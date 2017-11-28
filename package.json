@@ -1,0 +1,10 @@
+{
+  "name": "qlector",
+  "version": "0.0.1",
+  "description": "A GraphQL query framework for serverside apps",
+  "main": "index.js",
+  "repository": "https://github.com/khaosdoctor/qlector.git",
+  "author": "Lucas Santos <lhs.santoss@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
