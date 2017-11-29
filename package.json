@@ -1,10 +1,40 @@
 {
   "name": "qlector",
   "version": "0.0.1",
+  "engines": {
+    "node": ">=8"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
   "description": "A GraphQL query framework for serverside apps",
   "main": "index.js",
   "repository": "https://github.com/khaosdoctor/qlector.git",
+  "bugs": {
+    "url": "https://github.com/khaosdoctor/qlector/issues"
+  },
+  "files": [
+    "index.js",
+    "src"
+  ],
   "author": "Lucas Santos <lhs.santoss@gmail.com>",
   "license": "MIT",
-  "private": false
+  "keywords": [
+    "graphql",
+    "query",
+    "framework",
+    "serverside",
+    "graph",
+    "post"
+  ],
+  "private": false,
+  "dependencies": {
+    "got": "^8.0.0",
+    "knoblr": "^2.4.0"
+  },
+  "devDependencies": {
+    "ava": "^0.24.0",
+    "nyc": "^11.3.0",
+    "sinon": "^4.1.2"
+  }
 }
