@@ -1,2 +1,4 @@
-# qlector
-GraphQL query framework for serverside apps
+# QLector
+> GraphQL query framework for serverside apps
+
+Brace yourselves, description is comming
