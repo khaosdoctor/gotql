@@ -2,19 +2,22 @@
   "name": "getql",
   "version": "0.0.1",
   "engines": {
-    "node": ">=8"
+    "node": ">=6"
   },
   "scripts": {
-    "start": "node index.js"
+    "pretest": "tsc",
+    "build": "tsc",
+    "postinstall": "npm run build",
+    "test": "ava --color -v -T 10000",
+    "coverage": "nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
   },
   "description": "A GraphQL query framework for serverside apps",
-  "main": "index.js",
+  "main": "dist/app.js",
   "repository": "https://github.com/khaosdoctor/qlector.git",
   "bugs": {
     "url": "https://github.com/khaosdoctor/qlector/issues"
   },
   "files": [
-    "index.js",
     "src"
   ],
   "author": "Lucas Santos <lhs.santoss@gmail.com>",
@@ -30,6 +33,8 @@
   "private": false,
   "dependencies": {
     "got": "^8.0.0",
+    "typescript": "^2.6.2",
+    "@types/node": "^8.0.54",
     "knoblr": "^2.4.0"
   },
   "devDependencies": {
