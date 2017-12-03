@@ -1,5 +1,4 @@
-import { join } from "path";
+import mutation from "./mutation";
+import query from "./query";
 
-export default function foo(): string {
-  return join("hello", "world");
-}
+export default { query, mutation };
