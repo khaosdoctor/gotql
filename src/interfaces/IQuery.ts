@@ -1,3 +1,10 @@
+import IArgs from "./IArgs";
+import IVars from "./IVars";
+import IFields from "./IField";
+
 export default interface IQuery {
-  // TODO
+  readonly name?: string;
+  args?: IArgs;
+  variables?: IVars;
+  fields: IFields;
 }
