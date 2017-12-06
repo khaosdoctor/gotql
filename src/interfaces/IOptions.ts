@@ -1,5 +1,6 @@
-import Headers from "./IHeaders";
 export default interface IOptions {
-  debug: boolean;
-  headers: Headers[];
+  debug?: boolean;
+  headers?: {
+    [headerName: string]: string;
+  }
 }
