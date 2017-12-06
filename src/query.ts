@@ -1,8 +1,8 @@
 import got from "got";
-import Options from "./interfaces/IOptions";
-import Query from "./interfaces/IQuery";
+import IOptions from "./interfaces/IOptions";
+import IQuery from "./interfaces/IQuery";
 import parser from "./modules/parser";
 
-export default (query: Query, options: Options) => {
+export default (query: IQuery, options: IOptions) => {
  // TODO
 };
