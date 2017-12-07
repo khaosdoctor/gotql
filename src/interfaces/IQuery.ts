@@ -4,6 +4,7 @@ import IFields from "./IField";
 
 export default interface IQuery {
   readonly name?: string;
+  readonly operation: string;
   args?: IArgs;
   variables?: IVars;
   fields: IFields;
