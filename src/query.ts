@@ -5,7 +5,7 @@ import parser from "./modules/parser";
 import Logger from "./modules/logger";
 import QueryType from "./interfaces/EType";
 
-function query (endPoint: string, query: IQuery, options: IOptions) {
+async function query (endPoint: string, query: IQuery, options: IOptions) {
   try {
     const logger: Logger = new Logger(options); // Instantiate logger to log messages
 
@@ -16,12 +16,25 @@ function query (endPoint: string, query: IQuery, options: IOptions) {
     logger.log('Building options object');
     const httpOptions: object = {
       headers: options.headers,
-      body: graphQuery,
+      body: {
+        query: graphQuery,
+        operationName: query.name || null,
+        variables: query.variables || null
+      },
       json: true
     }
     logger.log(`Option object: ${httpOptions}`);
 
-    return got.post(endPoint, httpOptions);
+    let response = await got.post(endPoint, httpOptions);
+
+    if (response.body['errors']) {
+      logger.log(`Detected response error`)
+      response.statusCode = 500
+    }
+
+    logger.log('Retrieved response:')
+    logger.log(JSON.stringify(response))
+    return response
   } catch (error) {
     throw error;
   }
