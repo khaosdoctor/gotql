@@ -12,22 +12,20 @@ const runner = require('./modules/runner')
  */
 /**
  * @typedef {object} fieldObj Field properties
- * @prop {string} [alias] Field Alias
- * @prop {Object.<string, any>} [args] Field Args
- * @prop {Object.<string, [fieldObj]>} [fields] Nested fields
+ * @prop {Array<string | Object.<string, [fieldObj]>>} [fields] Nested fields
  */
 /**
  * @typedef {object} operation An operation object
  * @prop {string} name Operation name
- * @prop {{Object.<string, any>}} [args] Operation arguments
- * @prop {Object.<string, [fieldObj]>} fields Field list
+ * @prop {Object.<string, any>} [args] Operation arguments
+ * @prop {string} [alias] Operation arguments
+ * @prop {Array<string | Object.<string, [fieldObj]>>} fields Field list
  */
 /**
  * @typedef {object} queryType An getQL JSON query type
  * @prop {string} [name] Query name (it is needed when there are multiple queries)
  * @prop {operation} operation Operation object
- * @prop {Object.<string, any>} [args] Query arguments
- * @prop {Object.<string, any>} [variables] Query variables
+ * @prop {Object.<string, { type: string, value: string }>} [variables] Query variables
  */
 
 /**
