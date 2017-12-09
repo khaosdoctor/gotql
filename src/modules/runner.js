@@ -13,13 +13,21 @@ function getHeaders (headers) {
   return Object.assign(headers, defaultHeaders)
 }
 
+function getQueryVariables (variables) {
+  let newVars = {}
+  for (let varName in variables) {
+    newVars[varName] = variables[varName].value
+  }
+  return newVars
+}
+
 function getPayload (headers, query, parsedQuery) {
   return {
     headers: getHeaders(headers),
     body: {
       query: parsedQuery,
       operationName: query.name || null,
-      variables: query.variables || null
+      variables: getQueryVariables(query.variables) || null
     },
     json: true
   }
@@ -33,7 +41,7 @@ function handleResponse (response) {
   return response
 }
 
-function run (endPoint, query, options, type) {
+async function run (endPoint, query, options, type) {
   try {
     userOptions = options
     const logger = new Logger(options) // Instantiate logger to log messages
@@ -46,13 +54,10 @@ function run (endPoint, query, options, type) {
     const gotPayload = getPayload(options.headers, query, graphQuery)
     logger.log(`Payload object: ${gotPayload.body}`)
 
-    return got.post(endPoint, gotPayload)
-      .then(response => {
-        logger.log(`Response: ${JSON.stringify(response)}`)
-        return response
-      })
-      .then(handleResponse)
-      .catch(err => { throw new Error(`Error executing GraphQL call: ${err.message}`) })
+    let response = await got.post(endPoint, gotPayload)
+    logger.log(`Response: ${JSON.stringify(response)}`)
+
+    return handleResponse(response)
   } catch (error) {
     throw new Error(`Error when executing query: ${error.message}`)
   }
