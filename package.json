@@ -5,14 +5,11 @@
     "node": ">=6"
   },
   "scripts": {
-    "pretest": "tsc",
-    "build": "tsc",
-    "postinstall": "npm run build",
     "test": "ava --color -v -T 10000",
     "coverage": "nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
   },
   "description": "A GraphQL query framework for serverside apps",
-  "main": "dist/app.js",
+  "main": "index.js",
   "repository": "https://github.com/khaosdoctor/qlector.git",
   "bugs": {
     "url": "https://github.com/khaosdoctor/qlector/issues"
@@ -32,15 +29,12 @@
   ],
   "private": false,
   "dependencies": {
-    "got": "^8.0.1",
-    "knoblr": "^2.4.0",
-    "typescript": "^2.6.2"
+    "got": "^8.0.1"
   },
   "devDependencies": {
-    "@types/node": "^8.0.54",
-    "@types/got": "^7.1.5",
     "ava": "^0.24.0",
     "nyc": "^11.3.0",
-    "sinon": "^4.1.2"
+    "sinon": "^4.1.2",
+    "standard": "^10.0.3"
   }
 }
