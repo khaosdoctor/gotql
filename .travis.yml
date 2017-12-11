@@ -1,0 +1,18 @@
+os:
+  - linux
+  - osx
+language: node_js
+node_js:
+  - "node"
+  - "8.9.3"
+  - "7.10.0"
+  - "7.10.1"
+  - "6.12.2"
+before_script:
+  - npm i -g ava codecov nyc
+  - npm i
+  - npm run postinstall
+script:
+  - npm run cover
+after_success:
+  - npm run report
