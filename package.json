@@ -6,6 +6,7 @@
   },
   "scripts": {
     "test": "ava --color -v -T 10000",
+    "report": "cat ./coverage/lcov.info | codecov",
     "postinstall": "./node_modules/.bin/babel -d dist -s inline --no-comments src",
     "coverage": "nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
   },
@@ -36,6 +37,7 @@
     "ava": "^0.24.0",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "codecov": "^3.0.0",
     "nyc": "^11.3.0",
     "sinon": "^4.1.2",
     "standard": "^10.0.3"
