@@ -1,5 +1,4 @@
 class Logger {
-
   constructor (debug) {
     this._debug = debug || false
   }
@@ -7,7 +6,6 @@ class Logger {
   log (message) {
     if (this._debug) console.log(message)
   }
-
 }
 
 module.exports = Logger
