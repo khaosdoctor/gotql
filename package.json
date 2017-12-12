@@ -13,9 +13,9 @@
   },
   "description": "A GraphQL query framework for serverside apps",
   "main": "index.js",
-  "repository": "https://github.com/khaosdoctor/qlector.git",
+  "repository": "https://github.com/khaosdoctor/gotql.git",
   "bugs": {
-    "url": "https://github.com/khaosdoctor/qlector/issues"
+    "url": "https://github.com/khaosdoctor/gotql/issues"
   },
   "pre-push": [
     "lint",
