@@ -1,6 +1,6 @@
 {
   "name": "gotql",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "engines": {
     "node": ">=6"
   },
@@ -25,7 +25,14 @@
     "ignore": [
       "./dist/**/*.*"
     ],
-    "globals": [ "describe", "assert", "before", "beforeAll", "after", "afterAll" ]
+    "globals": [
+      "describe",
+      "assert",
+      "before",
+      "beforeAll",
+      "after",
+      "afterAll"
+    ]
   },
   "files": [
     "dist",
