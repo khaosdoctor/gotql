@@ -13,6 +13,6 @@ before_script:
   - npm i
   - npm run postinstall
 script:
-  - npm run cover
+  - npm run coverage
 after_success:
   - npm run report
