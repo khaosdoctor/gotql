@@ -6,6 +6,7 @@
   },
   "scripts": {
     "test": "ava --color -v -T 10000",
+    "lint": "standard -v",
     "report": "cat ./coverage/lcov.info | codecov",
     "postinstall": "./node_modules/.bin/babel -d dist -s inline --no-comments src",
     "coverage": "nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
@@ -16,6 +17,10 @@
   "bugs": {
     "url": "https://github.com/khaosdoctor/qlector/issues"
   },
+  "pre-push": [
+    "lint",
+    "coverage"
+  ],
   "files": [
     "src"
   ],
@@ -39,6 +44,7 @@
     "babel-preset-env": "^1.6.1",
     "codecov": "^3.0.0",
     "nyc": "^11.3.0",
+    "pre-push": "^0.1.1",
     "sinon": "^4.1.2",
     "standard": "^10.0.3"
   }
