@@ -21,6 +21,12 @@
     "lint",
     "coverage"
   ],
+  "standard": {
+    "ignore": [
+      "./dist/**/*.*"
+    ],
+    "globals": [ "describe", "assert", "before", "beforeAll", "after", "afterAll" ]
+  },
   "files": [
     "dist",
     "index.js"
