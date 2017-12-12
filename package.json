@@ -22,7 +22,8 @@
     "coverage"
   ],
   "files": [
-    "src"
+    "dist",
+    "index.js"
   ],
   "author": "Lucas Santos <lhs.santoss@gmail.com>",
   "license": "MIT",
