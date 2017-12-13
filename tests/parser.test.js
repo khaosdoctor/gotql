@@ -54,12 +54,12 @@ describe('Should return a named simple query with a variable and arg variable', 
     operation: {
       name: 'TestOp',
       args: {
-        name: '$name'
+        user: '$name'
       },
       fields: [ 'field1', 'field2' ]
     }
   }
-  const testReturn = 'query TestQuery ($name: string!) { TestOp(name: $name) { field1 field2 } }'
+  const testReturn = 'query TestQuery ($name: string!) { TestOp(user: $name) { field1 field2 } }'
   const queryResult = parser.parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
@@ -80,7 +80,7 @@ describe('Should return an error when args has variable and variable is not decl
   try {
     parser.parse(query, 'query')
   } catch (error) {
-    assert.is(error.message, 'Parse error: Failed to parse operation TestOp => Variable "name" is defined on operation but it has neither a type or a value')
+    assert.is(error.message, 'Parse error: Failed to parse operation "TestOp" => Variable "name" is defined on operation but it has neither a type or a value')
     assert.deepEqual(error.name, 'Error')
   }
 })
@@ -103,7 +103,7 @@ describe('Should return an error when args has variable and variable is missing 
   try {
     parser.parse(query, 'query')
   } catch (error) {
-    assert.is(error.message, 'Parse error: Failed to parse operation TestOp => Variable "name" is defined on operation but it has neither a type or a value')
+    assert.is(error.message, 'Parse error: Failed to parse operation "TestOp" => Variable "name" is defined on operation but it has neither a type or a value')
     assert.deepEqual(error.name, 'Error')
   }
 })
@@ -126,7 +126,7 @@ describe('Should return an error when args has variable and variable is missing 
   try {
     parser.parse(query, 'query')
   } catch (error) {
-    assert.is(error.message, 'Parse error: Failed to parse operation TestOp => Variable "name" is defined on operation but it has neither a type or a value')
+    assert.is(error.message, 'Parse error: Failed to parse operation "TestOp" => Variable "name" is defined on operation but it has neither a type or a value')
     assert.deepEqual(error.name, 'Error')
   }
 })
@@ -149,7 +149,7 @@ describe('Should return an error when args has variable and variable is not pres
   try {
     parser.parse(query, 'query')
   } catch (error) {
-    assert.is(error.message, 'Parse error: Failed to parse operation TestOp => Variable "name" is defined on operation but it has neither a type or a value')
+    assert.is(error.message, 'Parse error: Failed to parse operation "TestOp" => Variable "name" is defined on operation but it has neither a type or a value')
     assert.deepEqual(error.name, 'Error')
   }
 })
@@ -210,6 +210,82 @@ describe('Should return a simple operation with args', (assert) => {
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 } }'
+  const queryResult = parser.parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
+
+describe('Should return a simple operation with args not escaped', (assert) => {
+  const query = {
+    operation: {
+      name: 'TestOp',
+      args: {
+        name: { value: 'Test', escape: false }
+      },
+      fields: [ 'field1', 'field2' ]
+    }
+  }
+  const testReturn = 'query { TestOp(name: Test) { field1 field2 } }'
+  const queryResult = parser.parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
+
+describe('Should return a simple operation with args escaped', (assert) => {
+  const query = {
+    operation: {
+      name: 'TestOp',
+      args: {
+        name: { value: 'Test', escape: true }
+      },
+      fields: [ 'field1', 'field2' ]
+    }
+  }
+  const testReturn = 'query { TestOp(name: "Test") { field1 field2 } }'
+  const queryResult = parser.parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
+
+describe('Should return a simple operation with escaped arg variable as object but no errors', (assert) => {
+  const query = {
+    variables: {
+      test: {
+        type: 'string',
+        value: 'TestVar'
+      }
+    },
+    operation: {
+      name: 'TestOp',
+      args: {
+        user: { value: '$test', escape: true }
+      },
+      fields: [ 'field1', 'field2' ]
+    }
+  }
+  const testReturn = 'query ($test: string) { TestOp(user: "$test") { field1 field2 } }'
+  const queryResult = parser.parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
+
+describe('Should return a simple operation with arg variable as object but no errors', (assert) => {
+  const query = {
+    variables: {
+      test: {
+        type: 'string',
+        value: 'TestVar'
+      }
+    },
+    operation: {
+      name: 'TestOp',
+      args: {
+        user: { value: '$test', escape: false }
+      },
+      fields: [ 'field1', 'field2' ]
+    }
+  }
+  const testReturn = 'query ($test: string) { TestOp(user: $test) { field1 field2 } }'
   const queryResult = parser.parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)

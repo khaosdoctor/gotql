@@ -21,14 +21,34 @@ function getFields (fieldList) {
   return fieldStr
 }
 
-function checkArgVar (query, operationArg) {
-  const isVar = (query.operation.args[operationArg].indexOf('$') === 0)
-  let parsedVar = `"${query.operation.args[operationArg]}"`
+function checkIsObject (varName) {
+  return (typeof varName === 'object' && varName.value)
+}
 
-  if (isVar) {
-    parsedVar = query.operation.args[operationArg]
-    if (!query.variables || !query.variables[operationArg] || !query.variables[operationArg].type || !query.variables[operationArg].value) {
-      throw new Error(`Variable "${operationArg}" is defined on operation but it has neither a type or a value`)
+function checkIsVar (varName) {
+  if (checkIsObject(varName)) return false
+  return varName.indexOf('$') === 0
+}
+
+function getParsedVar (varName) {
+  if (checkIsObject(varName)) return `"${varName.value}"`
+  return `"${varName}"`
+}
+
+function checkArgVar (query, operationArg) {
+  const argValue = query.operation.args[operationArg]
+  let parsedVar = getParsedVar(argValue)
+
+  if (checkIsVar(argValue)) { // Check if is query var, must contain "$" and not be an object
+    parsedVar = argValue
+    const varName = parsedVar.slice(1) // Removes "$" to check for name
+
+    if (!query.variables || !query.variables[varName] || !query.variables[varName].type || !query.variables[varName].value) {
+      throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
+    }
+  } else if (checkIsObject(argValue)) { // Check if arg is object (i.e enum)
+    if (!argValue.escape) {
+      parsedVar = argValue.value
     }
   }
 
@@ -52,7 +72,7 @@ function parseOperation (query) {
     let alias = operation.alias ? `${operation.alias}:` : ''
     return `${alias} ${operation.name}${operationArgs} { ${getFields(operation.fields).trim()} }`.trim()
   } catch (error) {
-    throw new Error(`Failed to parse operation ${query.operation.name} => ${error.message}`)
+    throw new Error(`Failed to parse operation "${query.operation.name}" => ${error.message}`)
   }
 }
 
