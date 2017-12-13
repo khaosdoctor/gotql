@@ -39,9 +39,10 @@ function getPayload (headers, query, parsedQuery) {
 function handleResponse (response) {
   if (response.body.errors) {
     response.statusCode = userOptions.errorStatusCode || 500
+    response.statusMessage = 'GraphQL Error'
   }
 
-  return response
+  return Object.assign({}, response.body, { statusCode: response.statusCode, message: response.statusMessage })
 }
 
 async function run (endPoint, query, options, type) {
