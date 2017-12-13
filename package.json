@@ -51,7 +51,8 @@
   ],
   "private": false,
   "dependencies": {
-    "got": "^8.0.1"
+    "got": "^8.0.1",
+    "prepend-http": "^2.0.0"
   },
   "devDependencies": {
     "ava": "^0.24.0",
