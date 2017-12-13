@@ -50,13 +50,13 @@ async function run (endPoint, query, options, type) {
     userOptions = options
     const logger = new Logger(options) // Instantiate logger to log messages
 
-    logger.log(`Parsing query: ${console.log(query)}`)
+    logger.log(`Parsing query: ${JSON.stringify(query)}`)
     const graphQuery = parser.parse(query, type) // Parses JSON into GraphQL Query
     logger.log(`Parsed query: ${graphQuery}`)
 
     logger.log('Building payload object')
     const gotPayload = getPayload(options.headers, query, graphQuery)
-    logger.log(`Payload object: ${gotPayload.body}`)
+    logger.log(`Payload object: ${JSON.stringify(gotPayload.body)}`)
 
     let response = await got.post(endPoint, gotPayload)
     logger.log(`Response: ${JSON.stringify(response)}`)
