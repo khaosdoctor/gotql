@@ -1,13 +1,46 @@
-# GotQL
-> GraphQL query framework for serverside apps
+<h1 align="center">
+	<br>
+	<img width="360" height="" src="https://cdn.rawgit.com/khaosdoctor/gotql/master/media/gotql.svg" alt="GotQL">
+	<br>
+	<br>
+	<br>
+</h1>
 
-<center>
+> Because JSON is way better
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9)](https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade) [![Build Status](https://travis-ci.org/khaosdoctor/gotql.svg?branch=master)](https://travis-ci.org/khaosdoctor/gotql)
 [![codecov](https://codecov.io/gh/khaosdoctor/gotql/branch/master/graph/badge.svg?token=dQlUpT7QSF)](https://codecov.io/gh/khaosdoctor/gotql) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com) [![Gitmoji](https://img.shields.io/badge/gitmoji-%20%F0%9F%98%9C%20%F0%9F%98%8D-FFDD67.svg?style=flat)](https://gitmoji.carloscuesta.me/)
 
-</center>
+[![Downloads](https://img.shields.io/npm/dm/gotql.svg)](https://npmjs.com/gotql)
+[![npm](https://img.shields.io/npm/v/gotql.svg)](http://npmjs.com/gotql)
+[![node](https://img.shields.io/node/v/gotql.svg)](http://npmjs.com/gotql)
+
+This is a better implementation of the [GraphQL](https://github.com/facebook/graphql) request via NodeJS, created upon [Got](http://github.com/sindresorhus/got).
+
+Built because manipulating strings is a real pain.
+
+# Table of Contents
+
+<!-- TOC -->
+
+- [Table of Contents](#table-of-contents)
+  - [Install](#install)
+  - [Basic Usage](#basic-usage)
+  - [What is it?](#what-is-it)
+  - [API](#api)
+  - [To do](#to-do)
+
+<!-- /TOC -->
+
+## Install
+
+## Basic Usage
+
+## What is it?
+
+GotQL is a better interface for GraphQL queries. It provides a way for developers to run queries using JSON instead of strings. Which is a way more usable data format than the string itself.
 
 
+## API
 
-Brace yourselves, description is comming
+## To do
