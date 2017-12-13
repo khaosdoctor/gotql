@@ -16,6 +16,7 @@ function getHeaders (headers) {
 }
 
 function getQueryVariables (variables) {
+  if (!variables) return null
   let newVars = {}
   for (let varName in variables) {
     newVars[varName] = variables[varName].value
