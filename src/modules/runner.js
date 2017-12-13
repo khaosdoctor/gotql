@@ -5,13 +5,14 @@ const prependHttp = require('prepend-http')
 let userOptions = {}
 
 function getHeaders (headers) {
+  if (!headers) headers = {}
   const defaultHeaders = {
     'X-Powered-By': 'GetQL - The serverside GraphQL query engine',
-    'Content-Type': 'application/json',
-    'User-Agent': 'GetQL'
+    'User-Agent': `GetQL ${require('../../package.json').version}`,
+    'Accept-Encoding': 'gzip, deflate'
   }
 
-  return Object.assign(headers, defaultHeaders)
+  return Object.assign({}, headers, defaultHeaders)
 }
 
 function getQueryVariables (variables) {
