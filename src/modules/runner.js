@@ -58,9 +58,8 @@ async function run (endPoint, query, options, type) {
     const gotPayload = getPayload(options.headers, query, graphQuery)
     logger.log(`Payload object: ${JSON.stringify(gotPayload.body)}`)
 
-    let response = await got.post(endPoint, gotPayload)
-    logger.log(`Response: ${JSON.stringify(response)}`)
-
+    let response = await got.post(prependHttp(endPoint), gotPayload)
+    logger.log(`Response: ${response.body.toString()}`)
     return handleResponse(response)
   } catch (error) {
     throw new Error(`Error when executing query: ${error.message}`)
