@@ -17,7 +17,7 @@ const runner = require('./modules/runner')
 /**
  * @typedef {object} operation An operation object
  * @prop {string} name Operation name
- * @prop {Object.<string, any>} [args] Operation arguments
+ * @prop {Object.<string, any> | Object.<string, {value: string, escape: boolean}>} [args] Operation arguments
  * @prop {string} [alias] Operation arguments
  * @prop {Array<string | Object.<string, [fieldObj]>>} fields Field list
  */
