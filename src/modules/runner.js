@@ -1,6 +1,7 @@
 const got = require('got')
-const parser = require('./modules/parser')
-const Logger = require('./modules/logger')
+const parser = require('./parser')
+const Logger = require('./logger')
+const prependHttp = require('prepend-http')
 let userOptions = {}
 
 function getHeaders (headers) {
