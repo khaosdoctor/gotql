@@ -175,7 +175,18 @@ gotQl.mutation(graphQLEndpoint, query, [options])
     - Type: `number`
   - _headers_: Additional headers to be sent
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
+    
+### Returns
 
+All methods return an `object` like this:
+
+```js
+const response = {
+  data: { 'Your GraphQL response here' },
+  statusCode: '200', // Or an error code (or a defined user code) when GraphQL returns an error array
+  statusMessage: 'Status Message associated with the statusCode'
+}
+```
 
 ## The JSON query format
 
@@ -211,18 +222,6 @@ const query = {
             value: string;
         };
     };
-}
-```
-
-### Returns
-
-All methods return an `object` like this:
-
-```js
-const response = {
-  data: { 'Your GraphQL response here' },
-  statusCode: '200', // Or an error code (or a defined user code) when GraphQL returns an error array
-  statusMessage: 'Status Message associated with the statusCode'
 }
 ```
 
