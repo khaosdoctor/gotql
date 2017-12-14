@@ -411,6 +411,6 @@ query { users(type: "internal") { name age } }
 
 ## To do
 
-- [] Support for streams
-- [] Support for multiple operations
-- [] Full code coverage on Runner and query and mutation types
+- [ ] Support for streams
+- [ ] Support for multiple operations
+- [ ] Full code coverage on Runner and query and mutation types
