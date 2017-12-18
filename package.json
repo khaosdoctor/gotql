@@ -7,6 +7,7 @@
   "scripts": {
     "test": "ava --color -v -T 10000",
     "lint": "standard -v",
+    "lint:fix": "standard --fix",
     "report": "cat ./coverage/lcov.info | codecov",
     "build": "./node_modules/.bin/babel -d dist -s true --no-comments src",
     "postinstall": "npm run build",
