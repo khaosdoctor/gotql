@@ -82,7 +82,7 @@ Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com
 * Fill in [the required template](PULL_REQUEST_TEMPLATE.md)
 * Do not include issue numbers in the PR **title**
 * Include screenshots and animated GIFs in your pull request whenever possible.
-* Follow the [JavaScript](#javascript-styleguide).
+* Follow the [JavaScript styleguide](#javascript-styleguide).
 * Include thoughtfully-worded, well-structured [Ava](https://github.com/avajs/ava) tests in the `./tests` folder. Run them using `npm test`. Remember, tests are __one file per GotQL file__, which means, if you are going to test the `runner.js`, you should add the test to a file named `runner.test.js`, **remember `.test.js` extension**.
 * Assert that your code coverage is _at least_ 95% before submitting your pull request
 * Document new code based on the [Documentation Styleguide](#documentation-styleguide)
