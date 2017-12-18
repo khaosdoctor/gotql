@@ -43,6 +43,7 @@ Built because manipulating strings is a real pain.
       - [Query with variables](#query-with-variables)
       - [Nested fields](#nested-fields)
       - [Enum args](#enum-args)
+  - [Contributing to this project](#contributing-to-this-project)
   - [To do](#to-do)
 
 <!-- /TOC -->
@@ -175,7 +176,7 @@ gotQl.mutation(graphQLEndpoint, query, [options])
     - Type: `number`
   - _headers_: Additional headers to be sent
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
-    
+
 ### Returns
 
 All methods return an `object` like this:
@@ -409,10 +410,16 @@ query { users(type: "internal") { name age } }
 
 > **Note:** Variables such as described [here](#query-with-variables) _will __not___ be recognized. If the arg object is not an `[argName]: value`, variables will not pass through the definition check (GotQL warns if a variable is not declared but used on operation).
 
+## Contributing to this project
+
+> Please note that this project is released with a [Contributor Code of Conduct](code-of-conduct.md). By participating in this project you agree to abide by its terms.
+
+Hey! If you want to contribute, please read the [contributing guidelines](./.github/CONTRIBUTING.md) :smile:
+
 ## To do
 
 - [ ] Support for streams
 - [ ] Support for multiple operations
 - [ ] Full code coverage on Runner and query and mutation types
-- [ ] Add CONTRIBUTING and CoC
-- [ ] Add Issue template
+- [ X ] Add CONTRIBUTING and CoC
+- [ X ] Add Issue template
