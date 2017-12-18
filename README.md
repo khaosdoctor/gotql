@@ -414,3 +414,5 @@ query { users(type: "internal") { name age } }
 - [ ] Support for streams
 - [ ] Support for multiple operations
 - [ ] Full code coverage on Runner and query and mutation types
+- [ ] Add CONTRIBUTING and CoC
+- [ ] Add Issue template
