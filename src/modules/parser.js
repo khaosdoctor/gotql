@@ -1,3 +1,8 @@
+/**
+ * Parses query variables into strings
+ * @param {Object.<string, { type: string, value: string }>} variables Variable object
+ * @return {string} Parsed variables
+ */
 function getQueryVars (variables) {
   if (!variables) return ''
 
@@ -8,6 +13,11 @@ function getQueryVars (variables) {
   return queryVars.slice(0, -2) + ') ' // Split last comma
 }
 
+/**
+ * Parses fields recursively into strings
+ * @param {Array<string | Object.<string, [fieldObj]>>} fieldList List of fields
+ * @return {string} Parsed fields
+ */
 function getFields (fieldList) {
   if (!fieldList) return '' // Return condition, reached bottom of tree
   let fieldStr = ''
@@ -21,20 +31,45 @@ function getFields (fieldList) {
   return fieldStr
 }
 
+/**
+ * Checks if the value is an object
+ * @param {any} varName Object to be checked
+ * @return {boolean} True if is object
+ */
 function checkIsObject (varName) {
   return (typeof varName === 'object' && varName.value)
 }
 
+/**
+ * Outputs true if the argument is a variable
+ * @param {string|object} varName Variable value or object
+ * @return {boolean} True if it is a variable
+ */
 function checkIsVar (varName) {
   if (checkIsObject(varName)) return false
   return varName.indexOf('$') === 0
 }
 
+/**
+ * Parses the variable name into a string to be used.
+ *
+ * If variable is an object, then it is a query variable and must be treated differently
+ * @param {string|object} varName Variable value or object
+ * @return {string} Parsed variablename
+ */
 function getParsedVar (varName) {
   if (checkIsObject(varName)) return `"${varName.value}"`
   return `"${varName}"`
 }
 
+/**
+ * Checks if the operation argument is a variable or not
+ *
+ * Also checks if the variables are indeed set in the query before using it in the operation
+ * @param {queryType} query The JSON-like query
+ * @param {string} operationArg Argument name
+ * @returns {string} Parsed operation argument
+ */
 function checkArgVar (query, operationArg) {
   const argValue = query.operation.args[operationArg]
   let parsedVar = getParsedVar(argValue)
@@ -55,6 +90,11 @@ function checkArgVar (query, operationArg) {
   return parsedVar
 }
 
+/**
+ * Parses the operation bit of the query
+ * @param {queryType} query The JSON-Like query to be parsed
+ * @return {string} Parsed operation query
+ */
 function parseOperation (query) {
   let operation = query.operation
   if (!operation.name) throw new Error(`name is required for graphQL operation`)
@@ -76,6 +116,12 @@ function parseOperation (query) {
   }
 }
 
+/**
+ * Parses a JSON-like query into a string
+ * @param {queryType} query The JSON-like query to be parsed
+ * @param {string} type Can be 'query' or 'mutation'
+ * @return {string} Parsed query
+ */
 function parse (query, type) {
   try {
     if (!query.operation) throw new Error('a query must have at least one operation')
