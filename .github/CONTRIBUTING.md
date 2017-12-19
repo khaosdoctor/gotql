@@ -84,6 +84,18 @@ Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com
 * Include screenshots and animated GIFs in your pull request whenever possible.
 * Follow the [JavaScript styleguide](#javascript-styleguide).
 * Include thoughtfully-worded, well-structured [Ava](https://github.com/avajs/ava) tests in the `./tests` folder. Run them using `npm test`. Remember, tests are __one file per GotQL file__, which means, if you are going to test the `runner.js`, you should add the test to a file named `runner.test.js`, **remember `.test.js` extension**.
+* Ava object **must always be imported as `describe`** and the test parameter passed into the arrow function **must always be declared as `assert`**
+```js
+// Incorrect
+import ava from 'ava'
+
+ava('This is a test title', (test) => { test.pass() })
+
+// Correct
+import describe from 'ava'
+
+describe('This is a test title', (assert) => { assert.pass() })
+```
 * Assert that your code coverage is _at least_ 95% before submitting your pull request
 * Document new code based on the [Documentation Styleguide](#documentation-styleguide)
 * End all files with a newline
