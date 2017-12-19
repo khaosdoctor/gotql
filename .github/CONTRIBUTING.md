@@ -107,7 +107,6 @@ describe('This is a test title', (assert) => { assert.pass() })
 
 All JavaScript must adhere to [JavaScript Standard Style](https://standardjs.com/).
 
-* Prefer the object spread operator (`{...anotherObj}`) to `Object.assign()`
 * Do **not** include additional dependencies unless _strictly_ necessary
 * Use [template strings](https://developer.mozilla.org/docs/Web/JavaScript/Reference/template_strings) whenever there are variables messed up with strings
 * Avoid functions with more than 20 lines of code
