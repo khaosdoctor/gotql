@@ -420,6 +420,7 @@ Hey! If you want to contribute, please read the [contributing guidelines](./.git
 
 - [ ] Support for streams
 - [ ] Support for multiple operations
-- [ ] Full code coverage on Runner and query and mutation types
+- [ ] Add Integration tests
+- [X] Full code coverage on Runner and query and mutation types
 - [X] Add CONTRIBUTING and CoC
 - [X] Add Issue template
