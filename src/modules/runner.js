@@ -17,7 +17,7 @@ function getHeaders (headers) {
     'Accept-Encoding': 'gzip, deflate'
   }
 
-  return Object.assign({}, headers, defaultHeaders)
+  return { ...headers, ...defaultHeaders }
 }
 
 /**
@@ -65,7 +65,7 @@ function handleResponse (response) {
     response.statusMessage = 'GraphQL Error'
   }
 
-  return Object.assign({}, response.body, { statusCode: response.statusCode, message: response.statusMessage })
+  return { ...response.body, statusCode: response.statusCode, message: response.statusMessage }
 }
 
 /**
