@@ -3,7 +3,7 @@ import runner from '../src/modules/runner'
 import sinon from 'sinon'
 
 describe.before(test => {
-  // console.log = sinon.spy()
+  console.log = sinon.spy()
 })
 describe.beforeEach(test => {
   test.context = {}
