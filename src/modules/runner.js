@@ -1,4 +1,3 @@
-const got = require('got')
 const parser = require('./parser')
 const Logger = require('./logger')
 const prependHttp = require('prepend-http')
@@ -74,6 +73,8 @@ function handleResponse (response) {
  * @param {queryType} query A JSON-like query type
  * @param {userOpts} [options] User options
  * @param {string} type Can be 'query' or 'mutation'
+ * @param {any} got The Got object as an injected dependency (for test modularity)
+ * @return {{data: object, statusCode: number, message: string}} Got handled response
  */
 async function run (endPoint, query, options, type) {
   try {
