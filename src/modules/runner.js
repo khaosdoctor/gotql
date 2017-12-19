@@ -1,7 +1,6 @@
 const parser = require('./parser')
 const Logger = require('./logger')
 const prependHttp = require('prepend-http')
-let userOptions = {}
 
 /**
  * Extract the custom header object and mounts it together with the default objects
@@ -57,10 +56,11 @@ function getPayload (headers, query, parsedQuery) {
  *
  * Treats GraphQL errors and messages
  * @param {object} response Got response
+ * @param {userOpts} options User options
  */
-function handleResponse (response) {
+function handleResponse (response, options) {
   if (response.body.errors) {
-    response.statusCode = userOptions.errorStatusCode || 500
+    response.statusCode = options.errorStatusCode || 500
     response.statusMessage = 'GraphQL Error'
   }
 
@@ -76,9 +76,10 @@ function handleResponse (response) {
  * @param {any} got The Got object as an injected dependency (for test modularity)
  * @return {{data: object, statusCode: number, message: string}} Got handled response
  */
-async function run (endPoint, query, options, type) {
+async function run (endPoint, query, options, type, got) {
   try {
-    userOptions = options
+    if (!['query', 'mutation'].includes(type)) throw new Error('Query type must be either `query` or `mutation`')
+
     const logger = new Logger(options) // Instantiate logger to log messages
 
     logger.log(`Parsing query: ${JSON.stringify(query)}`)
@@ -91,7 +92,7 @@ async function run (endPoint, query, options, type) {
 
     let response = await got.post(prependHttp(endPoint), gotPayload)
     logger.log(`Response: ${response.body.toString()}`)
-    return handleResponse(response)
+    return handleResponse(response, options)
   } catch (error) {
     throw new Error(`Error when executing query: ${error.message}`)
   }
