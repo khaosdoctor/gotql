@@ -4,6 +4,11 @@ const Logger = require('./logger')
 const prependHttp = require('prepend-http')
 let userOptions = {}
 
+/**
+ * Extract the custom header object and mounts it together with the default objects
+ *
+ * @param {Object.<string, string>} headers Custom header Object
+ */
 function getHeaders (headers) {
   if (!headers) headers = {}
   const defaultHeaders = {
@@ -15,6 +20,11 @@ function getHeaders (headers) {
   return Object.assign({}, headers, defaultHeaders)
 }
 
+/**
+ * Extract variables from the JSON-like query
+ *
+ * @param {Object.<string, { type: string, value: string }>} variables Variable object
+ */
 function getQueryVariables (variables) {
   if (!variables) return null
   let newVars = {}
@@ -24,6 +34,13 @@ function getQueryVariables (variables) {
   return newVars
 }
 
+/**
+ * Creates the Got body object to be sent to the GraphQL endpoint
+ *
+ * @param {Object.<string, string>} headers Custom header list
+ * @param {queryType} query JSON-like query type
+ * @param {string} parsedQuery String-parsed query
+ */
 function getPayload (headers, query, parsedQuery) {
   return {
     headers: getHeaders(headers),
@@ -36,6 +53,12 @@ function getPayload (headers, query, parsedQuery) {
   }
 }
 
+/**
+ * Handles Got response object
+ *
+ * Treats GraphQL errors and messages
+ * @param {object} response Got response
+ */
 function handleResponse (response) {
   if (response.body.errors) {
     response.statusCode = userOptions.errorStatusCode || 500
@@ -45,6 +68,13 @@ function handleResponse (response) {
   return Object.assign({}, response.body, { statusCode: response.statusCode, message: response.statusMessage })
 }
 
+/**
+ *
+ * @param {string} endPoint GraphQL endpoint to query on
+ * @param {queryType} query A JSON-like query type
+ * @param {userOpts} [options] User options
+ * @param {string} type Can be 'query' or 'mutation'
+ */
 async function run (endPoint, query, options, type) {
   try {
     userOptions = options
