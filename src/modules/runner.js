@@ -7,8 +7,8 @@ let userOptions = {}
 function getHeaders (headers) {
   if (!headers) headers = {}
   const defaultHeaders = {
-    'X-Powered-By': 'GetQL - The serverside GraphQL query engine',
-    'User-Agent': `GetQL ${require('../../package.json').version}`,
+    'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+    'User-Agent': `GotQL ${require('../../package.json').version}`,
     'Accept-Encoding': 'gzip, deflate'
   }
 
