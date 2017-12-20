@@ -19,7 +19,7 @@ before_script:
   - npm i
   - npm run postinstall
 script:
-  - awesome_bot **/*.md --allow-ssl --allow-dupe --allow-redirect --allow 403 -w localhost,127.0.0.1,0.0.0.0,api.github.com
+  - awesome_bot ./.github/*.md ./*.md --allow-ssl --allow-dupe --allow-redirect --allow 403 -w localhost,127.0.0.1,0.0.0.0,api.github.com
   - npm run coverage
 after_success:
   - npm run report
