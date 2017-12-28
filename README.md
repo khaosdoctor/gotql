@@ -421,7 +421,7 @@ Hey! If you want to contribute, please read the [contributing guidelines](./.git
 - [ ] Support for streams
 - [ ] Support for multiple operations
 - [ ] Add Integration tests
-- [ ] Remove unit testing from Node versions prior to 7 on Travis, because it does not make any sense to test it using babel
+- [X] Remove unit testing from Node versions prior to 7 on Travis, because it does not make any sense to test it using babel
 - [X] Full code coverage on Runner and query and mutation types
 - [X] Add CONTRIBUTING and CoC
 - [X] Add Issue template
