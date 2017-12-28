@@ -44,7 +44,6 @@ Built because manipulating strings is a real pain.
       - [Nested fields](#nested-fields)
       - [Enum args](#enum-args)
   - [Contributing to this project](#contributing-to-this-project)
-  - [To do](#to-do)
 
 <!-- /TOC -->
 
@@ -415,13 +414,3 @@ query { users(type: "internal") { name age } }
 > Please note that this project is released with a [Contributor Code of Conduct](code-of-conduct.md). By participating in this project you agree to abide by its terms.
 
 Hey! If you want to contribute, please read the [contributing guidelines](./.github/CONTRIBUTING.md) :smile:
-
-## To do
-
-- [ ] Support for streams
-- [ ] Support for multiple operations
-- [ ] Add Integration tests
-- [X] Remove unit testing from Node versions prior to 7 on Travis, because it does not make any sense to test it using babel
-- [X] Full code coverage on Runner and query and mutation types
-- [X] Add CONTRIBUTING and CoC
-- [X] Add Issue template
