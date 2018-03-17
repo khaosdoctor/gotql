@@ -176,6 +176,22 @@ gotQl.mutation(graphQLEndpoint, query, [options])
   - _headers_: Additional headers to be sent
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
 
+```js
+gotQl.parser(query, type)
+```
+
+- **Description**: Parses a JSON-Like query and returns the query's string
+
+**query**
+
+- Type: `object`
+- Description: The JSON-typed query following the [json-query format](#the-json-query-format)
+
+**type**
+
+- Type: `string`
+- Description: Must be either `'query'` or `'mutation'`
+
 ### Returns
 
 All methods return an `object` like this:
