@@ -6,7 +6,7 @@
 	<br>
 </h1>
 
-> Because JSON is way better
+> Write GraphQL queries as objects instead of strings
 
 <center>
 <a href="https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade"><img src= "https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9" alt="Codacy Badge"></a>
@@ -19,7 +19,7 @@
 <a href="https://npmjs.com/gotql"><img src= "https://img.shields.io/node/v/gotql.svg" alt="Node Version"></a>
 </center>
 
-This is a better implementation of the [GraphQL](https://github.com/facebook/graphql) request via NodeJS, created as a wrapper of [Got](http://github.com/sindresorhus/got).
+This is a better implementation of the [GraphQL](https://github.com/facebook/graphql) query API via NodeJS, created as a wrapper of [Got](http://github.com/sindresorhus/got). It works like a transpiler, with a built in HTTPRequest Client (Got), allowing you to write your GraphQL queries as Javascript Objects instead of strings.
 
 Built because manipulating strings is a real pain.
 
