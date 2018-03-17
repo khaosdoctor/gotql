@@ -143,6 +143,7 @@ function parseOperation (query) {
 function parse (query, type) {
   try {
     if (!query.operation) throw new Error('a query must have at least one operation')
+    if (!type) throw new Error('type must be either "query" or "mutation"')
 
     let queryName = (query.name) ? `${query.name} ` : ''
     return `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query)} }`.trim()

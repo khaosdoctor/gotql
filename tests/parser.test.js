@@ -85,6 +85,26 @@ describe('Should return an error when args has variable and variable is not decl
   }
 })
 
+describe('Should return an error when type is null', async (assert) => {
+  const query = {
+    name: 'TestQuery',
+    operation: {
+      name: 'TestOp',
+      args: {
+        name: '$name'
+      },
+      fields: [ 'field1', 'field2' ]
+    }
+  }
+
+  try {
+    parse(query)
+  } catch (error) {
+    assert.is(error.message, 'Parse error: type must be either "query" or "mutation"')
+    assert.deepEqual(error.name, 'Error')
+  }
+})
+
 describe('Should return an error when args has variable and variable is missing value', async (assert) => {
   const query = {
     name: 'TestQuery',
