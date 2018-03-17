@@ -151,4 +151,4 @@ function parse (query, type) {
   }
 }
 
-module.exports = { parse }
+module.exports = parse

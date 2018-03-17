@@ -1,5 +1,5 @@
 import describe from 'ava'
-import parser from '../src/modules/parser'
+import parse from '../src/modules/parser'
 
 describe('Should return a usable simple query', (assert) => {
   const query = {
@@ -9,7 +9,7 @@ describe('Should return a usable simple query', (assert) => {
     }
   }
   const testReturn = 'query { TestOp { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -23,7 +23,7 @@ describe('Should return a named simple query', (assert) => {
     }
   }
   const testReturn = 'query TestQuery { TestOp { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -40,7 +40,7 @@ describe('Should return a named simple query with a variable', (assert) => {
     }
   }
   const testReturn = 'query TestQuery ($name: string!) { TestOp { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -60,7 +60,7 @@ describe('Should return a named simple query with a variable and arg variable', 
     }
   }
   const testReturn = 'query TestQuery ($name: string!) { TestOp(user: $name) { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -78,7 +78,7 @@ describe('Should return an error when args has variable and variable is not decl
   }
 
   try {
-    parser.parse(query, 'query')
+    parse(query, 'query')
   } catch (error) {
     assert.is(error.message, 'Parse error: Failed to parse operation "TestOp" => Variable "name" is defined on operation but it has neither a type or a value')
     assert.deepEqual(error.name, 'Error')
@@ -101,7 +101,7 @@ describe('Should return an error when args has variable and variable is missing 
   }
 
   try {
-    parser.parse(query, 'query')
+    parse(query, 'query')
   } catch (error) {
     assert.is(error.message, 'Parse error: Failed to parse operation "TestOp" => Variable "name" is defined on operation but it has neither a type or a value')
     assert.deepEqual(error.name, 'Error')
@@ -124,7 +124,7 @@ describe('Should return an error when args has variable and variable is missing 
   }
 
   try {
-    parser.parse(query, 'query')
+    parse(query, 'query')
   } catch (error) {
     assert.is(error.message, 'Parse error: Failed to parse operation "TestOp" => Variable "name" is defined on operation but it has neither a type or a value')
     assert.deepEqual(error.name, 'Error')
@@ -147,7 +147,7 @@ describe('Should return an error when args has variable and variable is not pres
   }
 
   try {
-    parser.parse(query, 'query')
+    parse(query, 'query')
   } catch (error) {
     assert.is(error.message, 'Parse error: Failed to parse operation "TestOp" => Variable "name" is defined on operation but it has neither a type or a value')
     assert.deepEqual(error.name, 'Error')
@@ -163,7 +163,7 @@ describe('Should return an error when operation has no name', async (assert) => 
   }
 
   try {
-    parser.parse(query, 'query')
+    parse(query, 'query')
   } catch (error) {
     assert.is(error.message, 'Parse error: name is required for graphQL operation')
     assert.deepEqual(error.name, 'Error')
@@ -179,7 +179,7 @@ describe('Should return an error when operation has no fields', async (assert) =
   }
 
   try {
-    parser.parse(query, 'query')
+    parse(query, 'query')
   } catch (error) {
     assert.is(error.message, 'Parse error: field list is required for operation "TestOp"')
     assert.deepEqual(error.name, 'Error')
@@ -192,7 +192,7 @@ describe('Should return an error when no operation exists', async (assert) => {
   }
 
   try {
-    parser.parse(query, 'query')
+    parse(query, 'query')
   } catch (error) {
     assert.is(error.message, 'Parse error: a query must have at least one operation')
     assert.deepEqual(error.name, 'Error')
@@ -210,7 +210,7 @@ describe('Should return a simple operation with args', (assert) => {
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -226,7 +226,7 @@ describe('Should return a simple operation with args not escaped', (assert) => {
     }
   }
   const testReturn = 'query { TestOp(name: Test) { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -242,7 +242,7 @@ describe('Should return a simple operation with args escaped', (assert) => {
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -264,7 +264,7 @@ describe('Should return a simple operation with escaped arg variable as object b
     }
   }
   const testReturn = 'query ($test: string) { TestOp(user: "$test") { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -286,7 +286,7 @@ describe('Should return a simple operation with arg variable as object but no er
     }
   }
   const testReturn = 'query ($test: string) { TestOp(user: $test) { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -303,7 +303,7 @@ describe('Should return a simple operation with alias', (assert) => {
     }
   }
   const testReturn = 'query { Alias: TestOp(name: "Test") { field1 field2 } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -319,7 +319,7 @@ describe('Should parse fields recursively', (assert) => {
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 owner { name age } } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -335,7 +335,7 @@ describe('Should parse fields recursively with empty objects', (assert) => {
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 owner { name age } people { } } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })
@@ -351,7 +351,7 @@ describe('Should parse fields recursively with nested second level fields', (ass
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 owner { name people { } } } }'
-  const queryResult = parser.parse(query, 'query')
+  const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
 })

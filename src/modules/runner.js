@@ -1,4 +1,4 @@
-const parser = require('./parser')
+const parse = require('./parser')
 const Logger = require('./logger')
 const prependHttp = require('prepend-http')
 
@@ -83,7 +83,7 @@ async function run (endPoint, query, options, type, got) {
     const logger = new Logger(options) // Instantiate logger to log messages
 
     logger.log(`Parsing query: ${JSON.stringify(query)}`)
-    const graphQuery = parser.parse(query, type) // Parses JSON into GraphQL Query
+    const graphQuery = parse(query, type) // Parses JSON into GraphQL Query
     logger.log(`Parsed query: ${graphQuery}`)
 
     logger.log('Building payload object')
