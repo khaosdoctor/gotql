@@ -198,14 +198,10 @@ gotQl.parser(query, type)
 
 ### Returns
 
-All methods return an `object` like this:
+All methods return a `string` like this:
 
 ```js
-const response = {
-  data: { 'Your GraphQL response here' },
-  statusCode: '200', // Or an error code (or a defined user code) when GraphQL returns an error array
-  statusMessage: 'Status Message associated with the statusCode'
-}
+const response = 'query { test { name args } }'
 ```
 
 ## The JSON query format
