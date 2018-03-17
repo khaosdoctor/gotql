@@ -149,6 +149,8 @@ gotQl.query(graphQLEndpoint, query, [options])
   - _headers_: Additional headers to be sent
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
 
+---
+
 ```js
 gotQl.mutation(graphQLEndpoint, query, [options])
 ```
@@ -175,6 +177,8 @@ gotQl.mutation(graphQLEndpoint, query, [options])
     - Type: `number`
   - _headers_: Additional headers to be sent
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
+
+---
 
 ```js
 gotQl.parser(query, type)
