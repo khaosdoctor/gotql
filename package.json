@@ -1,14 +1,12 @@
 {
   "name": "gotql",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "engines": {
     "node": ">=7"
   },
   "files": [
-    "src",
     "dist",
-    "index.js",
-    ".babelrc"
+    "index.js"
   ],
   "scripts": {
     "test": "ava --color -v -T 10000",
@@ -42,10 +40,6 @@
       "afterAll"
     ]
   },
-  "files": [
-    "dist",
-    "index.js"
-  ],
   "author": "Lucas Santos <lhs.santoss@gmail.com>",
   "license": "MIT",
   "keywords": [
