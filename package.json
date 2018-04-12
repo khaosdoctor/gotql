@@ -4,12 +4,18 @@
   "engines": {
     "node": ">=7"
   },
+  "files": [
+    "src",
+    "dist",
+    "index.js",
+    ".babelrc"
+  ],
   "scripts": {
     "test": "ava --color -v -T 10000",
     "lint": "standard -v",
     "lint:fix": "standard --fix",
     "report": "cat ./coverage/lcov.info | codecov",
-    "build": "export BABEL_ENV=production && ./node_modules/.bin/babel -d dist -s true --no-comments src",
+    "build": "export BABEL_ENV=production && babel -d dist -s true --no-comments src",
     "postinstall": "npm run build",
     "coverage": "nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
   },
