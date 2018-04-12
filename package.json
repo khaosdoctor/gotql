@@ -1,11 +1,10 @@
 {
   "name": "gotql",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "engines": {
     "node": ">=7"
   },
   "files": [
-    "src",
     "dist",
     "index.js"
   ],
@@ -15,7 +14,6 @@
     "lint:fix": "standard --fix",
     "report": "cat ./coverage/lcov.info | codecov",
     "build": "export BABEL_ENV=production && babel -d ./dist -s true --no-comments ./src",
-    "postinstall": "npm run build",
     "coverage": "nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
   },
   "description": "A GraphQL query framework for serverside apps",
@@ -26,7 +24,8 @@
   },
   "pre-push": [
     "lint",
-    "coverage"
+    "coverage",
+    "build"
   ],
   "standard": {
     "ignore": [
