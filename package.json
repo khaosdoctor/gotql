@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "test": "ava --color -v -T 10000",
-    "lint": "standard -v",
+    "lint": "standard -v ./src",
     "lint:fix": "standard --fix",
     "report": "cat ./coverage/lcov.info | codecov",
     "build": "export BABEL_ENV=production && babel -d ./dist -s true --no-comments ./src",
