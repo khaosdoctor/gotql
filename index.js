@@ -1,5 +1,5 @@
-const mutation = require('./dist/mutation')
-const query = require('./dist/query')
-const parser = require('./dist/modules/parser')
+const mutation = require('./src/mutation')
+const query = require('./src/query')
+const parser = require('./src/modules/parser')
 
 module.exports = { query, mutation, parser }
