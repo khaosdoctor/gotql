@@ -6,8 +6,9 @@
 	<br>
 </h1>
 
-> Because JSON is way better
+> Write GraphQL queries as objects instead of strings
 
+<br/>
 <center>
 <a href="https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade"><img src= "https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9" alt="Codacy Badge"></a>
 <a href="https://travis-ci.org/khaosdoctor/gotql"><img src= "https://travis-ci.org/khaosdoctor/gotql.svg?branch=master" alt="Build Status"></a>
@@ -18,8 +19,10 @@
 <a href="https://npmjs.com/gotql"><img src= "https://img.shields.io/npm/v/gotql.svg" alt="NPM"></a>
 <a href="https://npmjs.com/gotql"><img src= "https://img.shields.io/node/v/gotql.svg" alt="Node Version"></a>
 </center>
+<br/>
+<br/>
 
-This is a better implementation of the [GraphQL](https://github.com/facebook/graphql) request via NodeJS, created as a wrapper of [Got](http://github.com/sindresorhus/got).
+This is a better implementation of the [GraphQL](https://github.com/facebook/graphql) query API via NodeJS, created as a wrapper of [Got](http://github.com/sindresorhus/got). It works like a transpiler, with a built in HTTPRequest Client (Got), allowing you to write your GraphQL queries as Javascript Objects instead of strings.
 
 Built because manipulating strings is a real pain.
 
@@ -149,6 +152,8 @@ gotQl.query(graphQLEndpoint, query, [options])
   - _headers_: Additional headers to be sent
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
 
+---
+
 ```js
 gotQl.mutation(graphQLEndpoint, query, [options])
 ```
@@ -176,16 +181,30 @@ gotQl.mutation(graphQLEndpoint, query, [options])
   - _headers_: Additional headers to be sent
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
 
-### Returns
-
-All methods return an `object` like this:
+---
 
 ```js
-const response = {
-  data: { 'Your GraphQL response here' },
-  statusCode: '200', // Or an error code (or a defined user code) when GraphQL returns an error array
-  statusMessage: 'Status Message associated with the statusCode'
-}
+gotQl.parser(query, type)
+```
+
+- **Description**: Parses a JSON-Like query and returns the query's string
+
+**query**
+
+- Type: `object`
+- Description: The JSON-typed query following the [json-query format](#the-json-query-format)
+
+**type**
+
+- Type: `string`
+- Description: Must be either `'query'` or `'mutation'`
+
+### Returns
+
+All methods return a `string` like this:
+
+```js
+const response = 'query { test { name args } }'
 ```
 
 ## The JSON query format

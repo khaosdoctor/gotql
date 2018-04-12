@@ -1,4 +1,22 @@
 /**
+ * @typedef {object} fieldObj Field properties
+ * @prop {Array<string | Object.<string, [fieldObj]>>} [fields] Nested fields
+ */
+/**
+ * @typedef {object} operation An operation object
+ * @prop {string} name Operation name
+ * @prop {Object.<string, any> | Object.<string, {value: string, escape: boolean}>} [args] Operation arguments
+ * @prop {string} [alias] Operation arguments
+ * @prop {Array<string | Object.<string, [fieldObj]>>} fields Field list
+ */
+/**
+ * @typedef {object} queryType An getQL JSON query type
+ * @prop {string} [name] Query name (it is needed when there are multiple queries)
+ * @prop {operation} operation Operation object
+ * @prop {Object.<string, { type: string, value: string }>} [variables] Query variables
+ */
+
+/**
  * Parses query variables into strings
  * @param {Object.<string, { type: string, value: string }>} variables Variable object
  * @return {string} Parsed variables
@@ -125,6 +143,7 @@ function parseOperation (query) {
 function parse (query, type) {
   try {
     if (!query.operation) throw new Error('a query must have at least one operation')
+    if (!type) throw new Error('type must be either "query" or "mutation"')
 
     let queryName = (query.name) ? `${query.name} ` : ''
     return `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query)} }`.trim()
@@ -133,4 +152,4 @@ function parse (query, type) {
   }
 }
 
-module.exports = { parse }
+module.exports = parse
