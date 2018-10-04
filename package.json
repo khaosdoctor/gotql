@@ -21,7 +21,9 @@
   "bugs": {
     "url": "https://github.com/khaosdoctor/gotql/issues"
   },
-  "pre-commit": [ "build" ],
+  "pre-commit": [
+    "build"
+  ],
   "pre-push": [
     "lint",
     "coverage"
@@ -55,7 +57,7 @@
     "prepend-http": "^2.0.0"
   },
   "devDependencies": {
-    "ava": "^0.24.0",
+    "ava": "^0.25.0",
     "codecov": "^3.0.0",
     "conduct": "^1.0.2",
     "nyc": "^11.3.0",
