@@ -26,15 +26,8 @@ action "Run coverage tests" {
   args = "run coverage"
 }
 
-action "Send coverage report" {
-  uses = "actions/npm@e7aaefe"
-  needs = ["Run coverage tests"]
-  args = "run report"
-}
-
 action "Check if is a tag" {
   uses = "actions/bin/filter@b2bea07"
-  needs = ["Send coverage report"]
   args = "tag"
 }
 
