@@ -1,6 +1,6 @@
 workflow "Build and deploy" {
   on = "push"
-  resolves = ["Publish package"]
+  resolves = ["Publish"]
 }
 
 action "Install" {
@@ -32,9 +32,15 @@ action "Send coverage report" {
   args = "run report"
 }
 
-action "Publish package" {
-  uses = "actions/npm@e7aaefe"
+action "Check if is a tag" {
+  uses = "actions/bin/filter@b2bea07"
   needs = ["Send coverage report"]
+  args = "tag"
+}
+
+action "Publish" {
+  uses = "actions/npm@e7aaefe"
+  needs = ["Check if is a tag"]
   args = "publish --access-public"
   secrets = ["NPM_AUTH_TOKEN"]
 }
