@@ -50,6 +50,15 @@ function getFields (fieldList) {
 }
 
 /**
+ * Outputs true if the argument is a boolean
+ * @param {string} varName Variable value
+ * @return {boolean} True if it is a boolean
+ */
+function checkIsBool (varValue) {
+  return (typeof varValue === typeof true)
+}
+
+/**
  * Checks if the value is an object
  * @param {any} varName Object to be checked
  * @return {boolean} True if is object
@@ -92,17 +101,28 @@ function checkArgVar (query, operationArg) {
   const argValue = query.operation.args[operationArg]
   let parsedVar = getParsedVar(argValue)
 
-  if (checkIsVar(argValue)) { // Check if is query var, must contain "$" and not be an object
-    parsedVar = argValue
-    const varName = parsedVar.slice(1) // Removes "$" to check for name
+  switch(true) {
+    case checkIsBool(argValue):
+      parsedVar = argValue
+      break
 
-    if (!query.variables || !query.variables[varName] || !query.variables[varName].type || !query.variables[varName].value) {
-      throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
-    }
-  } else if (checkIsObject(argValue)) { // Check if arg is object (i.e enum)
-    if (!argValue.escape) {
-      parsedVar = argValue.value
-    }
+    case checkIsVar(argValue):
+      parsedVar = argValue
+      const varName = parsedVar.slice(1) // Removes "$" to check for name
+
+      if (!query.variables || !query.variables[varName] || !query.variables[varName].type || !query.variables[varName].value) {
+        throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
+      }
+
+      break
+
+    case checkIsObject(argValue):
+      if (!argValue.escape)
+        parsedVar = argValue.value
+      break
+
+    default:
+      break
   }
 
   return parsedVar
