@@ -100,29 +100,23 @@ function getParsedVar (varName) {
 function checkArgVar (query, operationArg) {
   const argValue = query.operation.args[operationArg]
   let parsedVar = getParsedVar(argValue)
+  let varName
 
-  switch(true) {
-    case checkIsBool(argValue):
-      parsedVar = argValue
-      break
+  if (checkIsBool(argValue)) {
+    parsedVar = argValue
+  } else if (checkIsVar(argValue)) { // Check if is query var, must contain "$" and not be an object
+    parsedVar = argValue
+    varName = parsedVar.slice(1) // Removes "$" to check for name
 
-    case checkIsVar(argValue):
-      parsedVar = argValue
-      const varName = parsedVar.slice(1) // Removes "$" to check for name
-
-      if (!query.variables || !query.variables[varName] || !query.variables[varName].type || !query.variables[varName].value) {
-        throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
-      }
-
-      break
-
-    case checkIsObject(argValue):
-      if (!argValue.escape)
-        parsedVar = argValue.value
-      break
-
-    default:
-      break
+    if (
+      !query.variables ||
+      !query.variables[varName] ||
+      !query.variables[varName].type ||
+      !query.variables[varName].value
+    ) throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
+  } else if (checkIsObject(argValue)) { // Check if arg is object (i.e enum)
+    if (!argValue.escape)
+      parsedVar = argValue.value
   }
 
   return parsedVar
