@@ -5,7 +5,7 @@ describe('Should return a usable simple query', (assert) => {
   const query = {
     operation: {
       name: 'TestOp',
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query { TestOp { field1 field2 } }'
@@ -19,7 +19,7 @@ describe('Should return a named simple query', (assert) => {
     name: 'TestQuery',
     operation: {
       name: 'TestOp',
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query TestQuery { TestOp { field1 field2 } }'
@@ -36,7 +36,7 @@ describe('Should return a named simple query with a variable', (assert) => {
     },
     operation: {
       name: 'TestOp',
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query TestQuery ($name: string!) { TestOp { field1 field2 } }'
@@ -56,7 +56,7 @@ describe('Should return a named simple query with a variable and arg variable', 
       args: {
         user: '$name'
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query TestQuery ($name: string!) { TestOp(user: $name) { field1 field2 } }'
@@ -73,7 +73,7 @@ describe('Should return an error when args has variable and variable is not decl
       args: {
         name: '$name'
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
 
@@ -93,7 +93,7 @@ describe('Should return an error when type is null', async (assert) => {
       args: {
         name: '$name'
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
 
@@ -116,7 +116,7 @@ describe('Should return an error when args has variable and variable is missing 
       args: {
         name: '$name'
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
 
@@ -139,7 +139,7 @@ describe('Should return an error when args has variable and variable is missing 
       args: {
         name: '$name'
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
 
@@ -162,7 +162,7 @@ describe('Should return an error when args has variable and variable is not pres
       args: {
         name: '$name'
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
 
@@ -178,7 +178,7 @@ describe('Should return an error when operation has no name', async (assert) => 
   const query = {
     name: 'TestQuery',
     operation: {
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
 
@@ -226,10 +226,26 @@ describe('Should return a simple operation with args', (assert) => {
       args: {
         name: 'Test'
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 } }'
+  const queryResult = parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
+
+describe('Should return a simple operation with boolean args', (assert) => {
+  const query = {
+    operation: {
+      name: 'TestOp',
+      args: {
+        aBooleanArg: true
+      },
+      fields: ['field1', 'field2']
+    }
+  }
+  const testReturn = 'query { TestOp(aBooleanArg: true) { field1 field2 } }'
   const queryResult = parse(query, 'query')
 
   assert.deepEqual(queryResult, testReturn)
@@ -242,7 +258,7 @@ describe('Should return a simple operation with args not escaped', (assert) => {
       args: {
         name: { value: 'Test', escape: false }
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query { TestOp(name: Test) { field1 field2 } }'
@@ -258,7 +274,7 @@ describe('Should return a simple operation with args escaped', (assert) => {
       args: {
         name: { value: 'Test', escape: true }
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 } }'
@@ -280,7 +296,7 @@ describe('Should return a simple operation with escaped arg variable as object b
       args: {
         user: { value: '$test', escape: true }
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query ($test: string) { TestOp(user: "$test") { field1 field2 } }'
@@ -302,7 +318,7 @@ describe('Should return a simple operation with arg variable as object but no er
       args: {
         user: { value: '$test', escape: false }
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query ($test: string) { TestOp(user: $test) { field1 field2 } }'
@@ -319,7 +335,7 @@ describe('Should return a simple operation with alias', (assert) => {
       args: {
         name: 'Test'
       },
-      fields: [ 'field1', 'field2' ]
+      fields: ['field1', 'field2']
     }
   }
   const testReturn = 'query { Alias: TestOp(name: "Test") { field1 field2 } }'
@@ -335,7 +351,7 @@ describe('Should parse fields recursively', (assert) => {
       args: {
         name: 'Test'
       },
-      fields: [ 'field1', 'field2', { owner: { fields: ['name', 'age'] } } ]
+      fields: ['field1', 'field2', { owner: { fields: ['name', 'age'] } }]
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 owner { name age } } }'
@@ -351,7 +367,7 @@ describe('Should parse fields recursively with empty objects', (assert) => {
       args: {
         name: 'Test'
       },
-      fields: [ 'field1', 'field2', { owner: { fields: ['name', 'age'] } }, { people: {} } ]
+      fields: ['field1', 'field2', { owner: { fields: ['name', 'age'] } }, { people: {} }]
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 owner { name age } people { } } }'
@@ -367,7 +383,7 @@ describe('Should parse fields recursively with nested second level fields', (ass
       args: {
         name: 'Test'
       },
-      fields: [ 'field1', 'field2', { owner: { fields: ['name', { people: {} }] } } ]
+      fields: ['field1', 'field2', { owner: { fields: ['name', { people: {} }] } }]
     }
   }
   const testReturn = 'query { TestOp(name: "Test") { field1 field2 owner { name people { } } } }'

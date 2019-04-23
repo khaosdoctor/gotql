@@ -59,6 +59,15 @@ function checkIsObject (varName) {
 }
 
 /**
+ * Outputs true if the argument is a boolean
+ * @param {string} varName Variable value
+ * @return {boolean} True if it is a boolean
+ */
+function checkIsBool (varValue) {
+  return (typeof varValue === typeof true)
+}
+
+/**
  * Outputs true if the argument is a variable
  * @param {string|object} varName Variable value or object
  * @return {boolean} True if it is a variable
@@ -81,6 +90,15 @@ function getParsedVar (varName) {
 }
 
 /**
+ * Checks if a given variable is not existent in the query
+ * @param {string} varName Variable name without $
+ * @param {queryType} query The JSON-Like Query
+ */
+function isVarUndefined (varName, query) {
+  return !query.variables || !query.variables[varName] || !query.variables[varName].type || !query.variables[varName].value
+}
+
+/**
  * Checks if the operation argument is a variable or not
  *
  * Also checks if the variables are indeed set in the query before using it in the operation
@@ -92,17 +110,16 @@ function checkArgVar (query, operationArg) {
   const argValue = query.operation.args[operationArg]
   let parsedVar = getParsedVar(argValue)
 
-  if (checkIsVar(argValue)) { // Check if is query var, must contain "$" and not be an object
-    parsedVar = argValue
-    const varName = parsedVar.slice(1) // Removes "$" to check for name
+  if (checkIsBool(argValue)) return argValue
 
-    if (!query.variables || !query.variables[varName] || !query.variables[varName].type || !query.variables[varName].value) {
-      throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
-    }
-  } else if (checkIsObject(argValue)) { // Check if arg is object (i.e enum)
-    if (!argValue.escape) {
-      parsedVar = argValue.value
-    }
+  if (checkIsVar(argValue)) { // Check if is query var, must contain "$" and not be an object
+    const varName = argValue.slice(1) // Removes "$" to check for name
+    if (isVarUndefined(varName, query)) throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
+    return argValue
+  }
+
+  if (checkIsObject(argValue)) { // Check if arg is object (i.e enum)
+    if (!argValue.escape) return argValue.value
   }
 
   return parsedVar
