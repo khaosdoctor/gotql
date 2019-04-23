@@ -3,26 +3,24 @@ os:
 language: node_js
 node_js:
   - "node"
-  - "iojs"
+  - "11"
+  - "10"
+  - "9"
   - "8"
   - "7"
-  - "6"
 matrix:
   fast_finish: true
-  allow_failures:
-    - node_js: "6"
-    - node_js: "iojs"
 
 before_script:
-  - gem install awesome_bot
   - npm i -g ava codecov nyc
   - npm i
 
 jobs:
   include:
-    - stage: Test
+    - stage: "Test"
       script: npm run coverage
-    - stage: Deploy
+
+    - stage: "Deploy"
       deploy:
         provider: npm
         email: $NPM_EMAIL_ADDR
