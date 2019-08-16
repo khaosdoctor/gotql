@@ -22,7 +22,6 @@ jobs:
       - run: npm test
 
   publish-npm:
-    if: startsWith($GITHUB_REF, '/refs/tags/v')
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -32,11 +31,11 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: npm publish
+        if: startsWith($GITHUB_REF, '/refs/tags/v')
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
 
   publish-gpr:
-    if: startsWith($GITHUB_REF, '/refs/tags/v')
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -47,5 +46,6 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@khaosdoctor'
       - run: npm publish
+        if: startsWith($GITHUB_REF, '/refs/tags/v')
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
