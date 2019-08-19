@@ -1,4 +1,4 @@
-name: Node.js Package
+name: Build and Publish
 
 on:
   pull_request:
