@@ -1,3 +1,5 @@
+import got = require('got')
+
 /**
  * @typedef {object} userOpts User Options
  * @prop {boolean} debug Sets debug mode on/off
@@ -8,5 +10,6 @@ export type UserOptions = {
   errorStatusCode: number,
   headers: {
     [name: string]: string
-  }
+  },
+  gotInstance?: got.GotInstance
 }

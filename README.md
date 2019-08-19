@@ -37,6 +37,7 @@ Built because manipulating strings is a real pain.
   - [What is it?](#what-is-it)
     - [Motivation](#motivation)
   - [API](#api)
+    - [Option Object](#option-object)
     - [Returns](#returns)
   - [The JSON query format](#the-json-query-format)
     - [Description](#description)
@@ -144,19 +145,7 @@ gotQl.query(graphQLEndpoint, query, [options])
 
 **options**
 
-- Type: `object`
-- Description: The option object with the following properties.
-  - _errorStatusCode_: Default HTTP status code to be returned on error
-    - Type: `number`
-  - _headers_: Additional headers to be sent
-    - Type: `object`, in the form of `[headerName: string]: headerValue: string`
-
->**Note:** GotQL uses [`debug`](https://npmjs.com/package/debug) internally as default debugger, so you can set debug levels by setting the `DEBUG` environment variable. These are the current levels:
->
-> - `gotql:info`
-> - `gotql:errors`
-> - `gotql:parser`
-> - `gotql:runner`
+See [option object](#option-object) for more information.
 
 ---
 
@@ -178,14 +167,7 @@ gotQl.mutation(graphQLEndpoint, query, [options])
 
 **options**
 
-- Type: `object`
-- Description: The option object with the following properties.
-  - _debug_: Activates debug logging
-    - Type: `boolean`
-  - _errorStatusCode_: Default HTTP status code to be returned on error
-    - Type: `number`
-  - _headers_: Additional headers to be sent
-    - Type: `object`, in the form of `[headerName: string]: headerValue: string`
+See [option object](#option-object) for more information.
 
 ---
 
@@ -204,6 +186,26 @@ gotQl.parser(query, type)
 
 - Type: `string`
 - Description: Must be either `'query'` or `'mutation'`
+
+### Option Object
+
+Both `gotql.query` and `gotql.mutation` accept an optional user option object with the following API:
+
+- Type: `object`
+- Description: The option object with the following properties.
+  - _errorStatusCode_: Default HTTP status code to be returned on error
+    - Type: `number`
+  - _headers_: Additional headers to be sent
+    - Type: `object`, in the form of `[headerName: string]: headerValue: string`
+  - _gotInstance_: Customized Got instance to be used when calling the endpoint
+    - Type: `got`. Internally this will be called as `got.post(prependHttp(endPoint), gotPayload)`
+
+>**Note:** GotQL uses [`debug`](https://npmjs.com/package/debug) internally as default debugger, so you can set debug levels by setting the `DEBUG` environment variable. These are the current levels:
+>
+> - `gotql:info`
+> - `gotql:info:parser`
+> - `gotql:info:runner`
+> - `gotql:errors`
 
 ### Returns
 
