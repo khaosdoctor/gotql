@@ -1,6 +1,6 @@
 import debug from 'debug'
 import { GotQL } from '../types/generics'
-import { ParserError } from '../errors/parserError'
+import { ParserError } from '../errors/ParserError'
 import { QueryType, QueryOperation, VariableObject, ArgObject } from '../types/QueryType'
 const shout = debug('gotql:errors')
 const info = debug('gotql:info:parser')
