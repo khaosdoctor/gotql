@@ -146,12 +146,17 @@ gotQl.query(graphQLEndpoint, query, [options])
 
 - Type: `object`
 - Description: The option object with the following properties.
-  - _debug_: Activates debug logging
-    - Type: `boolean`
   - _errorStatusCode_: Default HTTP status code to be returned on error
     - Type: `number`
   - _headers_: Additional headers to be sent
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
+
+>**Note:** GotQL uses [`debug`](https://npmjs.com/package/debug) internally as default debugger, so you can set debug levels by setting the `DEBUG` environment variable. These are the current levels:
+>
+> - `gotql:info`
+> - `gotql:errors`
+> - `gotql:parser`
+> - `gotql:runner`
 
 ---
 
@@ -332,7 +337,7 @@ const query = {
     name: 'user',
     args: {
       name: 'Joe'
-    }
+    },
     fields: ['name', 'age']
   }
 }
@@ -358,7 +363,7 @@ const query = {
     name: 'user',
     args: {
       name: '$name'
-    }
+    },
     fields: ['name', 'age']
   }
 }
@@ -384,8 +389,15 @@ Variables are sent on a separate object to graphQL.
 const query = {
   operation: {
     name: 'users',
-    fields: ['name', 'age', { friends: { fields: ['name', 'age'] }
-    }]
+    fields: [
+      'name',
+      'age',
+      {
+        friends: {
+          fields: ['name', 'age']
+        }
+      }
+    ]
   }
 }
 ```
@@ -409,7 +421,7 @@ const query = {
         value: 'internal',
         escape: false
       }
-    }
+    },
     fields: ['name', 'age']
   }
 }

@@ -1,27 +1,12 @@
-/**
- * @typedef {object} fieldObj Field properties
- * @prop {Array<string | Object.<string, [fieldObj]>>} [fields] Nested fields
- */
-/**
- * @typedef {object} operation An operation object
- * @prop {string} name Operation name
- * @prop {Object.<string, any> | Object.<string, {value: string, escape: boolean}>} [args] Operation arguments
- * @prop {string} [alias] Operation arguments
- * @prop {Array<string | Object.<string, [fieldObj]>>} fields Field list
- */
-/**
- * @typedef {object} queryType An getQL JSON query type
- * @prop {string} [name] Query name (it is needed when there are multiple queries)
- * @prop {operation} operation Operation object
- * @prop {Object.<string, { type: string, value: string }>} [variables] Query variables
- */
+import { QueryType, QueryOperation, VariableObject, ArgObject } from '../types/QueryType'
+import { GotQL } from '../types/generics';
 
 /**
  * Parses query variables into strings
  * @param {Object.<string, { type: string, value: string }>} variables Variable object
  * @return {string} Parsed variables
  */
-function getQueryVars (variables) {
+function getQueryVars (variables: QueryType['variables']): string {
   if (!variables) return ''
 
   let queryVars = '('
@@ -36,9 +21,10 @@ function getQueryVars (variables) {
  * @param {Array<string | Object.<string, [fieldObj]>>} fieldList List of fields
  * @return {string} Parsed fields
  */
-function getFields (fieldList) {
+function getFields (fieldList: QueryOperation['fields']): string {
   if (!fieldList) return '' // Return condition, reached bottom of tree
   let fieldStr = ''
+
   for (let field of fieldList) {
     if (typeof field === 'string') fieldStr += `${field} ` // Return plain string field
     /* istanbul ignore next */
@@ -54,8 +40,8 @@ function getFields (fieldList) {
  * @param {any} varName Object to be checked
  * @return {boolean} True if is object
  */
-function checkIsObject (varName) {
-  return (typeof varName === 'object' && varName.value)
+function checkIsObject (varName: any): boolean {
+  return !!(typeof varName === 'object' && varName.value)
 }
 
 /**
@@ -63,7 +49,7 @@ function checkIsObject (varName) {
  * @param {string} varName Variable value
  * @return {boolean} True if it is a boolean
  */
-function checkIsBool (varValue) {
+function checkIsBool (varValue: any): boolean {
   return (typeof varValue === typeof true)
 }
 
@@ -72,7 +58,7 @@ function checkIsBool (varValue) {
  * @param {string|object} varName Variable value or object
  * @return {boolean} True if it is a variable
  */
-function checkIsVar (varName) {
+function checkIsVar (varName: any): boolean {
   if (checkIsObject(varName)) return false
   return varName.indexOf('$') === 0
 }
@@ -84,8 +70,8 @@ function checkIsVar (varName) {
  * @param {string|object} varName Variable value or object
  * @return {string} Parsed variablename
  */
-function getParsedVar (varName) {
-  if (checkIsObject(varName)) return `"${varName.value}"`
+function getParsedVar (varName: string | VariableObject | ArgObject): string {
+  if (checkIsObject(varName)) return `"${(varName as VariableObject).value}"`
   return `"${varName}"`
 }
 
@@ -94,8 +80,8 @@ function getParsedVar (varName) {
  * @param {string} varName Variable name without $
  * @param {queryType} query The JSON-Like Query
  */
-function isVarUndefined (varName, query) {
-  return !query.variables || !query.variables[varName] || !query.variables[varName].type || !query.variables[varName].value
+function isVarUndefined (varName: string, { variables }: QueryType) {
+  return !variables || !variables[varName] || !variables[varName].type || !variables[varName].value
 }
 
 /**
@@ -106,20 +92,20 @@ function isVarUndefined (varName, query) {
  * @param {string} operationArg Argument name
  * @returns {string} Parsed operation argument
  */
-function checkArgVar (query, operationArg) {
-  const argValue = query.operation.args[operationArg]
+function checkArgVar (query: QueryType, operationArg: string): string {
+  const argValue = query.operation.args![operationArg]
   let parsedVar = getParsedVar(argValue)
 
-  if (checkIsBool(argValue)) return argValue
+  if (checkIsBool(argValue)) return argValue as string
 
   if (checkIsVar(argValue)) { // Check if is query var, must contain "$" and not be an object
-    const varName = argValue.slice(1) // Removes "$" to check for name
+    const varName = (argValue as string).slice(1) // Removes "$" to check for name
     if (isVarUndefined(varName, query)) throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
-    return argValue
+    return argValue as string
   }
 
   if (checkIsObject(argValue)) { // Check if arg is object (i.e enum)
-    if (!argValue.escape) return argValue.value
+    if (!(argValue as ArgObject).escape) return (argValue as ArgObject).value
   }
 
   return parsedVar
@@ -130,7 +116,7 @@ function checkArgVar (query, operationArg) {
  * @param {queryType} query The JSON-Like query to be parsed
  * @return {string} Parsed operation query
  */
-function parseOperation (query) {
+function parseOperation (query: QueryType): string {
   let operation = query.operation
   if (!operation.name) throw new Error(`name is required for graphQL operation`)
   if (!operation.fields) throw new Error(`field list is required for operation "${operation.name}"`)
@@ -157,7 +143,7 @@ function parseOperation (query) {
  * @param {string} type Can be 'query' or 'mutation'
  * @return {string} Parsed query
  */
-function parse (query, type) {
+export function parse (query: QueryType, type: GotQL.ExecutionType): string {
   try {
     if (!query.operation) throw new Error('a query must have at least one operation')
     if (!type) throw new Error('type must be either "query" or "mutation"')
@@ -168,5 +154,3 @@ function parse (query, type) {
     throw new Error(`Parse error: ${error.message}`)
   }
 }
-
-module.exports = parse
