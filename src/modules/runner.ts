@@ -4,6 +4,7 @@ import prependHttp from 'prepend-http'
 import { GotQL } from '../types/generics'
 import { QueryType } from '../types/QueryType'
 import { UserOptions } from '../types/UserOptions'
+import { RunnerError } from '../errors/RunnerError'
 import got, { GotInstance, GotJSONOptions } from 'got'
 const shout = debug('gotql:errors')
 const info = debug('gotql:info:runner')
@@ -123,6 +124,6 @@ export async function run (endPoint: string, query: QueryType, type: GotQL.Execu
     return handleResponse(response, options)
   } catch (error) {
     shout('Error on runner: %O', error)
-    throw new Error(`Error when executing query: ${error.message}`)
+    throw new RunnerError(`Error when executing query: ${error.message}`)
   }
 }
