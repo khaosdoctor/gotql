@@ -1,8 +1,8 @@
 import got from 'got'
 import debug from 'debug'
 import { run } from './modules/runner'
-import { QueryType } from './types/QueryType'
 import { GotQL } from './types/generics'
+import { QueryType } from './types/QueryType'
 import { UserOptions } from './types/UserOptions'
 const info = debug('gotql:info')
 
@@ -16,6 +16,7 @@ const info = debug('gotql:info')
  * @return {Promise<any>} A response object containing all the data
  */
 export function mutation (endPoint: string, query: QueryType, options?: UserOptions): Promise<any> {
+  const client = options && options.gotInstance ? options.gotInstance : got
   info('Starting a new mutation')
-  return run(endPoint, query, GotQL.ExecutionType.MUTATION, got, options)
+  return run(endPoint, query, GotQL.ExecutionType.MUTATION, client, options)
 }

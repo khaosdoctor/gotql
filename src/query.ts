@@ -15,6 +15,7 @@ const info = debug('gotql:info')
  * @return {Promise<any>} A response object containing all the data
  */
 export function query (endPoint: string, query: QueryType, options?: UserOptions): Promise<any> {
+  const client = options && options.gotInstance ? options.gotInstance : got
   info('Starting a new query')
-  return run(endPoint, query, GotQL.ExecutionType.QUERY, got, options)
+  return run(endPoint, query, GotQL.ExecutionType.QUERY, client, options)
 }
