@@ -8,7 +8,7 @@
     /* Generates corresponding '.d.ts' file. */
     "declarationMap": true,
     /* Generates a sourcemap for each corresponding '.d.ts' file. */
-    "sourceMap": false,
+    "sourceMap": true,
     /* Generates corresponding '.map' file. */
     "outDir": "./dist",
     /* Redirect output structure to the directory. */
