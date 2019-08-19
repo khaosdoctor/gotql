@@ -12,11 +12,14 @@ matrix:
   fast_finish: true
 
 before_script:
-  - npm i -g ava codecov nyc
+  - npm i -g ava codecov nyc tsc
   - npm i
 
 jobs:
   include:
+    - stage: "Build"
+      script: npm run build:clean
+
     - stage: "Test"
       script: npm run coverage
 
