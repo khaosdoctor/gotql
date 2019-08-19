@@ -5,18 +5,20 @@
     "node": ">=7"
   },
   "files": [
-    "src",
-    "index.js"
+    "dist"
   ],
   "scripts": {
-    "test": "ava --color -v -T 10000",
+    "test": "npm run build:clean && ava --color -v -T 10000",
     "lint": "standard -v ./src",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "build:clean": "npm run clean && npm run build",
     "lint:fix": "standard --fix",
     "report": "cat ./coverage/lcov.info | codecov",
-    "coverage": "nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
+    "coverage": "npm run build:clean && nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
   },
   "description": "A GraphQL query framework for serverside apps",
-  "main": "index.js",
+  "main": "dist/index.js",
   "repository": "https://github.com/khaosdoctor/gotql.git",
   "bugs": {
     "url": "https://github.com/khaosdoctor/gotql/issues"
@@ -28,19 +30,6 @@
     "lint",
     "coverage"
   ],
-  "standard": {
-    "ignore": [
-      "./dist/**/*.*"
-    ],
-    "globals": [
-      "describe",
-      "assert",
-      "before",
-      "beforeAll",
-      "after",
-      "afterAll"
-    ]
-  },
   "author": "Lucas Santos <lhs.santoss@gmail.com>",
   "license": "MIT",
   "keywords": [
@@ -53,16 +42,23 @@
   ],
   "private": false,
   "dependencies": {
+    "debug": "^4.1.1",
     "got": "^8.0.1",
     "prepend-http": "^2.0.0"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.5",
+    "@types/got": "^9.6.7",
+    "@types/node": "^12.7.2",
     "ava": "^0.25.0",
     "codecov": "^3.0.0",
+    "concurrently": "^4.1.2",
     "conduct": "^1.0.2",
-    "nyc": "^11.3.0",
+    "nyc": "^11.9.0",
     "pre-push": "^0.1.1",
     "sinon": "^4.1.2",
-    "standard": "^10.0.3"
+    "standard": "^10.0.3",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.5.3"
   }
 }
