@@ -15,7 +15,7 @@
     "build:clean": "npm run clean && npm run build",
     "lint:fix": "standard --fix",
     "report": "cat ./coverage/lcov.info | codecov",
-    "coverage": "npm run build:clean && nyc --check-coverage --lines 95 --functions 95 --branches 95 --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
+    "coverage": "npm run build:clean && nyc --check-coverage --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
   },
   "description": "A GraphQL query framework for serverside apps",
   "main": "dist/index.js",
