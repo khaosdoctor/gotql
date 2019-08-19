@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "test": "npm run build:clean && ava --color -v -T 10000",
+    "prepare": "npm run build:clean",
     "lint": "standard -v ./src",
     "build": "tsc",
     "clean": "rm -rf dist",
