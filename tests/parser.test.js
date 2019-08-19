@@ -1,5 +1,5 @@
 import describe from 'ava'
-import parse from '../src/modules/parser'
+import { parse } from '../dist/modules/parser'
 
 describe('Should return a usable simple query', (assert) => {
   const query = {
