@@ -1,9 +1,6 @@
 name: Build and Publish
 
 on:
-  pull_request:
-    branches:
-      - master
   push:
     branches:
       - master
@@ -31,7 +28,6 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - run: npm publish
-        if: startsWith(github.ref, '/refs/tags/v')
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
 
@@ -46,6 +42,5 @@ jobs:
           registry-url: https://npm.pkg.github.com/
           scope: '@khaosdoctor'
       - run: npm publish
-        if: startsWith(github.ref, '/refs/tags/v')
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_ACCESS_TOKEN}}
