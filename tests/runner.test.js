@@ -266,6 +266,6 @@ describe('Should successfully handle error when type is not passed', async (asse
     await runner(assert.context.endpointIp, query, '', assert.context.got)
   } catch (error) {
     assert.deepEqual(error.name, 'Error')
-    assert.deepEqual(error.message, 'Error when executing query: Query type must be either `query` or `mutation`')
+    assert.deepEqual(error.message, 'Runner error: Error when executing query: Query type must be either `query` or `mutation`')
   }
 })
