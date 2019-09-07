@@ -27,7 +27,7 @@ function getQueryVars (variables: QueryType['variables']): string {
  * @param {Array<string | Object.<string, [fieldObj]>>} fieldList List of fields
  * @return {string} Parsed fields
  */
-function getFields (fieldList: QueryOperation['fields']): string {
+function getFields (fieldList: QueryOperation['fields'], variables: QueryType['variables']): string {
   info('Getting fields')
   if (!fieldList) return '' // Return condition, reached bottom of tree
   let fieldStr = ''
@@ -39,12 +39,26 @@ function getFields (fieldList: QueryOperation['fields']): string {
     }
     /* istanbul ignore next */
     else if (typeof field === 'object') {
-      info('Processing field %s', Object.keys(field)[0])
-      fieldStr += `${Object.keys(field)[0]} { ${getFields(field[Object.keys(field)[0]].fields)}} ` // Get fields recursively if nested
+      const fieldName = Object.keys(field)[0]
+      info('Processing field %s', fieldName)
+      fieldStr += `${fieldName}${parseArgs(field[fieldName].args, variables)} { ${getFields(field[fieldName].fields, variables)}} ` // Get fields recursively if nested
     }
   }
   info('Parsed field: "%s"', fieldStr)
   return fieldStr
+}
+
+function parseArgs (argsList: QueryType['operation']['args'], variables: QueryType['variables']): string {
+  if (!argsList) return ''
+  let fieldArgs = ''
+  info('Parsing args args')
+  for (let argName in argsList) {
+    info('Parsing arg %s', argName)
+    fieldArgs += `${argName}: ${CheckArgs(argsList, argName, variables)}, ` // There'll be a last comma we'll strip later
+  }
+  fieldArgs = `(${fieldArgs.slice(0, -2)})` // Strips last comma
+  info('Obtained args: %s', fieldArgs)
+  return fieldArgs
 }
 
 /**
@@ -96,7 +110,7 @@ function getParsedVar (varName: string | VariableObject | ArgObject): string {
  * @param {string} varName Variable name without $
  * @param {queryType} query The JSON-Like Query
  */
-function isVarUndefined (varName: string, { variables }: QueryType) {
+function isVarUndefined (varName: string, variables: QueryType['variables']) {
   info('Checking if "%s" variable is defined in the query', varName)
   return !variables || !variables[varName] || !variables[varName].type || !variables[varName].value
 }
@@ -109,8 +123,8 @@ function isVarUndefined (varName: string, { variables }: QueryType) {
  * @param {string} operationArg Argument name
  * @returns {string} Parsed operation argument
  */
-function checkArgVar (query: QueryType, operationArg: string): string {
-  const argValue = query.operation.args![operationArg]
+function CheckArgs (argsList: QueryType['operation']['args'], operationArg: string, variables: QueryType['variables']): string {
+  const argValue = argsList![operationArg]
   info('Obtained arg value')
   let parsedVar = getParsedVar(argValue)
 
@@ -119,7 +133,7 @@ function checkArgVar (query: QueryType, operationArg: string): string {
   if (checkIsVar(argValue)) { // Check if is query var, must contain "$" and not be an object
     const varName = (argValue as string).slice(1) // Removes "$" to check for name
     info('Argument is variable "%s"', varName)
-    if (isVarUndefined(varName, query)) throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
+    if (isVarUndefined(varName, variables)) throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
     return argValue as string
   }
 
@@ -146,16 +160,12 @@ function parseOperation (query: QueryType): string {
     let operationArgs = ''
     if (operation.args) {
       info('Parsing args')
-      for (let argName in operation.args) {
-        info('Parsing arg %s', argName)
-        operationArgs += `${argName}: ${checkArgVar(query, argName)}, ` // There'll be a last comma we'll strip later
-      }
-      operationArgs = `(${operationArgs.slice(0, -2)})`
-      info('Obtained args: %s', operationArgs)
+      operationArgs = parseArgs(query.operation.args, query.variables)
+      info('Operation args are: %s', operationArgs)
     }
 
     let alias = operation.alias ? `${operation.alias}:` : ''
-    const parsedOperation = `${alias} ${operation.name}${operationArgs} { ${getFields(operation.fields).trim()} }`.trim()
+    const parsedOperation = `${alias} ${operation.name}${operationArgs} { ${getFields(operation.fields, query.variables).trim()} }`.trim()
     info('Parsed operation: %s', parsedOperation)
     return parsedOperation
   } catch (error) {
@@ -178,7 +188,9 @@ export function parse (query: QueryType, type: GotQL.ExecutionType): string {
 
     let queryName = (query.name) ? `${query.name} ` : ''
     info('Defining name "%s"', queryName)
-    return `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query)} }`.trim()
+    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query)} }`.trim()
+    info('Parsed query: %s', parsedQuery)
+    return parsedQuery
   } catch (error) {
     shout('Parser error: %O', error)
     throw new ParserError(error.message)

@@ -391,3 +391,120 @@ describe('Should parse fields recursively with nested second level fields', (ass
 
   assert.deepEqual(queryResult, testReturn)
 })
+
+describe('Should parse fields with args and variables (#16)', (assert) => {
+  const query = {
+    operation: {
+      name: 'TestOp',
+      args: {
+        owner: '$owner'
+      },
+      fields: [
+        {
+          owner: {
+            args: { owner: '$owner' },
+            fields: ['f1', 'f2']
+          }
+        }
+      ]
+    },
+    variables: {
+      owner: {
+        type: 'String!',
+        value: 'test'
+      }
+    }
+  }
+  const testReturn = 'query ($owner: String!) { TestOp(owner: $owner) { owner(owner: $owner) { f1 f2 } } }'
+  const queryResult = parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
+
+describe('Should parse fields with args (#16)', (assert) => {
+  const query = {
+    operation: {
+      name: 'TestOp',
+      fields: [
+        {
+          user: {
+            args: { user: 'user' }
+          }
+        }
+      ]
+    }
+  }
+  const testReturn = 'query { TestOp { user(user: "user") { } } }'
+  const queryResult = parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
+
+describe('Should parse complex nested fields with args (#16)', (assert) => {
+  const query = {
+    operation: {
+      name: 'customer',
+      args: {
+        customerCode: '$customerCode',
+        dataRepositoryCode: '$dataRepositoryCode',
+        dataCollectionCode: 'dataCollectionCode',
+        dataRecordIDs: '$dataRecordIDs',
+        limit: '$limit'
+      },
+      fields: ['customerCode', {
+        dataRepository: {
+          args: {
+            dataRepositoryCode: '$dataRepositoryCode'
+          },
+          fields: ['customerCode', 'dataRepositoryCode', 'metadata', {
+            dataCollection: {
+              args: {
+                dataCollectionCode: '$dataCollectionCode'
+              },
+              fields: [{
+                dataRecords: {
+                  args: {
+                    dataRecordIDs: '$dataRecordIDs',
+                    limit: '$limit'
+                  },
+                  fields: [{
+                    entities: {
+                      fields: ['values', 'relatedDataRecords']
+                    }
+                  }]
+                }
+              }]
+            }
+          }]
+        }
+      }]
+    },
+    variables: {
+      customerCode: {
+        type: 'String!',
+        value: 'test'
+      },
+      dataRepositoryCode: {
+        type: 'String!',
+        value: 'test'
+      },
+      dataCollectionCode: {
+        type: 'String!',
+        value: 'test'
+      },
+      dataRecordIDs: {
+        type: '[String!]!',
+        value: ['1', '2', '3']
+      },
+      limit: {
+        type: 'Int',
+        value: 500
+      }
+    }
+  }
+
+  const testReturn = 'query ($customerCode: String!, $dataRepositoryCode: String!, $dataCollectionCode: String!, $dataRecordIDs: [String!]!, $limit: Int) { customer(customerCode: $customerCode, dataRepositoryCode: $dataRepositoryCode, dataCollectionCode: "dataCollectionCode", dataRecordIDs: $dataRecordIDs, limit: $limit) { customerCode dataRepository(dataRepositoryCode: $dataRepositoryCode) { customerCode dataRepositoryCode metadata dataCollection(dataCollectionCode: $dataCollectionCode) { dataRecords(dataRecordIDs: $dataRecordIDs, limit: $limit) { entities { values relatedDataRecords } } } } } }'
+  const queryResult = parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
