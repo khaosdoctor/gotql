@@ -440,6 +440,30 @@ describe('Should parse fields with args (#16)', (assert) => {
   assert.deepEqual(queryResult, testReturn)
 })
 
+describe('Should parse fields with no escaped args (#16)', (assert) => {
+  const query = {
+    operation: {
+      name: 'TestOp',
+      fields: [
+        {
+          user: {
+            args: {
+              user: {
+                value: 'user',
+                escape: false
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+  const testReturn = 'query { TestOp { user(user: user) { } } }'
+  const queryResult = parse(query, 'query')
+
+  assert.deepEqual(queryResult, testReturn)
+})
+
 describe('Should parse complex nested fields with args (#16)', (assert) => {
   const query = {
     operation: {
