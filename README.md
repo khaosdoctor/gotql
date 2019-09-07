@@ -219,32 +219,34 @@ This is a generic model of a JSONLike query:
 
 ```js
 const query = {
-    name?: string;
-    operation: {
-        name: string;
-        alias?: string;
-        args?: {
-            [argName: string]: any;
-        } | {
+  name?: string,
+  operation: {
+    name: string,
+    alias?: string,
+    args?: { [argName: string]: any } | {
+      [argName: string]: {
+        value: string,
+        escape: boolean
+      }
+    },
+    fields: (string | {
+      [fieldName: string]: [{
+        args?: { [argName: string]: any } | {
           [argName: string]: {
-              value: string;
-              escape: boolean;
-          };
-        };
-        fields: (string | {
-            [fieldName: string]: [{
-                fields?: (string | {
-                    [fieldName: string]: [any];
-                })[];
-            }];
-        })[];
-    };
-    variables?: {
-        [varName: string]: {
-            type: string;
-            value: string;
-        };
-    };
+            value: string,
+            escape: boolean
+          }
+        },
+        fields?: (string | { [fieldName: string]: [any] })[]
+      }]
+    })[]
+  },
+  variables?: {
+    [varName: string]: {
+      type: string,
+      value: string
+    }
+  }
 }
 ```
 
@@ -289,6 +291,18 @@ const query = {
           - Properties (for nested fields):
             - Type: `object` where the field name is the key
             - _fields_: Recursive definition, accepts another array just like the _fields_ above.
+            - _args_: [optional] The field args
+              - Type: `[argName: string]: any` or a detailed arg object
+                - **_Simple args_**: An `object` where the key is the argument name and its value. Accepts variables in the format of `argName: '$value'`
+                  - Example: `args { name: 'myName' }`
+                - **_Detailed args_**: An object with two properties. This will give more control over escaping (mostly to use enums). Argument name should be the key
+                  - Type: `object`
+                  - Properties:
+                    - _value_: The argument value
+                      - Type: `any`
+                    - _escape_: Whether the argument should be escaped or not (escaped means surrounded with double quotes `"argValue"`)
+                      - Type: `boolean`
+                  - Examples: `args: { status: { value: 'an_enum', escape: false } }` should output `operation (status: an_enum)...`
 
 ### Examples
 
