@@ -48,6 +48,12 @@ function getFields (fieldList: QueryOperation['fields'], variables: QueryType['v
   return fieldStr
 }
 
+/**
+ * Takes all argument-like objects and parse them all into a usable argument declaration
+ * It also checks for variable existence, variable type and parsing
+ * @param argsList {QueryType['operation']['args']} Argument object
+ * @param variables {QueryType['variables']} Variable object
+ */
 function parseArgs (argsList: QueryType['operation']['args'], variables: QueryType['variables']): string {
   if (!argsList) return ''
   let fieldArgs = ''
