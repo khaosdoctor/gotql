@@ -43,5 +43,10 @@ export type ArgObject = {
  * @prop {Array<string | Object.<string, [fieldObj]>>} [fields] Nested fields
  */
 export type FieldObject = {
-  [name: string]: { fields: Array<string | FieldObject> }
+  [name: string]: {
+    args?: {
+      [name: string]: string | ArgObject
+    },
+    fields: Array<string | FieldObject>
+  }
 }
