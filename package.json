@@ -2,7 +2,7 @@
   "name": "gotql",
   "version": "1.5.1",
   "engines": {
-    "node": ">=7"
+    "node": ">=8"
   },
   "files": [
     "dist"

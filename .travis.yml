@@ -7,7 +7,6 @@ node_js:
   - "10"
   - "9"
   - "8"
-  - "7"
 matrix:
   fast_finish: true
 
@@ -39,6 +38,6 @@ after_success:
 notifications:
   email:
     recipients:
-    - hello@lsantos.dev
+      - hello@lsantos.dev
     on_success: change
     on_failure: always
