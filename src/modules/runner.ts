@@ -83,7 +83,7 @@ function handleResponse (response: got.Response<any>, options?: UserOptions) {
   info('Response obtained: %O', { errors: response.body.errors, body: response.body, statusCode: response.statusCode })
   if (response.body.errors) {
     shout('Error on query: %O', response.body.errors)
-    response.statusCode = options ? options.errorStatusCode : 500
+    response.statusCode = options && options.errorStatusCode ? options.errorStatusCode : 500
     response.statusMessage = 'GraphQL Error'
   }
 

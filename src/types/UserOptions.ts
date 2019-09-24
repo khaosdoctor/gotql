@@ -7,8 +7,8 @@ import got = require('got')
  * @prop {headerObj} headers Custom headers to be sent along
  */
 export type UserOptions = {
-  errorStatusCode: number,
-  headers: {
+  errorStatusCode?: number,
+  headers?: {
     [name: string]: string
   },
   gotInstance?: got.GotInstance
