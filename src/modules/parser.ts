@@ -145,7 +145,7 @@ function CheckArgs (argsList: QueryType['operation']['args'], operationArg: stri
 
   if (checkIsObject(argValue)) { // Check if arg is object (i.e enum)
     info('Arg is object %O', argValue)
-    if (!(argValue as ArgObject).escape) return (argValue as ArgObject).value
+    if (!(argValue as { escape: boolean, value: any }).escape) return (argValue as { escape: boolean, value: any }).value
   }
 
   return parsedVar
