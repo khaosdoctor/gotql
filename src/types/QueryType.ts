@@ -34,6 +34,8 @@ export type QueryOperation = {
 }
 
 export type ArgObject = {
+  [name: string]: string | ArgObject
+} | {
   value: string
   escape: boolean
 }
