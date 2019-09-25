@@ -98,7 +98,7 @@ Which can be translated to something waay more readable in a JSON format like th
 
 ```js
 const mutation = {
-  operation {
+  operation: {
     name: 'addLog',
     args: {
       logType: { value: 'status_change', escape: false}, // Enum Value
