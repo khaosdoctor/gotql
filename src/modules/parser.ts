@@ -72,7 +72,7 @@ function parseArgs (argsList: QueryType['operation']['args'], variables: QueryTy
  * @param {any} varName Object to be checked
  * @return {boolean} True if is object
  */
-function checkIsObject (varName: any): boolean {
+function isUsableObject (varName: any): boolean {
   info(`checking if ${JSON.stringify(varName)} is object:`, `type: ${typeof varName}`)
   return !!(typeof varName === 'object' && varName.value)
 }
@@ -82,7 +82,7 @@ function checkIsObject (varName: any): boolean {
  * @param {string} varName Variable value
  * @return {boolean} True if it is a boolean
  */
-function checkIsBool (varValue: any): boolean {
+function isBool (varValue: any): boolean {
   return (typeof varValue === typeof true)
 }
 
@@ -91,8 +91,8 @@ function checkIsBool (varValue: any): boolean {
  * @param {string|object} varName Variable value or object
  * @return {boolean} True if it is a variable
  */
-function checkIsVar (varName: any): boolean {
-  if (checkIsObject(varName)) return false
+function isVar (varName: any): boolean {
+  if (isUsableObject(varName)) return false
   return varName.indexOf('$') === 0
 }
 
@@ -106,7 +106,7 @@ function checkIsVar (varName: any): boolean {
 function getParsedVar (varName: string | VariableObject | ArgObject): string {
   info('Parsing variable "%s" into string', varName)
   let variable = `"${varName}"`
-  if (checkIsObject(varName)) variable = `"${(varName as VariableObject).value}"`
+  if (isUsableObject(varName)) variable = `"${(varName as VariableObject).value}"`
 
   info('Parsed var "%s" equals to: "%s"', varName, variable)
   return variable
@@ -124,7 +124,7 @@ function isVarUndefined (varName: string, variables: QueryType['variables']) {
 
 function isArgNestedObject (argList: any) {
   info('Checking for nested argument objects without escape or value')
-  return !checkIsObject(argList) && typeof argList === 'object'
+  return !isUsableObject(argList) && typeof argList === 'object'
 }
 
 /**
@@ -177,16 +177,16 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
 
   let parsedVar = getParsedVar(argValue)
 
-  if (checkIsBool(argValue)) return argValue as string
+  if (isBool(argValue)) return argValue as string
 
-  if (checkIsVar(argValue)) { // Check if is query var, must contain "$" and not be an object
+  if (isVar(argValue)) { // Check if is query var, must contain "$" and not be an object
     const varName = (argValue as string).slice(1) // Removes "$" to check for name
     info('Argument is variable "%s"', varName)
     if (isVarUndefined(varName, variables)) throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
     return argValue as string
   }
 
-  if (checkIsObject(argValue)) { // Check if arg is object (i.e enum)
+  if (isUsableObject(argValue)) { // Check if arg is object (i.e enum)
     info('Arg is object %O', argValue)
     if (!(argValue as { escape: boolean, value: any }).escape) return (argValue as { escape: boolean, value: any }).value
   }
