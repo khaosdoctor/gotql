@@ -59,8 +59,8 @@ function parseArgs (argsList: QueryType['operation']['args'], variables: QueryTy
   let fieldArgs = ''
   info('Parsing args args')
   for (let argName in argsList) {
-    info('Parsing arg %s', argName)
-    fieldArgs += `${argName}: ${CheckArgs(argsList, argName, variables)}, ` // There'll be a last comma we'll strip later
+    info('Parsing arg "%s"', argName)
+    fieldArgs += `${argName}: ${checkArgs(argsList, argName, variables)}, ` // There'll be a last comma we'll strip later
   }
   fieldArgs = `(${fieldArgs.slice(0, -2)})` // Strips last comma
   info('Obtained args: %s', fieldArgs)
@@ -73,6 +73,7 @@ function parseArgs (argsList: QueryType['operation']['args'], variables: QueryTy
  * @return {boolean} True if is object
  */
 function checkIsObject (varName: any): boolean {
+  info(`checking if ${JSON.stringify(varName)} is object:`, `type: ${typeof varName}`)
   return !!(typeof varName === 'object' && varName.value)
 }
 
@@ -121,17 +122,59 @@ function isVarUndefined (varName: string, variables: QueryType['variables']) {
   return !variables || !variables[varName] || !variables[varName].type || !variables[varName].value
 }
 
+function isArgNestedObject (argList: any) {
+  info('Checking for nested argument objects without escape or value')
+  return !checkIsObject(argList) && typeof argList === 'object'
+}
+
+/**
+ * If an argument list is like:
+ * {
+ *  args: {
+ *    arg1: {
+ *      arg2: string,
+ *      arg3: string
+ *    }
+ *  }
+ * }
+ *
+ * Then this is not an usable object of type { value: any, escape: boolean } which is the main configuration option for gotQL's objects. Thus, we need to iterate over them to build a nested argument list for the spec
+ *
+ * @returns {string} A argument list like argName: { nestedArgName1: "nestedArgValue" }
+ */
+function parseNestedArgument (nestedArgList: QueryType['operation']['args'], variables: QueryType['variables']): string {
+  let parsedNestedArg: string = '{ '
+  for (let argument in nestedArgList as any) {
+    info('Parsing nested argument "%s"', argument)
+    parsedNestedArg += `${argument}: ${checkArgs(nestedArgList as QueryType['operation']['args'], argument, variables)},`
+  }
+
+  // Removing trailing comma, add spaces to commas and final curly braces
+  const parsedFinalString = `${parsedNestedArg.slice(0, -1).replace(',', ', ')} }`
+
+  info('Obtained nested arg "%s"', parsedFinalString)
+  return parsedFinalString
+}
+
 /**
  * Checks if the operation argument is a variable or not
  *
  * Also checks if the variables are indeed set in the query before using it in the operation
- * @param {queryType} query The JSON-like query
+ * @param {QueryType['operation']['args']} argsList The list of arguments in the query
  * @param {string} operationArg Argument name
+ * @param {QueryType['variables']} variables Variables list
  * @returns {string} Parsed operation argument
  */
-function CheckArgs (argsList: QueryType['operation']['args'], operationArg: string, variables: QueryType['variables']): string {
+function checkArgs (argsList: QueryType['operation']['args'], operationArg: string, variables: QueryType['variables']): string {
   const argValue = argsList![operationArg]
-  info('Obtained arg value')
+  info(`Obtained arg value of %O`, argValue)
+
+  // Issue #28: Allow support for nested arguments
+  if (isArgNestedObject(argValue)) {
+    info('Argument "%s" is a nested argument, parsing...', operationArg)
+    return parseNestedArgument(argValue as QueryType['operation']['args'], variables)
+  }
+
   let parsedVar = getParsedVar(argValue)
 
   if (checkIsBool(argValue)) return argValue as string
