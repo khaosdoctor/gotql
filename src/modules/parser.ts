@@ -68,7 +68,9 @@ function parseArgs (argsList: QueryType['operation']['args'], variables: QueryTy
 }
 
 /**
- * Checks if the value is an object
+ * Checks if the value is an usable object.
+ *
+ * An usable object is an object gotQL can use to determine its value. This is an object with keys: { escape: boolean, value: any }
  * @param {any} varName Object to be checked
  * @return {boolean} True if is object
  */
