@@ -532,3 +532,28 @@ describe('Should parse complex nested fields with args (#16)', (assert) => {
 
   assert.deepEqual(queryResult, testReturn)
 })
+
+
+describe('Should allow for nested arguments in mutation or query operations (#28)', (assert) => {
+  const query = {
+    operation: {
+      name: 'updateSomething',
+      args: {
+        id: '1234',
+        data: {
+          name: 'foo',
+          status: 'bar',
+        },
+      },
+      fields: ['test'],
+    },
+  }
+
+  const queryReturn = 'query { updateSomething(id: "1234", data: { name: "foo", status: "bar" }) { test } }'
+  const queryResult = parse(query, 'query')
+  assert.deepEqual(queryResult, queryReturn)
+
+  const mutationReturn = 'mutation { updateSomething(id: "1234", data: { name: "foo", status: "bar" }) { test } }'
+  const mutationResult = parse(query, 'mutation')
+  assert.deepEqual(mutationResult, mutationReturn)
+})
