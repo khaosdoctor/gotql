@@ -88,6 +88,8 @@ gotQL.query('mygraphqlendpoint.com.br/api', query, options)
 
 GotQL is a better interface for GraphQL queries. It provides a way for developers to run queries using JSON instead of strings. Which is a way more usable data format than the string itself.
 
+> See more on: https://hasura.io/blog/fluent-graphql-clients-how-to-write-queries-like-a-boss/
+
 ### Motivation
 
 Manipulating strings is very smelly, even on dynamically typed languages. So, in order to avoid things such as this:
