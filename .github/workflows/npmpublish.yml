@@ -33,6 +33,6 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Publish Package
-        run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_AUTH_TOKEN }}
