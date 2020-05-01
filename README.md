@@ -11,8 +11,7 @@
 <br/>
 <center>
 <a href="https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade"><img src= "https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9" alt="Codacy Badge"></a>
-<a href="https://travis-ci.org/khaosdoctor/gotql"><img src= "https://travis-ci.org/khaosdoctor/gotql.svg?branch=master" alt="Build Status"></a>
-<a href="https://codecov.io/gh/khaosdoctor/gotql"><img src= "https://codecov.io/gh/khaosdoctor/gotql/branch/master/graph/badge.svg?token=dQlUpT7QSF" alt="Codecov Status"></a>
+<img src="https://github.com/khaosdoctor/gotql/workflows/Build%20and%20Publish/badge.svg?branch=master" />
 <a href="https://standardjs.com"><img src= "https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>
 <a href="https://snyk.io/test/github/khaosdoctor/gotql?targetFile=package.json"><img src="https://snyk.io/test/github/khaosdoctor/gotql/badge.svg?targetFile=package.json" alt="Known vulnerabilities"></a>
 </center>
