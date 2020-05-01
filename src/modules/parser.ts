@@ -57,7 +57,7 @@ function getFields (fieldList: QueryOperation['fields'], variables: QueryType['v
 function parseArgs (argsList: QueryType['operation']['args'], variables: QueryType['variables']): string {
   if (!argsList) return ''
   let fieldArgs = ''
-  info('Parsing args args')
+  info('Parsing args %O', argsList)
   for (let argName in argsList) {
     info('Parsing arg "%s"', argName)
     fieldArgs += `${argName}: ${checkArgs(argsList, argName, variables)}, ` // There'll be a last comma we'll strip later
@@ -76,7 +76,9 @@ function parseArgs (argsList: QueryType['operation']['args'], variables: QueryTy
  */
 function isUsableObject (varName: any): boolean {
   info(`checking if ${JSON.stringify(varName)} is object:`, `type: ${typeof varName}`)
-  return !!(typeof varName === 'object' && varName.value)
+  const result = !!(typeof varName === 'object' && varName?.value)
+  info(`is ${result ? '' : 'not'} an usable object`)
+  return result
 }
 
 /**
@@ -94,7 +96,7 @@ function isBool (varValue: any): boolean {
  * @return {boolean} True if it is a variable
  */
 function isVar (varName: any): boolean {
-  if (isUsableObject(varName)) return false
+  if (isUsableObject(varName) || typeof varName !== 'string') return false
   return varName.indexOf('$') === 0
 }
 
@@ -110,7 +112,7 @@ function getParsedVar (varName: string | VariableObject | ArgObject): string {
   let variable = `"${varName}"`
   if (isUsableObject(varName)) variable = `"${(varName as VariableObject).value}"`
 
-  info('Parsed var "%s" equals to: "%s"', varName, variable)
+  info('Parsed var "%s" equals to: %s', varName, variable)
   return variable
 }
 
@@ -124,6 +126,16 @@ function isVarUndefined (varName: string, variables: QueryType['variables']) {
   return !variables || !variables[varName] || !variables[varName].type || !variables[varName].value
 }
 
+function isNull (value: any) {
+  info(`Checking if ${value} is 'null'`)
+  return value === null
+}
+
+/**
+ * Check if argument is an object which cannot be used as arg.value
+ *
+ * @param argList List of arguments
+ */
 function isArgNestedObject (argList: any) {
   info('Checking for nested argument objects without escape or value')
   return !isUsableObject(argList) && typeof argList === 'object'
@@ -148,7 +160,7 @@ function parseNestedArgument (nestedArgList: QueryType['operation']['args'], var
   let parsedNestedArg: string = '{ '
   for (let argument in nestedArgList as any) {
     info('Parsing nested argument "%s"', argument)
-    parsedNestedArg += `${argument}: ${checkArgs(nestedArgList as QueryType['operation']['args'], argument, variables)},`
+    parsedNestedArg += `${argument}: ${checkArgs(nestedArgList, argument, variables)},`
   }
 
   // Removing trailing comma, add spaces to commas and final curly braces
@@ -170,6 +182,7 @@ function parseNestedArgument (nestedArgList: QueryType['operation']['args'], var
 function checkArgs (argsList: QueryType['operation']['args'], operationArg: string, variables: QueryType['variables']): string {
   const argValue = argsList![operationArg]
   info(`Obtained arg value of %O`, argValue)
+  if (isNull(argValue)) return 'null'
 
   // Issue #28: Allow support for nested arguments
   if (isArgNestedObject(argValue)) {

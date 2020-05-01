@@ -533,7 +533,6 @@ describe('Should parse complex nested fields with args (#16)', (assert) => {
   assert.deepEqual(queryResult, testReturn)
 })
 
-
 describe('Should allow for nested arguments in mutation or query operations (#28)', (assert) => {
   const query = {
     operation: {
@@ -554,6 +553,48 @@ describe('Should allow for nested arguments in mutation or query operations (#28
   assert.deepEqual(queryResult, queryReturn)
 
   const mutationReturn = 'mutation { updateSomething(id: "1234", data: { name: "foo", status: "bar" }) { test } }'
+  const mutationResult = parse(query, 'mutation')
+  assert.deepEqual(mutationResult, mutationReturn)
+})
+
+describe('Should allow numbers and other types in mutation args (#33)', (assert) => {
+  const query = {
+    operation: {
+      name: 'updateSomething',
+      args: {
+        where: { id: { _eq: 0 } },
+        _set: { name: 'test' },
+      },
+      fields: ['affected_rows'],
+    },
+  }
+
+  const queryReturn = 'query { updateSomething(where: { id: { _eq: "0" } }, _set: { name: "test" }) { affected_rows } }'
+  const queryResult = parse(query, 'query')
+  assert.deepEqual(queryResult, queryReturn)
+
+  const mutationReturn = 'mutation { updateSomething(where: { id: { _eq: "0" } }, _set: { name: "test" }) { affected_rows } }'
+  const mutationResult = parse(query, 'mutation')
+  assert.deepEqual(mutationResult, mutationReturn)
+})
+
+describe('Should allow null in mutation args (#33)', (assert) => {
+  const query = {
+    operation: {
+      name: 'updateSomething',
+      args: {
+        where: { id: { _eq: 0 } },
+        _set: { name: null },
+      },
+      fields: ['affected_rows'],
+    },
+  }
+
+  const queryReturn = 'query { updateSomething(where: { id: { _eq: "0" } }, _set: { name: null }) { affected_rows } }'
+  const queryResult = parse(query, 'query')
+  assert.deepEqual(queryResult, queryReturn)
+
+  const mutationReturn = 'mutation { updateSomething(where: { id: { _eq: "0" } }, _set: { name: null }) { affected_rows } }'
   const mutationResult = parse(query, 'mutation')
   assert.deepEqual(mutationResult, mutationReturn)
 })
