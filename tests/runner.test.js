@@ -3,9 +3,10 @@ import sinon from 'sinon'
 import prependHttp from 'prepend-http'
 import { run as runner } from '../dist/modules/runner'
 
-describe.before(test => {
+describe.before(() => {
   console.log = sinon.spy()
 })
+
 describe.beforeEach(test => {
   test.context = {}
   test.context = {
