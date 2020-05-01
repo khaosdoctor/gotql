@@ -15,9 +15,7 @@
     "build:watch": "tsc -w",
     "clean": "rm -rf dist",
     "build:clean": "npm run clean && npm run build",
-    "lint:fix": "standard --fix",
-    "report": "cat ./coverage/lcov.info | codecov",
-    "coverage": "npm run build:clean && nyc --check-coverage --per-file --reporter=lcov --reporter=text --reporter-dir ./coverage --clean --cache --instrument ava"
+    "lint:fix": "standard --fix"
   },
   "description": "A GraphQL query framework for serverside apps",
   "main": "dist/index.js",
@@ -26,11 +24,11 @@
     "url": "https://github.com/khaosdoctor/gotql/issues"
   },
   "pre-commit": [
-    "build"
+    "lint"
   ],
   "pre-push": [
     "lint",
-    "coverage"
+    "build"
   ],
   "ava": {
     "files": [
