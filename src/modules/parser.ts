@@ -126,6 +126,15 @@ function isVarUndefined (varName: string, variables: QueryType['variables']) {
   return !variables || !variables[varName] || !variables[varName].type || !variables[varName].value
 }
 
+function isArray (value: any) {
+  info(`Checking if ${value} is an Array: ${typeof value}`)
+  return Array.isArray(value)
+}
+
+/**
+ * Check against "Null" only
+ * @param value Argument Value
+ */
 function isNull (value: any) {
   info(`Checking if ${value} is 'null'`)
   return value === null
@@ -182,7 +191,8 @@ function parseNestedArgument (nestedArgList: QueryType['operation']['args'], var
 function checkArgs (argsList: QueryType['operation']['args'], operationArg: string, variables: QueryType['variables']): string {
   const argValue = argsList![operationArg]
   info(`Obtained arg value of %O`, argValue)
-  if (isNull(argValue)) return 'null'
+  if (isNull(argValue)) return 'null' // Check for strict null values (#33)
+  if (isArray(argValue)) return `["${(argValue as unknown as Array<any>).join('","')}"]` // Check for array values (#35)
 
   // Issue #28: Allow support for nested arguments
   if (isArgNestedObject(argValue)) {
