@@ -598,3 +598,23 @@ describe('Should allow null in mutation args (#33)', (assert) => {
   const mutationResult = parse(query, 'mutation')
   assert.deepEqual(mutationResult, mutationReturn)
 })
+
+describe('Should pass on arrays as arrays (#35)', (assert) => {
+  const query = {
+    operation: {
+      name: 'insert_example',
+      args: {
+        on_conflict: { update_columns: ['status', 'price'] },
+      },
+      fields: ['affected_rows'],
+    }
+  }
+
+  const queryReturn = 'query { insert_example(on_conflict: { update_columns: ["status", "price"] }) { affected_rows } }'
+  const queryResult = parse(query, 'query')
+  assert.deepEqual(queryResult, queryReturn)
+
+  const mutationReturn = 'mutation { insert_example(on_conflict: { update_columns: ["status", "price"] }) { affected_rows } }'
+  const mutationResult = parse(query, 'mutation')
+  assert.deepEqual(mutationResult, mutationReturn)
+})
