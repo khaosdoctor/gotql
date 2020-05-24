@@ -11,7 +11,7 @@
 <br/>
 <center>
 <a href="https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade"><img src= "https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9" alt="Codacy Badge"></a>
-<img src="https://github.com/khaosdoctor/gotql/workflows/Build%20and%20Publish/badge.svg?branch=master" />
+<a href="https://opencollective.com/gotql" alt="Financial Contributors on Open Collective"><img src="https://opencollective.com/gotql/all/badge.svg?label=financial+contributors" /></a> <img src="https://github.com/khaosdoctor/gotql/workflows/Build%20and%20Publish/badge.svg?branch=master" />
 <a href="https://standardjs.com"><img src= "https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>
 <a href="https://snyk.io/test/github/khaosdoctor/gotql?targetFile=package.json"><img src="https://snyk.io/test/github/khaosdoctor/gotql/badge.svg?targetFile=package.json" alt="Known vulnerabilities"></a>
 </center>
@@ -459,3 +459,33 @@ query { users(type: "internal") { name age } }
 > Please note that this project is released with a [Contributor Code of Conduct](code-of-conduct.md). By participating in this project you agree to abide by its terms.
 
 Hey! If you want to contribute, please read the [contributing guidelines](./.github/CONTRIBUTING.md) :smile:
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/khaosdoctor/gotql/graphs/contributors"><img src="https://opencollective.com/gotql/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/gotql/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/gotql"><img src="https://opencollective.com/gotql/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/gotql/contribute)]
+
+<a href="https://opencollective.com/gotql/organization/0/website"><img src="https://opencollective.com/gotql/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/1/website"><img src="https://opencollective.com/gotql/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/2/website"><img src="https://opencollective.com/gotql/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/3/website"><img src="https://opencollective.com/gotql/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/4/website"><img src="https://opencollective.com/gotql/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/5/website"><img src="https://opencollective.com/gotql/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/6/website"><img src="https://opencollective.com/gotql/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/7/website"><img src="https://opencollective.com/gotql/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/8/website"><img src="https://opencollective.com/gotql/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/gotql/organization/9/website"><img src="https://opencollective.com/gotql/organization/9/avatar.svg"></a>
