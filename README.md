@@ -11,7 +11,7 @@
 <br/>
 <center>
 <a href="https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade"><img src= "https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9" alt="Codacy Badge"></a>
-<a href="https://opencollective.com/gotql" alt="Financial Contributors on Open Collective"><img src="https://opencollective.com/gotql/all/badge.svg?label=financial+contributors" /></a> <img src="https://github.com/khaosdoctor/gotql/workflows/Build%20and%20Publish/badge.svg?branch=master" />
+<a href="https://opencollective.com/gotql" alt="Financial Contributors on Open Collective"><img src="https://opencollective.com/gotql/all/badge.svg?label=financial+contributors" /></a> <img src="https://github.com/khaosdoctor/gotql/workflows/Build%20and%20Publish/badge.svg" />
 <a href="https://standardjs.com"><img src= "https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a>
 <a href="https://snyk.io/test/github/khaosdoctor/gotql?targetFile=package.json"><img src="https://snyk.io/test/github/khaosdoctor/gotql/badge.svg?targetFile=package.json" alt="Known vulnerabilities"></a>
 </center>
