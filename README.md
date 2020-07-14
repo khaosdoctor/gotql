@@ -8,7 +8,6 @@
 
 > Write GraphQL queries as objects instead of strings
 
-<br/>
 <h1 align="center">
 	<a href="https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade">
 		<img src= "https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9" alt="Codacy Badge">
