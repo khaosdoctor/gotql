@@ -1,0 +1,15 @@
+{
+  "collectCoverage": false,
+  "coverageReporters": ["lcov", "text"],
+  "collectCoverageFrom": ["**/src/**/*.ts", "**/config/**/*.ts"],
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "testMatch": ["<rootDir>/**/?(*.)spec.ts"],
+  "moduleFileExtensions": ["js", "ts", "json"],
+  "coveragePathIgnorePatterns": [
+    "/node_modules/",
+    "/dist/",
+    "/coverage/"
+  ]
+}

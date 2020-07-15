@@ -45,7 +45,7 @@ describe.beforeEach(test => {
 
 // --- //
 
-describe('Should successfully perform a simple query on DNS endpoint', async (assert) => {
+describe('Should successfully perform a simple query on DNS endpoint', () => {
   const query = {
     operation: {
       name: 'TestOp',
@@ -73,7 +73,7 @@ describe('Should successfully perform a simple query on DNS endpoint', async (as
 
 // --- //
 
-describe('Should successfully perform a simple query on IP endpoint', async (assert) => {
+describe('Should successfully perform a simple query on IP endpoint', () => {
   const query = {
     operation: {
       name: 'TestOp',
@@ -101,7 +101,7 @@ describe('Should successfully perform a simple query on IP endpoint', async (ass
 
 // --- //
 
-describe('Should successfully handle a simple query errors on DNS endpoint', async (assert) => {
+describe('Should successfully handle a simple query errors on DNS endpoint', () => {
   const query = {
     operation: {
       name: 'TestOp',
@@ -131,7 +131,7 @@ describe('Should successfully handle a simple query errors on DNS endpoint', asy
 
 // --- //
 
-describe('Should successfully handle a simple query errors on IP endpoint', async (assert) => {
+describe('Should successfully handle a simple query errors on IP endpoint', () => {
   const query = {
     operation: {
       name: 'TestOp',
@@ -161,7 +161,7 @@ describe('Should successfully handle a simple query errors on IP endpoint', asyn
 
 // --- //
 
-describe('Should successfully handle a simple query errors with custom codes', async (assert) => {
+describe('Should successfully handle a simple query errors with custom codes', () => {
   const query = {
     operation: {
       name: 'TestOp',
@@ -192,7 +192,7 @@ describe('Should successfully handle a simple query errors with custom codes', a
 
 // --- //
 
-describe('Should successfully handle a simple query with custom headers', async (assert) => {
+describe('Should successfully handle a simple query with custom headers', () => {
   const query = {
     operation: {
       name: 'TestOp',
@@ -221,7 +221,7 @@ describe('Should successfully handle a simple query with custom headers', async 
 
 // --- //
 
-describe('Should successfully handle a simple query with variables', async (assert) => {
+describe('Should successfully handle a simple query with variables', () => {
   const query = {
     variables: {
       testVar: {
@@ -255,7 +255,7 @@ describe('Should successfully handle a simple query with variables', async (asse
 
 // --- //
 
-describe('Should successfully handle error when type is not passed', async (assert) => {
+describe('Should successfully handle error when type is not passed', () => {
   const query = {
     operation: {
       name: 'TestOp',
