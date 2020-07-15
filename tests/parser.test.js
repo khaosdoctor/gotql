@@ -541,11 +541,11 @@ describe('Should allow for nested arguments in mutation or query operations (#28
         id: '1234',
         data: {
           name: 'foo',
-          status: 'bar',
-        },
+          status: 'bar'
+        }
       },
-      fields: ['test'],
-    },
+      fields: ['test']
+    }
   }
 
   const queryReturn = 'query { updateSomething(id: "1234", data: { name: "foo", status: "bar" }) { test } }'
@@ -563,10 +563,10 @@ describe('Should allow numbers and other types in mutation args (#33)', (assert)
       name: 'updateSomething',
       args: {
         where: { id: { _eq: 0 } },
-        _set: { name: 'test' },
+        _set: { name: 'test' }
       },
-      fields: ['affected_rows'],
-    },
+      fields: ['affected_rows']
+    }
   }
 
   const queryReturn = 'query { updateSomething(where: { id: { _eq: "0" } }, _set: { name: "test" }) { affected_rows } }'
@@ -584,10 +584,10 @@ describe('Should allow null in mutation args (#33)', (assert) => {
       name: 'updateSomething',
       args: {
         where: { id: { _eq: 0 } },
-        _set: { name: null },
+        _set: { name: null }
       },
-      fields: ['affected_rows'],
-    },
+      fields: ['affected_rows']
+    }
   }
 
   const queryReturn = 'query { updateSomething(where: { id: { _eq: "0" } }, _set: { name: null }) { affected_rows } }'
@@ -604,9 +604,9 @@ describe('Should pass on arrays as arrays (#35)', (assert) => {
     operation: {
       name: 'insert_example',
       args: {
-        on_conflict: { update_columns: ['status', 'price'] },
+        on_conflict: { update_columns: ['status', 'price'] }
       },
-      fields: ['affected_rows'],
+      fields: ['affected_rows']
     }
   }
 
@@ -625,10 +625,10 @@ describe('Should throw an error on empty fields array in query (#36)', (assert) 
       name: 'updateSomething',
       args: {
         where: { id: { _eq: 0 } },
-        _set: { name: null },
+        _set: { name: null }
       },
-      fields: [],
-    },
+      fields: []
+    }
   }
 
   try {
@@ -637,9 +637,7 @@ describe('Should throw an error on empty fields array in query (#36)', (assert) 
     assert.is(error.message, 'Parse error: field list is required for operation "updateSomething"')
     assert.deepEqual(error.name, 'Error')
   }
-
 })
-
 
 describe('Should return valid query string with empty fields array in mutation (#37)', (assert) => {
   const query = {
@@ -647,10 +645,10 @@ describe('Should return valid query string with empty fields array in mutation (
       name: 'updateSomething',
       args: {
         where: { id: { _eq: 0 } },
-        _set: { name: null },
+        _set: { name: null }
       },
-      fields: [],
-    },
+      fields: []
+    }
   }
 
   const mutationReturn = 'mutation { updateSomething(where: { id: { _eq: "0" } }, _set: { name: null }) }'
@@ -664,10 +662,10 @@ describe('Should return valid query string with no fields array defined in mutat
       name: 'updateSomething',
       args: {
         where: { id: { _eq: 0 } },
-        _set: { name: null },
+        _set: { name: null }
       },
-      fields: [],
-    },
+      fields: []
+    }
   }
 
   const mutationReturn = 'mutation { updateSomething(where: { id: { _eq: "0" } }, _set: { name: null }) }'
