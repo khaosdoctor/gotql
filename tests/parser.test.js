@@ -663,8 +663,7 @@ describe('Should return valid query string with no fields array defined in mutat
       args: {
         where: { id: { _eq: 0 } },
         _set: { name: null }
-      },
-      fields: []
+      }
     }
   }
 
