@@ -618,3 +618,59 @@ describe('Should pass on arrays as arrays (#35)', (assert) => {
   const mutationResult = parse(query, 'mutation')
   assert.deepEqual(mutationResult, mutationReturn)
 })
+
+describe('Should throw an error on empty fields array in query (#36)', (assert) => {
+  const query = {
+    operation: {
+      name: 'updateSomething',
+      args: {
+        where: { id: { _eq: 0 } },
+        _set: { name: null },
+      },
+      fields: [],
+    },
+  }
+
+  try {
+    parse(query, 'query')
+  } catch (error) {
+    assert.is(error.message, 'Parse error: field list is required for operation "updateSomething"')
+    assert.deepEqual(error.name, 'Error')
+  }
+
+})
+
+
+describe('Should return valid query string with empty fields array in mutation (#37)', (assert) => {
+  const query = {
+    operation: {
+      name: 'updateSomething',
+      args: {
+        where: { id: { _eq: 0 } },
+        _set: { name: null },
+      },
+      fields: [],
+    },
+  }
+
+  const mutationReturn = 'mutation { updateSomething(where: { id: { _eq: "0" } }, _set: { name: null }) }'
+  const mutationResult = parse(query, 'mutation')
+  assert.deepEqual(mutationResult, mutationReturn)
+})
+
+describe('Should return valid query string with no fields array defined in mutation (#38)', (assert) => {
+  const query = {
+    operation: {
+      name: 'updateSomething',
+      args: {
+        where: { id: { _eq: 0 } },
+        _set: { name: null },
+      },
+      fields: [],
+    },
+  }
+
+  const mutationReturn = 'mutation { updateSomething(where: { id: { _eq: "0" } }, _set: { name: null }) }'
+  const mutationResult = parse(query, 'mutation')
+  assert.deepEqual(mutationResult, mutationReturn)
+})

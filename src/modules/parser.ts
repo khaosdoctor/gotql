@@ -221,14 +221,18 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
 
 /**
  * Parses the operation bit of the query
- * @param {queryType} query The JSON-Like query to be parsed
+ * @param {QueryType} query The JSON-Like query to be parsed
+ * @param {boolean} allowEmptyFields If 'true', empty fields are allowed (which is not considered a good practice)
  * @return {string} Parsed operation query
  */
-function parseOperation (query: QueryType): string {
+function parseOperation (query: QueryType, allowEmptyFields: boolean): string {
   let operation = query.operation
+  const hasEmptyFields = !operation.fields || !operation.fields.length
   info('Parsing operation %s', operation.name)
   if (!operation.name) throw new Error(`name is required for graphQL operation`)
-  if (!operation.fields) throw new Error(`field list is required for operation "${operation.name}"`)
+  if (hasEmptyFields && !allowEmptyFields) throw new Error(`field list is required for operation "${operation.name}"`)
+
+  if(hasEmptyFields) info('Hint: having no fields is not considered as a good practice')
 
   try {
     let operationArgs = ''
@@ -239,7 +243,9 @@ function parseOperation (query: QueryType): string {
     }
 
     let alias = operation.alias ? `${operation.alias}:` : ''
-    const parsedOperation = `${alias} ${operation.name}${operationArgs} { ${getFields(operation.fields, query.variables).trim()} }`.trim()
+    const parsedOperation = hasEmptyFields
+        ?`${alias} ${operation.name}${operationArgs}`.trim()
+        :`${alias} ${operation.name}${operationArgs} { ${getFields(operation.fields, query.variables).trim()} }`.trim()
     info('Parsed operation: %s', parsedOperation)
     return parsedOperation
   } catch (error) {
@@ -260,9 +266,10 @@ export function parse (query: QueryType, type: GotQL.ExecutionType): string {
     if (!query.operation) throw new Error('a query must have at least one operation')
     if (!type) throw new Error('type must be either "query" or "mutation"')
 
+    let isMutation = type === 'mutation'
     let queryName = (query.name) ? `${query.name} ` : ''
     info('Defining name "%s"', queryName)
-    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query)} }`.trim()
+    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query, isMutation)} }`.trim()
     info('Parsed query: %s', parsedQuery)
     return parsedQuery
   } catch (error) {
