@@ -5,7 +5,7 @@ name: Tests and CI
 
 on:
   push:
-    branches-ignore: master
+    branches-ignore: main
 
 jobs:
   build:
