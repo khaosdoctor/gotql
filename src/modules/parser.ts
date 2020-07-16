@@ -222,7 +222,7 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
 /**
  * Parses the operation bit of the query
  * @param {QueryType} query The JSON-Like query to be parsed
- * @param {boolean} allowEmptyFields If 'true', empty fields are allowed (which is not considered a good practice)
+ * @param {boolean} allowEmptyFields If 'true', empty fields are allowed (WARNING: this is not considered a good practice)
  * @return {string} Parsed operation query
  */
 function parseOperation (query: QueryType, allowEmptyFields: boolean): string {
@@ -232,7 +232,7 @@ function parseOperation (query: QueryType, allowEmptyFields: boolean): string {
   if (!operation.name) throw new Error(`name is required for graphQL operation`)
   if (hasEmptyFields && !allowEmptyFields) throw new Error(`field list is required for operation "${operation.name}"`)
 
-  if(hasEmptyFields) info('Hint: having no fields is not considered as a good practice')
+  if(hasEmptyFields) info('Hint: Returning no fields is not considered a good practice')
 
   try {
     let operationArgs = ''
@@ -266,10 +266,9 @@ export function parse (query: QueryType, type: GotQL.ExecutionType): string {
     if (!query.operation) throw new Error('a query must have at least one operation')
     if (!type) throw new Error('type must be either "query" or "mutation"')
 
-    let isMutation = type === 'mutation'
     let queryName = (query.name) ? `${query.name} ` : ''
     info('Defining name "%s"', queryName)
-    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query, isMutation)} }`.trim()
+    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query, type === GotQL.ExecutionType.MUTATION)} }`.trim()
     info('Parsed query: %s', parsedQuery)
     return parsedQuery
   } catch (error) {
