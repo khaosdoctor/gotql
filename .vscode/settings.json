@@ -1,7 +1,0 @@
-{
-  "window.autoDetectColorScheme": true,
-  "workbench.preferredDarkColorTheme": "Dracula",
-  "editor.renderWhitespace": "boundary"m
-  "workbench.colorTheme": "Dracula",
-  "workbench.iconTheme": "vscode-great-icons"
-}
