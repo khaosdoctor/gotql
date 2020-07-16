@@ -225,7 +225,7 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
  * @param {boolean} allowEmptyFields If 'true', empty fields are allowed (WARNING: this is not considered a good practice)
  * @return {string} Parsed operation query
  */
-function parseOperation (query: QueryType, allowEmptyFields: boolean): string {
+function parseOperation (query: QueryType, allowEmptyFields: boolean = false): string {
   let operation = query.operation
   const hasEmptyFields = !operation.fields || !operation.fields.length
   info('Parsing operation %s', operation.name)
