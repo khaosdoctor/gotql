@@ -3,7 +3,7 @@
     "extensions": [
         "emmanuelbeziat.vscode-great-icons",
         "dbaeumer.vscode-eslint",
-	"oderwat.indent-rainbow"
+	"oderwat.indent-rainbow",
         "vtrois.gitmoji-vscode",
         "dracula-theme.theme-dracula",
 	"2gua.rainbow-brackets",
