@@ -3,10 +3,11 @@
     "extensions": [
         "emmanuelbeziat.vscode-great-icons",
         "dbaeumer.vscode-eslint",
+	"oderwat.indent-rainbow"
         "vtrois.gitmoji-vscode",
         "dracula-theme.theme-dracula",
-        
-		"ms-vscode.vscode-typescript-tslint-plugin"
+	"2gua.rainbow-brackets",
+	"ms-vscode.vscode-typescript-tslint-plugin"
     ],
 	"dockerFile": "Dockerfile",
 
