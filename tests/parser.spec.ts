@@ -1,5 +1,5 @@
-import {parse} from '../dist/modules/parser'
-import {GotQL} from '../dist/types/generics';
+import {parse} from '../src/modules/parser'
+import {GotQL} from '../src/types/generics';
 import ExecutionType = GotQL.ExecutionType;
 
 describe('parser', () => {
