@@ -79,7 +79,7 @@ function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQu
  * @param {object} response Got response
  * @param {userOpts} options User options
  */
-function handleResponse (response: got.Response<any>, options?: UserOptions) {
+function handleResponse (response: got.Response<any>, options?: UserOptions): GotQL.Response {
   info('Response obtained: %O', { errors: response.body.errors, body: response.body, statusCode: response.statusCode })
   if (response.body.errors) {
     shout('Error on query: %O', response.body.errors)
