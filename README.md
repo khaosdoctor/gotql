@@ -1,6 +1,6 @@
 <h1 align="center">
 	<br>
-	<img width="360" height="" src="https://cdn.rawgit.com/khaosdoctor/gotql/master/media/gotql.svg" alt="GotQL">
+	<img width="360" height="" src="https://cdn.rawgit.com/khaosdoctor/gotql/main/media/gotql.svg" alt="GotQL">
 	<br>
 	<br>
 	<br>

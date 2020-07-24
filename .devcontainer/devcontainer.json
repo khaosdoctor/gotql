@@ -1,0 +1,24 @@
+{
+  "name": "TypeScript website codespace",
+  "extensions": [
+    "emmanuelbeziat.vscode-great-icons",
+    "dbaeumer.vscode-eslint",
+    "oderwat.indent-rainbow",
+    "vtrois.gitmoji-vscode",
+    "dracula-theme.theme-dracula",
+    "2gua.rainbow-brackets",
+    "ms-vscode.vscode-typescript-tslint-plugin"
+  ],
+  "dockerFile": "Dockerfile",
+  // Set *default* container specific settings.json values on container create.
+  "settings": { 
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "window.autoDetectColorScheme": true,
+    "workbench.preferredDarkColorTheme": "Dracula",
+    "editor.renderWhitespace": "boundary",
+    "workbench.colorTheme": "Dracula",
+    "workbench.iconTheme": "vscode-great-icons"
+  },
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "npm install"
+}
