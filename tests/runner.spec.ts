@@ -25,7 +25,7 @@ const test: Test = {
   }
 };
 
-const parseToGotInstance = (gotInstance: got): GotInstance => gotInstance as GotInstance;
+const parseToGotInstance = (gotInstance: got | undefined): GotInstance => gotInstance as GotInstance;
 
 beforeEach(() => {
   test.context = {
@@ -96,34 +96,33 @@ describe('runner', () => {
 
     expect(payload).toEqual(response.options)
   })
-})
-
-// --- //
-
-describe('Should successfully perform a simple query on IP endpoint', () => {
-  const query = {
-    operation: {
-      name: 'TestOp',
-      fields: ['t1', 't2']
+  
+  it('Should successfully perform a simple query on IP endpoint', async () => {
+    const query = {
+      operation: {
+        name: 'TestOp',
+        fields: ['t1', 't2']
+      }
     }
-  }
-  const payload = {
-    headers: {
-      'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-      'User-Agent': `GotQL ${require('../package.json').version}`,
-      'Accept-Encoding': 'gzip, deflate'
-    },
-    body: {
-      query: 'query { TestOp { t1 t2 } }',
-      operationName: null,
-      variables: null
-    },
-    json: true
-  }
-  const response = await runner(context.endpointIp, query, 'query', context.got)
+    const payload = {
+      headers: {
+        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+        'User-Agent': `GotQL ${require('../package.json').version}`,
+        'Accept-Encoding': 'gzip, deflate'
+      },
+      body: {
+        query: 'query { TestOp { t1 t2 } }',
+        operationName: null,
+        variables: null
+      },
+      json: true
+    }
+    const response = await runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got))
+  
+    expect(prependHttp(test.context.endpointIp)).toEqual(response.endpoint)
 
-  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
-  assert.deepEqual(payload, response.options)
+    expect(payload).toEqual(response.options)
+  })
 })
 
 // --- //
