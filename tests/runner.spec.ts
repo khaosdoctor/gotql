@@ -25,6 +25,8 @@ const test: Test = {
   }
 };
 
+const parseToGotInstance = (gotInstance: got): GotInstance => gotInstance as GotInstance;
+
 beforeEach(() => {
   test.context = {
     endpointDns: "",
@@ -66,30 +68,34 @@ beforeEach(() => {
 
 // --- //
 
-describe('Should successfully perform a simple query on DNS endpoint', () => {
-  const query = {
-    operation: {
-      name: 'TestOp',
-      fields: ['t1', 't2']
-    }
-  }
-  const payload = {
-    headers: {
-      'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-      'User-Agent': `GotQL ${require('../package.json').version}`,
-      'Accept-Encoding': 'gzip, deflate'
-    },
-    body: {
-      query: 'query { TestOp { t1 t2 } }',
-      operationName: null,
-      variables: null
-    },
-    json: true
-  }
-  const response = await runner(assert.context.endpointDns, query, 'query', assert.context.got)
 
-  assert.deepEqual(prependHttp(assert.context.endpointDns), response.endpoint)
-  assert.deepEqual(payload, response.options)
+describe('runner', () => {
+  it('Should successfully perform a simple query on DNS endpoint', async () => {
+    const query = {
+      operation: {
+        name: 'TestOp',
+        fields: ['t1', 't2']
+      }
+    }
+    const payload = {
+      headers: {
+        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+        'User-Agent': `GotQL ${require('../package.json').version}`,
+        'Accept-Encoding': 'gzip, deflate'
+      },
+      body: {
+        query: 'query { TestOp { t1 t2 } }',
+        operationName: null,
+        variables: null
+      },
+      json: true
+    }
+    const response = await runner(test.context.endpointDns, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got))
+
+    expect(prependHttp(test.context.endpointDns)).toEqual(response.endpoint);
+
+    expect(payload).toEqual(response.options)
+  })
 })
 
 // --- //
