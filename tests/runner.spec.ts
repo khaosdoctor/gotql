@@ -1,18 +1,39 @@
-import describe from 'ava'
-import sinon from 'sinon'
 import prependHttp from 'prepend-http'
-import { run as runner } from '../dist/modules/runner'
+import { run as runner } from '../src/modules/runner'
+import { GotQL } from "../src/types/generics"
+import { GotUrl, GotOptions, GotInstance } from 'got'
 
-describe.before(() => {
-  console.log = sinon.spy()
-})
+declare type got = {
+  post: Function
+}
 
-describe.beforeEach(test => {
-  test.context = {}
+declare type Context = {
+  endpointDns: string;
+  got?: got;
+  gotWithErrors?: got;
+  endpointIp: string;
+}
+
+declare type Test = {
+  context: Context;
+};
+
+const test: Test = {
+  context: {
+    endpointDns: "",
+    endpointIp: ""
+  }
+};
+
+beforeEach(() => {
+  test.context = {
+    endpointDns: "",
+    endpointIp: ""
+  };
   test.context = {
     got: {
-      post: (endpoint, options) => {
-        return new Promise((resolve, reject) => {
+      post: (endpoint: GotUrl, options: GotOptions<string | null>) => {
+        return new Promise((resolve) => {
           const ret = {
             body: {
               data: 'Simple data',
@@ -25,8 +46,8 @@ describe.beforeEach(test => {
       }
     },
     gotWithErrors: {
-      post: (endpoint, options) => {
-        return new Promise((resolve, reject) => {
+      post: (endpoint: GotUrl, options: GotOptions<string | null>) => {
+        return new Promise((resolve) => {
           const ret = {
             body: {
               errors: 'Simple data',
@@ -93,9 +114,9 @@ describe('Should successfully perform a simple query on IP endpoint', () => {
     },
     json: true
   }
-  const response = await runner(assert.context.endpointIp, query, 'query', assert.context.got)
+  const response = await runner(context.endpointIp, query, 'query', context.got)
 
-  assert.deepEqual(prependHttp(assert.context.endpointIp), response.endpoint)
+  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
   assert.deepEqual(payload, response.options)
 })
 
@@ -121,9 +142,9 @@ describe('Should successfully handle a simple query errors on DNS endpoint', () 
     },
     json: true
   }
-  const response = await runner(assert.context.endpointDns, query, 'query', assert.context.gotWithErrors)
+  const response = await runner(context.endpointDns, query, 'query', context.gotWithErrors)
 
-  assert.deepEqual(prependHttp(assert.context.endpointDns), response.endpoint)
+  assert.deepEqual(prependHttp(context.endpointDns), response.endpoint)
   assert.deepEqual(payload, response.options)
   assert.deepEqual(500, response.statusCode)
   assert.deepEqual('GraphQL Error', response.message)
@@ -151,9 +172,9 @@ describe('Should successfully handle a simple query errors on IP endpoint', () =
     },
     json: true
   }
-  const response = await runner(assert.context.endpointIp, query, 'query', assert.context.gotWithErrors)
+  const response = await runner(context.endpointIp, query, 'query', context.gotWithErrors)
 
-  assert.deepEqual(prependHttp(assert.context.endpointIp), response.endpoint)
+  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
   assert.deepEqual(payload, response.options)
   assert.deepEqual(500, response.statusCode)
   assert.deepEqual('GraphQL Error', response.message)
@@ -182,9 +203,9 @@ describe('Should successfully handle a simple query errors with custom codes', (
     json: true
   }
   const customCode = 399
-  const response = await runner(assert.context.endpointIp, query, 'query', assert.context.gotWithErrors, { debug: false, errorStatusCode: customCode })
+  const response = await runner(context.endpointIp, query, 'query', context.gotWithErrors, { debug: false, errorStatusCode: customCode })
 
-  assert.deepEqual(prependHttp(assert.context.endpointIp), response.endpoint)
+  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
   assert.deepEqual(payload, response.options)
   assert.deepEqual(customCode, response.statusCode)
   assert.deepEqual('GraphQL Error', response.message)
@@ -213,9 +234,9 @@ describe('Should successfully handle a simple query with custom headers', () => 
     },
     json: true
   }
-  const response = await runner(assert.context.endpointIp, query, 'query', assert.context.got, { debug: false, headers: { 'Test-Header': 't' } })
+  const response = await runner(context.endpointIp, query, 'query', context.got, { debug: false, headers: { 'Test-Header': 't' } })
 
-  assert.deepEqual(prependHttp(assert.context.endpointIp), response.endpoint)
+  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
   assert.deepEqual(payload, response.options)
 })
 
@@ -247,9 +268,9 @@ describe('Should successfully handle a simple query with variables', () => {
     },
     json: true
   }
-  const response = await runner(assert.context.endpointIp, query, 'query', assert.context.got)
+  const response = await runner(context.endpointIp, query, 'query', context.got)
 
-  assert.deepEqual(prependHttp(assert.context.endpointIp), response.endpoint)
+  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
   assert.deepEqual(payload, response.options)
 })
 
@@ -264,7 +285,7 @@ describe('Should successfully handle error when type is not passed', () => {
   }
 
   try {
-    await runner(assert.context.endpointIp, query, '', assert.context.got)
+    await runner(context.endpointIp, query, '', context.got)
   } catch (error) {
     assert.deepEqual(error.name, 'Error')
     assert.deepEqual(error.message, 'Runner error: Error when executing query: Query type must be either `query` or `mutation`')
