@@ -235,40 +235,38 @@ describe('runner', () => {
     expect(prependHttp(test.context.endpointIp)).toEqual(response.endpoint)
     expect(payload).toEqual(response.options)
   })
-})
 
-// --- //
-
-describe('Should successfully handle a simple query with variables', () => {
-  const query = {
-    variables: {
-      testVar: {
-        type: 'string',
-        value: 't'
+  it('Should successfully handle a simple query with variables', async () => {
+    const query = {
+      variables: {
+        testVar: {
+          type: 'string',
+          value: 't'
+        }
+      },
+      operation: {
+        name: 'TestOp',
+        fields: ['t1', 't2']
       }
-    },
-    operation: {
-      name: 'TestOp',
-      fields: ['t1', 't2']
     }
-  }
-  const payload = {
-    headers: {
-      'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-      'User-Agent': `GotQL ${require('../package.json').version}`,
-      'Accept-Encoding': 'gzip, deflate'
-    },
-    body: {
-      query: 'query ($testVar: string) { TestOp { t1 t2 } }',
-      operationName: null,
-      variables: { testVar: 't' }
-    },
-    json: true
-  }
-  const response = await runner(context.endpointIp, query, 'query', context.got)
-
-  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
-  assert.deepEqual(payload, response.options)
+    const payload = {
+      headers: {
+        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+        'User-Agent': `GotQL ${require('../package.json').version}`,
+        'Accept-Encoding': 'gzip, deflate'
+      },
+      body: {
+        query: 'query ($testVar: string) { TestOp { t1 t2 } }',
+        operationName: null,
+        variables: { testVar: 't' }
+      },
+      json: true
+    }
+    const response = await runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got))
+  
+    expect(prependHttp(test.context.endpointIp)).toEqual(response.endpoint)
+    expect(payload).toEqual(response.options)
+  })
 })
 
 // --- //
