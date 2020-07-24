@@ -208,35 +208,33 @@ describe('runner', () => {
     expect(errorStatusCode).toEqual(response.statusCode)
     expect('GraphQL Error').toEqual(response.message)
   })
-})
 
-// --- //
-
-describe('Should successfully handle a simple query with custom headers', () => {
-  const query = {
-    operation: {
-      name: 'TestOp',
-      fields: ['t1', 't2']
+  it('Should successfully handle a simple query with custom headers', async () => {
+    const query = {
+      operation: {
+        name: 'TestOp',
+        fields: ['t1', 't2']
+      }
     }
-  }
-  const payload = {
-    headers: {
-      'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-      'User-Agent': `GotQL ${require('../package.json').version}`,
-      'Accept-Encoding': 'gzip, deflate',
-      'Test-Header': 't'
-    },
-    body: {
-      query: 'query { TestOp { t1 t2 } }',
-      operationName: null,
-      variables: null
-    },
-    json: true
-  }
-  const response = await runner(context.endpointIp, query, 'query', context.got, { debug: false, headers: { 'Test-Header': 't' } })
-
-  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
-  assert.deepEqual(payload, response.options)
+    const payload = {
+      headers: {
+        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+        'User-Agent': `GotQL ${require('../package.json').version}`,
+        'Accept-Encoding': 'gzip, deflate',
+        'Test-Header': 't'
+      },
+      body: {
+        query: 'query { TestOp { t1 t2 } }',
+        operationName: null,
+        variables: null
+      },
+      json: true
+    }
+    const response = await runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got), { headers: { 'Test-Header': 't' } })
+  
+    expect(prependHttp(test.context.endpointIp)).toEqual(response.endpoint)
+    expect(payload).toEqual(response.options)
+  })
 })
 
 // --- //
