@@ -268,21 +268,3 @@ describe('runner', () => {
     expect(payload).toEqual(response.options)
   })
 })
-
-// --- //
-
-describe('Should successfully handle error when type is not passed', () => {
-  const query = {
-    operation: {
-      name: 'TestOp',
-      fields: ['t1', 't2']
-    }
-  }
-
-  try {
-    await runner(context.endpointIp, query, '', context.got)
-  } catch (error) {
-    assert.deepEqual(error.name, 'Error')
-    assert.deepEqual(error.message, 'Runner error: Error when executing query: Query type must be either `query` or `mutation`')
-  }
-})
