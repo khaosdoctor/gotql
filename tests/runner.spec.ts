@@ -179,37 +179,35 @@ describe('runner', () => {
     expect(500).toEqual(response.statusCode)
     expect('GraphQL Error').toEqual(response.message)
   })
-})
 
-// --- //
-
-describe('Should successfully handle a simple query errors with custom codes', () => {
-  const query = {
-    operation: {
-      name: 'TestOp',
-      fields: ['t1', 't2']
+  it('Should successfully handle a simple query errors with custom codes', async () => {
+    const query = {
+      operation: {
+        name: 'TestOp',
+        fields: ['t1', 't2']
+      }
     }
-  }
-  const payload = {
-    headers: {
-      'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-      'User-Agent': `GotQL ${require('../package.json').version}`,
-      'Accept-Encoding': 'gzip, deflate'
-    },
-    body: {
-      query: 'query { TestOp { t1 t2 } }',
-      operationName: null,
-      variables: null
-    },
-    json: true
-  }
-  const customCode = 399
-  const response = await runner(context.endpointIp, query, 'query', context.gotWithErrors, { debug: false, errorStatusCode: customCode })
-
-  assert.deepEqual(prependHttp(context.endpointIp), response.endpoint)
-  assert.deepEqual(payload, response.options)
-  assert.deepEqual(customCode, response.statusCode)
-  assert.deepEqual('GraphQL Error', response.message)
+    const payload = {
+      headers: {
+        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+        'User-Agent': `GotQL ${require('../package.json').version}`,
+        'Accept-Encoding': 'gzip, deflate'
+      },
+      body: {
+        query: 'query { TestOp { t1 t2 } }',
+        operationName: null,
+        variables: null
+      },
+      json: true
+    }
+    const errorStatusCode = 399
+    const response = await runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.gotWithErrors), { errorStatusCode })
+  
+    expect(prependHttp(test.context.endpointIp)).toEqual(response.endpoint)
+    expect(payload).toEqual(response.options)
+    expect(errorStatusCode).toEqual(response.statusCode)
+    expect('GraphQL Error').toEqual(response.message)
+  })
 })
 
 // --- //
