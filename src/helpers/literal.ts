@@ -1,0 +1,15 @@
+import { LiteralObject } from '../types/Literal'
+
+/**
+ * Literal is a tagged template for an object { value: string, escape: false }
+ * @example
+ * // literal`example_pkey` return { value: 'example_pkey', escape: false }
+ * @example
+ * // literal`['example_key01', 'example_key02']` return { value: '['example_key01', 'example_key02']', escape: false }
+ * @param {TemplateStringsArray} literalValue Literal value
+ * @return {LiteralObject} LiteralObject
+ */
+export const literal = (literalValue: TemplateStringsArray): LiteralObject => {
+  if (!literalValue || !literalValue[0]) throw new Error('literalValue cannot be null or empty')
+  return { value: literalValue[0], escape: false }
+}
