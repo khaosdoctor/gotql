@@ -1,6 +1,6 @@
 import {parse} from '../src/modules/parser'
-import {GotQL} from '../src/types/generics';
-import ExecutionType = GotQL.ExecutionType;
+import {GotQL} from '../src/types/generics'
+import ExecutionType = GotQL.ExecutionType
 
 describe('parser', () => {
     it('Should return a usable simple query', () => {

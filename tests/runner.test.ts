@@ -8,30 +8,30 @@ declare type got = {
 }
 
 declare type Context = {
-  endpointDns: string;
-  got?: got;
-  gotWithErrors?: got;
-  endpointIp: string;
+  endpointDns: string
+  got?: got
+  gotWithErrors?: got
+  endpointIp: string
 }
 
 declare type Test = {
-  context: Context;
-};
+  context: Context
+}
 
 const test: Test = {
   context: {
     endpointDns: "",
     endpointIp: ""
   }
-};
+}
 
-const parseToGotInstance = (gotInstance: got | undefined): GotInstance => gotInstance as GotInstance;
+const parseToGotInstance = (gotInstance: got | undefined): GotInstance => gotInstance as GotInstance
 
 beforeEach(() => {
   test.context = {
     endpointDns: "",
     endpointIp: ""
-  };
+  }
   test.context = {
     got: {
       post: (endpoint: GotUrl, options: GotOptions<string | null>) => {
@@ -92,7 +92,7 @@ describe('runner', () => {
     }
     const response = await runner(test.context.endpointDns, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got))
 
-    expect(prependHttp(test.context.endpointDns)).toEqual(response.endpoint);
+    expect(prependHttp(test.context.endpointDns)).toEqual(response.endpoint)
 
     expect(payload).toEqual(response.options)
   })
