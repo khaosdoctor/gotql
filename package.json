@@ -8,6 +8,7 @@
     "dist"
   ],
   "scripts": {
+    "test": "npm run test:jest",
     "test:jest": "npm run build:clean && jest",
     "test:ava": "npm run build:clean && ava --color -v -T 10000",
     "prepare": "npm run build:clean",
