@@ -3,7 +3,7 @@
   "coverageReporters": ["lcov", "text"],
   "collectCoverageFrom": ["**/src/**/*.ts", "**/config/**/*.ts"],
   "preset": "ts-jest",
-  "testMatch": ["**/*.spec.ts"],
+  "testMatch": ["**/*.test.ts"],
   "moduleFileExtensions": ["js", "ts", "json"],
   "coveragePathIgnorePatterns": [
     "/node_modules/",
