@@ -449,6 +449,22 @@ const query = {
 }
 ```
 
+Or with shorthand tagged template string:
+
+```js
+const { literal } = require('gotql')
+
+const query = {
+  operation: {
+    name: 'user',
+    args: {
+      type: literal`internal`
+    },
+    fields: ['name', 'age']
+  }
+}
+```
+
 Outputs:
 
 ```js
