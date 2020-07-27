@@ -18,12 +18,21 @@ describe('literal', () => {
     expect(literalResult).toEqual(expectedResult)
   })
 
-  it('should return an error when the argument is empty', () => {
-    expect(() => literal``).toThrowError('literalValue cannot be null or empty')
+  it('should return an object with an empty value property, when literal is called with empty arguments', () => {
+    const expectedResult: LiteralObject = { value: '', escape: false }
+
+    const literalResult = literal``
+
+    expect(literalResult).toEqual(expectedResult)
   })
 
-  it('should return an error when the argument is null', () => {
+  it('should return an object with an empty value property, when the literal is called with a null argument', () => {
+    const expectedResult: LiteralObject = { value: '', escape: false }
+
     const nullValue = null as unknown as TemplateStringsArray
-    expect(() => literal(nullValue)).toThrowError('literalValue cannot be null or empty')
+
+    const literalResult = literal(nullValue)
+
+    expect(literalResult).toEqual(expectedResult)
   })
 })

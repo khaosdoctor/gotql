@@ -10,5 +10,5 @@ import { LiteralObject } from '../types/Literal'
  * @return {LiteralObject} LiteralObject
  */
 export function literal(literalValue: TemplateStringsArray): LiteralObject {
-  return { value: literalValue[0] || '', escape: false }
+  return { value: literalValue && literalValue[0] || '', escape: false }
 }
