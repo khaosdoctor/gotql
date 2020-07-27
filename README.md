@@ -111,7 +111,7 @@ const mutation = {
   operation: {
     name: 'addLog',
     args: {
-      logType: { value: 'status_change', escape: false}, // Enum Value
+      logType: literal`status_change`, // Enum Value
       fromState: variables.fromState,
       toState: variables.toState,
       idUser: variables.idUser,
@@ -295,7 +295,7 @@ const query = {
                   - Type: `any`
                 - _escape_: Whether the argument should be escaped or not (escaped means surrounded with double quotes `"argValue"`)
                   - Type: `boolean`
-              - Examples: `args: { status: { value: 'an_enum', escape: false } }` should output `operation (status: an_enum)...`
+              - Examples: `args: { status: literal``an_enum`` }` should output `operation (status: an_enum)...`
         - _fields_: The field list to get back from the operation
           - Type: An `array` of `object` (to use nested fields) or `string`, or both.
           - Properties (for nested fields):
@@ -312,7 +312,7 @@ const query = {
                       - Type: `any`
                     - _escape_: Whether the argument should be escaped or not (escaped means surrounded with double quotes `"argValue"`)
                       - Type: `boolean`
-                  - Examples: `args: { status: { value: 'an_enum', escape: false } }` should output `operation (status: an_enum)...`
+                  - Examples: `args: { status: literal``an_enum`` }` should output `operation (status: an_enum)...`
 
 ### Examples
 
