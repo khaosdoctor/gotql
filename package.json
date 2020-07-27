@@ -65,7 +65,6 @@
     "jest": "^26.1.0",
     "nyc": "^14.1.1",
     "pre-push": "^0.1.1",
-    "sinon": "^7.5.0",
     "standard": "^14.3.3",
     "ts-jest": "^26.1.2",
     "tslint-config-standard": "^8.0.1",
