@@ -1,6 +1,6 @@
 {
   "name": "gotql",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "engines": {
     "node": ">=8"
   },
@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "test": "npm run build:clean && ava --color -v -T 10000",
+    "test": "npm run build:clean && jest",
     "prepare": "npm run build:clean",
     "lint": "standard -v ./src",
     "build": "tsc",
@@ -30,11 +30,6 @@
     "lint",
     "build"
   ],
-  "ava": {
-    "files": [
-      "tests/**/*.test.js"
-    ]
-  },
   "author": "Lucas Santos <lhs.santoss@gmail.com>",
   "license": "MIT",
   "keywords": [
@@ -54,15 +49,14 @@
   "devDependencies": {
     "@types/debug": "^4.1.5",
     "@types/got": "^9.6.10",
+    "@types/jest": "^26.0.4",
     "@types/node": "^13.13.4",
-    "ava": "^2.4.0",
-    "codecov": "^3.5.0",
     "concurrently": "^4.1.2",
     "conduct": "^2.3.1",
-    "nyc": "^14.1.1",
+    "jest": "^26.1.0",
     "pre-push": "^0.1.1",
-    "sinon": "^7.5.0",
     "standard": "^14.3.3",
+    "ts-jest": "^26.1.2",
     "tslint-config-standard": "^8.0.1",
     "typescript": "^3.8.3"
   }
