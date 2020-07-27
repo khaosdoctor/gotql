@@ -10,5 +10,7 @@ export namespace GotQL {
     data: object
     statusCode: number
     message: string
+    endpoint: string
+    options: string
   }
 }
