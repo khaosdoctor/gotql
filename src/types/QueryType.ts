@@ -1,3 +1,5 @@
+import { LiteralObject } from './Literal'
+
 /**
  * @typedef {object} queryType An getQL JSON query type
  * @prop {string} [name] Query name (it is needed when there are multiple queries)
@@ -35,10 +37,7 @@ export type QueryOperation = {
 
 export type ArgObject = {
   [name: string]: string | ArgObject
-} | {
-  value: string
-  escape: boolean
-}
+} | LiteralObject
 
 /**
  * @typedef {object} fieldObj Field properties
