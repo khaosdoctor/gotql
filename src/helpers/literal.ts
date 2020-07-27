@@ -10,6 +10,5 @@ import { LiteralObject } from '../types/Literal'
  * @return {LiteralObject} LiteralObject
  */
 export function literal(literalValue: TemplateStringsArray): LiteralObject {
-  if (!literalValue || !literalValue[0]) throw new Error('literalValue cannot be null or empty')
-  return { value: literalValue[0], escape: false }
+  return { value: literalValue[0] || '', escape: false }
 }
