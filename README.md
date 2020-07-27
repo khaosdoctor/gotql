@@ -1,29 +1,29 @@
 <h1 align="center">
-	<br>
-	<img width="360" height="" src="https://cdn.rawgit.com/khaosdoctor/gotql/main/media/gotql.svg" alt="GotQL">
-	<br>
-	<br>
-	<br>
+  <br>
+  <img width="360" height="" src="https://cdn.rawgit.com/khaosdoctor/gotql/main/media/gotql.svg" alt="GotQL">
+  <br>
+  <br>
+  <br>
 </h1>
 
 > Write GraphQL queries as objects instead of strings
 
 <h1 align="center">
-	<a href="https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade">
-		<img src= "https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9" alt="Codacy Badge">
-	</a>
-	<a href="https://opencollective.com/gotql" alt="Financial Contributors on Open Collective">
-		<img src="https://opencollective.com/gotql/all/badge.svg?label=financial+contributors" />
-	</a>
-	<a href="https://github.com/khaosdoctor/gotql/actions?query=workflow%3A%22Build+and+Publish%22">
-		<img src="https://github.com/khaosdoctor/gotql/workflows/Build%20and%20Publish/badge.svg" />
-	</a>
-	<a href="https://standardjs.com">
-		<img src= "https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide">
-	</a>
-	<a href="https://snyk.io/test/github/khaosdoctor/gotql?targetFile=package.json">
-		<img src="https://snyk.io/test/github/khaosdoctor/gotql/badge.svg?targetFile=package.json" alt="Known vulnerabilities">
-	</a>
+  <a href="https://www.codacy.com/app/khaosdoctor/gotql?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=khaosdoctor/gotql&amp;utm_campaign=Badge_Grade">
+    <img src= "https://api.codacy.com/project/badge/Grade/c993589aba95499691230a0a889377a9" alt="Codacy Badge">
+  </a>
+  <a href="https://opencollective.com/gotql" alt="Financial Contributors on Open Collective">
+    <img src="https://opencollective.com/gotql/all/badge.svg?label=financial+contributors" />
+  </a>
+  <a href="https://github.com/khaosdoctor/gotql/actions?query=workflow%3A%22Build+and+Publish%22">
+    <img src="https://github.com/khaosdoctor/gotql/workflows/Build%20and%20Publish/badge.svg" />
+  </a>
+  <a href="https://standardjs.com">
+    <img src= "https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide">
+  </a>
+  <a href="https://snyk.io/test/github/khaosdoctor/gotql?targetFile=package.json">
+    <img src="https://snyk.io/test/github/khaosdoctor/gotql/badge.svg?targetFile=package.json" alt="Known vulnerabilities">
+  </a>
 </h1>
 
 
@@ -432,7 +432,31 @@ query { users { name age friends { name age } } }
 
 Recursive fields can go forever.
 
-#### Enum args
+#### Enum and literal args
+
+Enum or literal values should not be escaped, to do that, GotQL has a helper called `literal` which can be used to tell the query that value will not be escaped:
+
+```js
+const { literal } = require('gotql')
+
+const query = {
+  operation: {
+    name: 'user',
+    args: {
+      type: literal`internal`
+    },
+    fields: ['name', 'age']
+  }
+}
+```
+
+The code above outputs:
+
+```js
+query { users(type: internal) { name age } }
+```
+
+The `literal` helper is just a shorthand to the old-style `{value: string, escape: boolean}` object like below:
 
 ```js
 const query = {
@@ -449,35 +473,13 @@ const query = {
 }
 ```
 
-Or with shorthand tagged template string:
-
-```js
-const { literal } = require('gotql')
-
-const query = {
-  operation: {
-    name: 'user',
-    args: {
-      type: literal`internal`
-    },
-    fields: ['name', 'age']
-  }
-}
-```
-
-Outputs:
-
-```js
-query { users(type: internal) { name age } }
-```
-
-If `escape` is set to `true`, the output would be:
+If `literal` is omitted, or if `escape` is set to `true`, the output would be:
 
 ```js
 query { users(type: "internal") { name age } }
 ```
 
-> **Note:** Variables such as described [here](#query-with-variables) _will __not___ be recognized. If the arg object is not an `[argName]: value`, variables will not pass through the definition check (GotQL warns if a variable is not declared but used on operation).
+> **Note:** Variables such as described [here](#query-with-variables) will __not__ be recognized. If the arg object is not an `[argName]: value`, variables will not pass through the definition check (GotQL warns if a variable is not declared but used on operation).
 
 ## Contributing to this project
 
