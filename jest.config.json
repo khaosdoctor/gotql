@@ -1,5 +1,5 @@
 {
-  "collectCoverage": false,
+  "collectCoverage": true,
   "coverageReporters": ["lcov", "text"],
   "collectCoverageFrom": ["**/src/**/*.ts", "**/config/**/*.ts"],
   "preset": "ts-jest",
@@ -8,6 +8,9 @@
   "coveragePathIgnorePatterns": [
     "/node_modules/",
     "/dist/",
-    "/coverage/"
+    "/coverage/",
+    "/.devcontainer/",
+    "/.nyc_output/",
+    "/.vscode/"
   ]
 }

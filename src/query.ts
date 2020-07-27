@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import got from 'got'
 import debug from 'debug'
 import { run } from './modules/runner'
