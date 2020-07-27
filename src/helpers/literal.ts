@@ -9,7 +9,7 @@ import { LiteralObject } from '../types/Literal'
  * @param {TemplateStringsArray} literalValue Literal value
  * @return {LiteralObject} LiteralObject
  */
-export const literal = (literalValue: TemplateStringsArray): LiteralObject => {
+export function literal(literalValue: TemplateStringsArray): LiteralObject {
   if (!literalValue || !literalValue[0]) throw new Error('literalValue cannot be null or empty')
   return { value: literalValue[0], escape: false }
 }
