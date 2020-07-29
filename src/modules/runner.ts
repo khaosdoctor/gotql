@@ -4,8 +4,9 @@ import prependHttp from 'prepend-http'
 import { GotQL } from '../types/generics'
 import { QueryType } from '../types/QueryType'
 import { UserOptions } from '../types/UserOptions'
+import { GotJSONOptions } from '../types/GotJSONOptions'
 import { RunnerError } from '../errors/RunnerError'
-import got, { GotInstance, GotJSONOptions } from 'got'
+import { Got as GotInstance, Response } from 'got'
 const shout = debug('gotql:errors')
 const info = debug('gotql:info:runner')
 
@@ -14,7 +15,7 @@ const info = debug('gotql:info:runner')
  *
  * @param {Object.<string, string>} headers Custom header Object
  */
-function getHeaders (headers: { [s: string]: string; } = {}) {
+function getHeaders(headers: { [s: string]: string; } = {}) {
   info('Mounting headers using "%o" as provided headers', headers)
   const defaultHeaders = {
     'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
@@ -35,7 +36,7 @@ function getHeaders (headers: { [s: string]: string; } = {}) {
  *
  * @param {Object.<string, { type: string, value: string }>} variables Variable object
  */
-function getQueryVariables (variables?: QueryType['variables']) {
+function getQueryVariables(variables?: QueryType['variables']) {
   info('Parsing query variables')
   if (!variables) return null
 
@@ -56,16 +57,15 @@ function getQueryVariables (variables?: QueryType['variables']) {
  * @param {queryType} query JSON-like query type
  * @param {string} parsedQuery String-parsed query
  */
-function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQuery: string): GotJSONOptions {
+function getPayload(headers: UserOptions['headers'], query: QueryType, parsedQuery: string): GotJSONOptions {
   info('Generating final payload')
   const returnObject: GotJSONOptions = {
     headers: getHeaders(headers),
-    body: {
+    json: {
       query: parsedQuery,
       operationName: query.name || null,
       variables: getQueryVariables(query.variables) || null
-    },
-    json: true
+    }
   }
 
   info('Payload to be sent: %O', returnObject)
@@ -79,7 +79,7 @@ function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQu
  * @param {object} response Got response
  * @param {userOpts} options User options
  */
-function handleResponse (response: got.Response<any>, options?: UserOptions): GotQL.Response {
+function handleResponse(response: Response<any>, options?: UserOptions): GotQL.Response {
   info('Response obtained: %O', { errors: response.body.errors, body: response.body, statusCode: response.statusCode })
   if (response.body.errors) {
     shout('Error on query: %O', response.body.errors)
@@ -88,7 +88,8 @@ function handleResponse (response: got.Response<any>, options?: UserOptions): Go
   }
 
   const handledResponse = {
-    ...response.body,
+    ...JSON.parse(response.body),
+    endpoint: response.requestUrl,
     ...{ statusCode: response.statusCode, message: response.statusMessage }
   }
   info('Final response: %O', handledResponse)
@@ -104,7 +105,7 @@ function handleResponse (response: got.Response<any>, options?: UserOptions): Go
  * @param {any} got The Got object as an injected dependency (for test modularity)
  * @return {{data: object, statusCode: number, message: string}} Got handled response
  */
-export async function run (endPoint: string, query: QueryType, type: GotQL.ExecutionType, got: GotInstance, options?: UserOptions): Promise<GotQL.Response> {
+export async function run(endPoint: string, query: QueryType, type: GotQL.ExecutionType, got: GotInstance, options?: UserOptions): Promise<GotQL.Response> {
   try {
     info('Invoking runner with query type %s', type)
     if (!['query', 'mutation'].includes(type)) throw new Error('Query type must be either `query` or `mutation`')
@@ -116,9 +117,10 @@ export async function run (endPoint: string, query: QueryType, type: GotQL.Execu
     info('Building payload object')
     const headers = options ? options.headers : {}
     const gotPayload = getPayload(headers, query, graphQuery)
-    info('Payload object: %O', gotPayload.body)
+    info('Payload object: %O', gotPayload.json)
     info('Sending request...')
     let response = await got.post(prependHttp(endPoint), gotPayload)
+
     info('Response: %O', response.body.toString())
 
     return handleResponse(response, options)
