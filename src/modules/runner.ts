@@ -78,7 +78,7 @@ function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQu
  *
  * Treats GraphQL errors and messages
  * @param {object} response Got response
- * @param {userOpts} options User options
+ * @param {UserOptions} options User options
  */
 function handleResponse (response: Response<any>, options?: UserOptions): GotQL.Response {
   info('Response obtained: %O', { errors: response.body.errors, body: response.body, statusCode: response.statusCode })
