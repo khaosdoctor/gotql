@@ -35,6 +35,10 @@ const defaultHeaders = {
   'Response-Type': 'application/json'
 }
 
+const defaultPayload = {
+  http2: true
+}
+
 const parseToGotInstance = (gotInstance: got | undefined): GotInstance => gotInstance as GotInstance
 
 describe('runner', () => {
@@ -84,6 +88,7 @@ describe('runner', () => {
     }
 
     const payload = {
+      ...defaultPayload,
       headers: defaultHeaders,
       json: {
         query: 'query { TestOp { t1 t2 } }',
@@ -113,6 +118,7 @@ describe('runner', () => {
       }
     }
     const payload = {
+      ...defaultPayload,
       headers: defaultHeaders,
       json: {
         query: 'query { TestOp { t1 t2 } }',
@@ -169,6 +175,7 @@ describe('runner', () => {
       }
     }
     const payload = {
+      ...defaultPayload,
       headers: {
         ...defaultHeaders,
         'Test-Header': 't'
@@ -207,6 +214,7 @@ describe('runner', () => {
       }
     }
     const payload = {
+      ...defaultPayload,
       headers: defaultHeaders,
       json: {
         query: 'query ($testVar: string) { TestOp { t1 t2 } }',

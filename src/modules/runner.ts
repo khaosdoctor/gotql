@@ -65,7 +65,8 @@ function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQu
       query: parsedQuery,
       operationName: query.name || null,
       variables: getQueryVariables(query.variables) || null
-    }
+    },
+    http2: true
   }
 
   info('Payload to be sent: %O', returnObject)
