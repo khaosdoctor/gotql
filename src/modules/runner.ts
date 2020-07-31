@@ -20,7 +20,8 @@ function getHeaders(headers: { [s: string]: string; } = {}) {
   const defaultHeaders = {
     'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
     'User-Agent': `GotQL ${require('../../package.json').version}`,
-    'Accept-Encoding': 'gzip, deflate'
+    'Accept-Encoding': 'gzip, deflate',
+    'Response-Type': 'application/json'
   }
 
   const returnObj = {

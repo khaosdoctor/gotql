@@ -28,6 +28,13 @@ const test: Test = {
   }
 }
 
+const headers = {
+  'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+  'User-Agent': `GotQL ${require('../package.json').version}`,
+  'Accept-Encoding': 'gzip, deflate',
+  'Response-Type': 'application/json'
+}
+
 const parseToGotInstance = (gotInstance: got | undefined): GotInstance => gotInstance as GotInstance
 
 describe('runner', () => {
@@ -77,11 +84,7 @@ describe('runner', () => {
     }
 
     const payload = {
-      headers: {
-        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-        'User-Agent': `GotQL ${require('../package.json').version}`,
-        'Accept-Encoding': 'gzip, deflate'
-      },
+      headers,
       json: {
         query: 'query { TestOp { t1 t2 } }',
         operationName: null,
@@ -110,11 +113,7 @@ describe('runner', () => {
       }
     }
     const payload = {
-      headers: {
-        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-        'User-Agent': `GotQL ${require('../package.json').version}`,
-        'Accept-Encoding': 'gzip, deflate'
-      },
+      headers,
       json: {
         query: 'query { TestOp { t1 t2 } }',
         operationName: null,
@@ -171,9 +170,7 @@ describe('runner', () => {
     }
     const payload = {
       headers: {
-        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-        'User-Agent': `GotQL ${require('../package.json').version}`,
-        'Accept-Encoding': 'gzip, deflate',
+        ...headers,
         'Test-Header': 't'
       },
       json: {
@@ -210,11 +207,7 @@ describe('runner', () => {
       }
     }
     const payload = {
-      headers: {
-        'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
-        'User-Agent': `GotQL ${require('../package.json').version}`,
-        'Accept-Encoding': 'gzip, deflate'
-      },
+      headers,
       json: {
         query: 'query ($testVar: string) { TestOp { t1 t2 } }',
         operationName: null,
