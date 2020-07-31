@@ -120,7 +120,7 @@ export async function run (endPoint: string, query: QueryType, type: GotQL.Execu
     const gotPayload = getPayload(headers, query, graphQuery)
     info('Payload object: %O', gotPayload.json)
     info('Sending request...')
-    let response = await got.post(prependHttp(endPoint), gotPayload)
+    let response = await got.post<Request>(prependHttp(endPoint), gotPayload)
 
     info('Response: %O', response.body.toString())
 
