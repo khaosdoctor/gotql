@@ -9,9 +9,7 @@ import { LiteralObject } from './Literal'
 export type QueryType = {
   name?: string,
   operation: QueryOperation,
-  variables?: {
-    [name: string]: VariableObject
-  }
+  variables?: Record<string, VariableObject>
 }
 
 export type VariableObject = {
@@ -28,9 +26,7 @@ export type VariableObject = {
  */
 export type QueryOperation = {
   name: string
-  args?: {
-    [name: string]: string | ArgObject
-  },
+  args?: Record<string, string | ArgObject>,
   alias?: string
   fields: Array<string | FieldObject>
 }
@@ -43,11 +39,7 @@ export type ArgObject = {
  * @typedef {object} fieldObj Field properties
  * @prop {Array<string | Object.<string, [fieldObj]>>} [fields] Nested fields
  */
-export type FieldObject = {
-  [name: string]: {
-    args?: {
-      [name: string]: string | ArgObject
-    },
-    fields: Array<string | FieldObject>
-  }
-}
+export type FieldObject = Record<string, {
+  args?: Record<string, string | ArgObject>
+  fields: Array<string | FieldObject>
+}>

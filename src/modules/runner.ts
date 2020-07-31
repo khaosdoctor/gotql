@@ -5,7 +5,7 @@ import { GotQL } from '../types/generics'
 import { QueryType } from '../types/QueryType'
 import { UserOptions } from '../types/UserOptions'
 import { RunnerError } from '../errors/RunnerError'
-import got, { GotInstance, GotJSONOptions } from 'got'
+import { Got as GotInstance, Response, Options } from 'got'
 const shout = debug('gotql:errors')
 const info = debug('gotql:info:runner')
 
@@ -14,12 +14,13 @@ const info = debug('gotql:info:runner')
  *
  * @param {Object.<string, string>} headers Custom header Object
  */
-function getHeaders (headers: { [s: string]: string; } = {}) {
+function getHeaders (headers: Record<string, string> = {}) {
   info('Mounting headers using "%o" as provided headers', headers)
   const defaultHeaders = {
-    'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+    'X-Powered-By': 'GotQL - The server-side GraphQL query engine',
     'User-Agent': `GotQL ${require('../../package.json').version}`,
-    'Accept-Encoding': 'gzip, deflate'
+    'Accept-Encoding': 'gzip, deflate',
+    'Response-Type': 'application/json'
   }
 
   const returnObj = {
@@ -39,7 +40,7 @@ function getQueryVariables (variables?: QueryType['variables']) {
   info('Parsing query variables')
   if (!variables) return null
 
-  let newVars: GotQL.Dictionary<string> = {}
+  let newVars: Record<string, string> = {}
   for (let varName in variables) {
     info('Parsing var "%s"', varName)
     newVars[varName] = variables[varName].value
@@ -56,16 +57,16 @@ function getQueryVariables (variables?: QueryType['variables']) {
  * @param {queryType} query JSON-like query type
  * @param {string} parsedQuery String-parsed query
  */
-function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQuery: string): GotJSONOptions {
+function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQuery: string) {
   info('Generating final payload')
-  const returnObject: GotJSONOptions = {
+  const returnObject: Pick<Options, 'json' | 'headers' | 'http2'> = {
     headers: getHeaders(headers),
-    body: {
+    json: {
       query: parsedQuery,
       operationName: query.name || null,
       variables: getQueryVariables(query.variables) || null
     },
-    json: true
+    http2: true
   }
 
   info('Payload to be sent: %O', returnObject)
@@ -77,9 +78,9 @@ function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQu
  *
  * Treats GraphQL errors and messages
  * @param {object} response Got response
- * @param {userOpts} options User options
+ * @param {UserOptions} options User options
  */
-function handleResponse (response: got.Response<any>, options?: UserOptions): GotQL.Response {
+function handleResponse (response: Response<any>, options?: UserOptions): GotQL.Response {
   info('Response obtained: %O', { errors: response.body.errors, body: response.body, statusCode: response.statusCode })
   if (response.body.errors) {
     shout('Error on query: %O', response.body.errors)
@@ -88,8 +89,10 @@ function handleResponse (response: got.Response<any>, options?: UserOptions): Go
   }
 
   const handledResponse = {
-    ...response.body,
-    ...{ statusCode: response.statusCode, message: response.statusMessage }
+    ...JSON.parse(response.body),
+    endpoint: response.requestUrl,
+    statusCode: response.statusCode,
+    message: response.statusMessage
   }
   info('Final response: %O', handledResponse)
   return handledResponse
@@ -116,9 +119,10 @@ export async function run (endPoint: string, query: QueryType, type: GotQL.Execu
     info('Building payload object')
     const headers = options ? options.headers : {}
     const gotPayload = getPayload(headers, query, graphQuery)
-    info('Payload object: %O', gotPayload.body)
+    info('Payload object: %O', gotPayload.json)
     info('Sending request...')
-    let response = await got.post(prependHttp(endPoint), gotPayload)
+    let response = await got.post<Request>(prependHttp(endPoint), gotPayload)
+
     info('Response: %O', response.body.toString())
 
     return handleResponse(response, options)

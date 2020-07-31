@@ -1,4 +1,4 @@
-import got = require('got')
+import { Got as GotInstance } from 'got'
 
 /**
  * @typedef {object} userOpts User Options
@@ -8,8 +8,6 @@ import got = require('got')
  */
 export type UserOptions = {
   errorStatusCode?: number,
-  headers?: {
-    [name: string]: string
-  },
-  gotInstance?: got.GotInstance
+  headers?: Record<string, string>,
+  gotInstance?: GotInstance
 }
