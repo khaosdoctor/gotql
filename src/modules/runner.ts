@@ -4,9 +4,8 @@ import prependHttp from 'prepend-http'
 import { GotQL } from '../types/generics'
 import { QueryType } from '../types/QueryType'
 import { UserOptions } from '../types/UserOptions'
-import { GotOptions } from '../types/GotOptions'
 import { RunnerError } from '../errors/RunnerError'
-import { Got as GotInstance, Response } from 'got'
+import { Got as GotInstance, Response, Options } from 'got'
 const shout = debug('gotql:errors')
 const info = debug('gotql:info:runner')
 
@@ -60,7 +59,7 @@ function getQueryVariables (variables?: QueryType['variables']) {
  */
 function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQuery: string): GotOptions {
   info('Generating final payload')
-  const returnObject: GotOptions = {
+  const returnObject: Pick<Options, 'json' | 'headers' | 'http2'> = {
     headers: getHeaders(headers),
     json: {
       query: parsedQuery,
