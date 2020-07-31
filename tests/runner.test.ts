@@ -1,6 +1,7 @@
 import { run as runner } from '../src/modules/runner'
 import { GotQL } from '../src/types/generics'
 import got, { Got as GotInstance } from 'got'
+import intercept from 'nock'
 
 declare type got = {
   post: Function
@@ -36,7 +37,7 @@ const defaultHeaders = {
 }
 
 const defaultPayload = {
-  http2: true
+  http2: false
 }
 
 const parseToGotInstance = (gotInstance: got | undefined): GotInstance => gotInstance as GotInstance
@@ -165,7 +166,33 @@ describe('runner', () => {
     await expect(() => response).rejects.toThrowError('Runner error: Error when executing query: error')
   })
 
-  it.todo('Should successfully handle a simple query errors with custom codes')
+  it('Should successfully executes when the user passes on an extended Got instance (#48)', async () => {
+    test.context.endpointIp = 'https://somedns.com/'
+    const query = {
+      operation: {
+        name: 'TestOp',
+        fields: ['t1', 't2']
+      }
+    }
+
+    const expectedResponse = {
+      data: 'Simple data',
+      endpoint: test.context.endpointIp,
+      statusCode: 200,
+      message: 'OK'
+    }
+
+    intercept(test.context.endpointIp)
+      .post('/')
+      .reply(200, expectedResponse)
+
+    const customInstance = got.extend({ timeout: 1000 })
+    const gotSpy = jest.spyOn(customInstance, 'post')
+
+    const response = await runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, customInstance)
+    expect(gotSpy).toBeCalledTimes(1)
+    expect(response).toEqual(expectedResponse)
+  })
 
   it('Should successfully handle a simple query with custom headers', async () => {
     const query = {
