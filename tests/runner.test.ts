@@ -23,8 +23,8 @@ declare type Test = {
 
 const test: Test = {
   context: {
-    endpointDns: "",
-    endpointIp: ""
+    endpointDns: '',
+    endpointIp: ''
   }
 }
 
@@ -40,8 +40,8 @@ const parseToGotInstance = (gotInstance: got | undefined): GotInstance => gotIns
 describe('runner', () => {
   beforeEach(() => {
     test.context = {
-      endpointDns: "",
-      endpointIp: ""
+      endpointDns: '',
+      endpointIp: ''
     }
     test.context = {
       got: {
