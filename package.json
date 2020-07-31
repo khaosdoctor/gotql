@@ -27,7 +27,7 @@
     "lint"
   ],
   "pre-push": [
-    "lint",
+    "lint:fix",
     "build"
   ],
   "author": "Lucas Santos <lhs.santoss@gmail.com>",
@@ -52,6 +52,7 @@
     "@types/node": "^14.0.27",
     "concurrently": "^5.2.0",
     "conduct": "^2.3.1",
+    "husky": "^4.2.5",
     "jest": "^26.2.2",
     "pre-push": "^0.1.1",
     "standard": "^14.3.4",
