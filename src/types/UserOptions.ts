@@ -9,5 +9,6 @@ import { Got as GotInstance } from 'got'
 export type UserOptions = {
   errorStatusCode?: number,
   headers?: Record<string, string>,
-  gotInstance?: GotInstance
+  gotInstance?: GotInstance,
+  useHttp2?: boolean
 }

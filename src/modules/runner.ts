@@ -57,7 +57,7 @@ function getQueryVariables (variables?: QueryType['variables']) {
  * @param {queryType} query JSON-like query type
  * @param {string} parsedQuery String-parsed query
  */
-function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQuery: string) {
+function getPayload (headers: UserOptions['headers'], options: UserOptions, query: QueryType, parsedQuery: string) {
   info('Generating final payload')
   const returnObject: Pick<Options, 'json' | 'headers' | 'http2'> = {
     headers: getHeaders(headers),
@@ -66,7 +66,7 @@ function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQu
       operationName: query.name || null,
       variables: getQueryVariables(query.variables) || null
     },
-    http2: false
+    http2: options.useHttp2 || false
   }
 
   info('Payload to be sent: %O', returnObject)
@@ -107,7 +107,7 @@ function handleResponse (response: Response<any>, options?: UserOptions): GotQL.
  * @param {any} got The Got object as an injected dependency (for test modularity)
  * @return {{data: object, statusCode: number, message: string}} Got handled response
  */
-export async function run (endPoint: string, query: QueryType, type: GotQL.ExecutionType, got: GotInstance, options?: UserOptions): Promise<GotQL.Response> {
+export async function run (endPoint: string, query: QueryType, type: GotQL.ExecutionType, got: GotInstance, options: UserOptions = { useHttp2: false }): Promise<GotQL.Response> {
   try {
     info('Invoking runner with query type %s', type)
     if (!['query', 'mutation'].includes(type)) throw new Error('Query type must be either `query` or `mutation`')
@@ -118,7 +118,7 @@ export async function run (endPoint: string, query: QueryType, type: GotQL.Execu
 
     info('Building payload object')
     const headers = options ? options.headers : {}
-    const gotPayload = getPayload(headers, query, graphQuery)
+    const gotPayload = getPayload(headers, options, query, graphQuery)
     info('Payload object: %O', gotPayload.json)
     info('Sending request...')
     let response = await got.post<Request>(prependHttp(endPoint), gotPayload)

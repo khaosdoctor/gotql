@@ -78,7 +78,8 @@ const options = {
   headers: {
     "Authorization": "Bearer <token>"
   },
-  debug: false
+  debug: false,
+  useHttp2: false
 }
 
 gotQL.query('mygraphqlendpoint.com.br/api', query, options)
@@ -199,6 +200,8 @@ Both `gotql.query` and `gotql.mutation` accept an optional user option object wi
     - Type: `object`, in the form of `[headerName: string]: headerValue: string`
   - _gotInstance_: Customized Got instance to be used when calling the endpoint
     - Type: `got`. Internally this will be called as `got.post(prependHttp(endPoint), gotPayload)`
+  - _useHttp2_: Boolean defining if the call should be made using HTTP2, defaults to `false` (see [release 11 of got](https://github.com/sindresorhus/got/releases/tag/v11.0.0))
+    - Type: `boolean`
 
 >**Note:** GotQL uses [`debug`](https://npmjs.com/package/debug) internally as default debugger, so you can set debug levels by setting the `DEBUG` environment variable. These are the current levels:
 >
