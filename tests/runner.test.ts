@@ -9,7 +9,7 @@ declare type got = {
 declare type Context = {
   endpointDns: string
   got?: {
-    post: jest.Mock<any, any>,
+    post: jest.Mock<any, any>
   }
   gotWithErrors?: {
     post: jest.Mock<any, any>
@@ -28,7 +28,7 @@ const test: Test = {
   }
 }
 
-const headers = {
+const defaultHeaders = {
   'X-Powered-By': 'GotQL - The server-side GraphQL query engine',
   'User-Agent': `GotQL ${require('../package.json').version}`,
   'Accept-Encoding': 'gzip, deflate',
@@ -84,7 +84,7 @@ describe('runner', () => {
     }
 
     const payload = {
-      headers,
+      headers: defaultHeaders,
       json: {
         query: 'query { TestOp { t1 t2 } }',
         operationName: null,
@@ -113,7 +113,7 @@ describe('runner', () => {
       }
     }
     const payload = {
-      headers,
+      headers: defaultHeaders,
       json: {
         query: 'query { TestOp { t1 t2 } }',
         operationName: null,
@@ -170,7 +170,7 @@ describe('runner', () => {
     }
     const payload = {
       headers: {
-        ...headers,
+        ...defaultHeaders,
         'Test-Header': 't'
       },
       json: {
@@ -207,7 +207,7 @@ describe('runner', () => {
       }
     }
     const payload = {
-      headers,
+      headers: defaultHeaders,
       json: {
         query: 'query ($testVar: string) { TestOp { t1 t2 } }',
         operationName: null,
