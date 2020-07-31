@@ -18,7 +18,7 @@ const info = debug('gotql:info:runner')
 function getHeaders (headers: { [s: string]: string } = {}) {
   info('Mounting headers using "%o" as provided headers', headers)
   const defaultHeaders = {
-    'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+    'X-Powered-By': 'GotQL - The server-side GraphQL query engine',
     'User-Agent': `GotQL ${require('../../package.json').version}`,
     'Accept-Encoding': 'gzip, deflate',
     'Response-Type': 'application/json'

@@ -29,7 +29,7 @@ const test: Test = {
 }
 
 const headers = {
-  'X-Powered-By': 'GotQL - The serverside GraphQL query engine',
+  'X-Powered-By': 'GotQL - The server-side GraphQL query engine',
   'User-Agent': `GotQL ${require('../package.json').version}`,
   'Accept-Encoding': 'gzip, deflate',
   'Response-Type': 'application/json'
