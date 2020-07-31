@@ -57,7 +57,7 @@ function getQueryVariables (variables?: QueryType['variables']) {
  * @param {queryType} query JSON-like query type
  * @param {string} parsedQuery String-parsed query
  */
-function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQuery: string): GotOptions {
+function getPayload (headers: UserOptions['headers'], query: QueryType, parsedQuery: string) {
   info('Generating final payload')
   const returnObject: Pick<Options, 'json' | 'headers' | 'http2'> = {
     headers: getHeaders(headers),
