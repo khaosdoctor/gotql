@@ -1,5 +1,5 @@
 import { run as runner } from '../src/modules/runner'
-import { GotQL } from "../src/types/generics"
+import { GotQL } from '../src/types/generics'
 import got, { Got as GotInstance } from 'got'
 
 declare type got = {
