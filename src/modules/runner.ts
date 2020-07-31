@@ -15,7 +15,7 @@ const info = debug('gotql:info:runner')
  *
  * @param {Object.<string, string>} headers Custom header Object
  */
-function getHeaders (headers: { [s: string]: string } = {}) {
+function getHeaders (headers: Record<string, string> = {}) {
   info('Mounting headers using "%o" as provided headers', headers)
   const defaultHeaders = {
     'X-Powered-By': 'GotQL - The server-side GraphQL query engine',
@@ -41,7 +41,7 @@ function getQueryVariables (variables?: QueryType['variables']) {
   info('Parsing query variables')
   if (!variables) return null
 
-  let newVars: GotQL.Dictionary<string> = {}
+  let newVars: Record<string, string> = {}
   for (let varName in variables) {
     info('Parsing var "%s"', varName)
     newVars[varName] = variables[varName].value

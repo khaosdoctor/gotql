@@ -8,8 +8,6 @@ import { Got as GotInstance } from 'got'
  */
 export type UserOptions = {
   errorStatusCode?: number,
-  headers?: {
-    [name: string]: string
-  },
+  headers?: Record<string, string>,
   gotInstance?: GotInstance
 }
