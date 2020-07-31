@@ -1,6 +1,5 @@
 export namespace GotQL {
-  export type Dictionary<Y> = { [key: string]: Y }
-
+  export type Nullable<T> = T | null
   export enum ExecutionType {
     QUERY = 'query',
     MUTATION = 'mutation'
