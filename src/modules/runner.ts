@@ -91,7 +91,8 @@ function handleResponse (response: Response<any>, options?: UserOptions): GotQL.
   const handledResponse = {
     ...JSON.parse(response.body),
     endpoint: response.requestUrl,
-    ...{ statusCode: response.statusCode, message: response.statusMessage }
+    statusCode: response.statusCode,
+    message: response.statusMessage
   }
   info('Final response: %O', handledResponse)
   return handledResponse
