@@ -285,14 +285,9 @@ const query = {
           - Type: `[argName: string]: any` or a detailed arg object
             - **_Simple args_**: An `object` where the key is the argument name and its value. Accepts variables in the format of `argName: '$value'`
               - Example: `args { name: 'myName' }`
-            - **_Detailed args_**: An object with two properties. This will give more control over escaping (mostly to use enums). Argument name should be the key
-              - Type: `object`
-              - Properties:
-                - _value_: The argument value
-                  - Type: `any`
-                - _escape_: Whether the argument should be escaped or not (escaped means surrounded with double quotes `"argValue"`)
-                  - Type: `boolean`
-              - Examples: `args: { status: literal``an_enum`` }` should output `operation (status: an_enum)...`
+            - **_Detailed args_**: A tagged template. This will give more control over escaping (mostly to use enums). Argument name should be the key
+              - Type: `tagged template`
+              - Examples: ```args: { status: literal`an_enum` }``` should output `operation (status: an_enum)...`
         - _fields_: The field list to get back from the operation
           - Type: An `array` of `object` (to use nested fields) or `string`, or both.
           - Properties (for nested fields):
@@ -302,14 +297,9 @@ const query = {
               - Type: `[argName: string]: any` or a detailed arg object
                 - **_Simple args_**: An `object` where the key is the argument name and its value. Accepts variables in the format of `argName: '$value'`
                   - Example: `args { name: 'myName' }`
-                - **_Detailed args_**: An object with two properties. This will give more control over escaping (mostly to use enums). Argument name should be the key
-                  - Type: `object`
-                  - Properties:
-                    - _value_: The argument value
-                      - Type: `any`
-                    - _escape_: Whether the argument should be escaped or not (escaped means surrounded with double quotes `"argValue"`)
-                      - Type: `boolean`
-                  - Examples: `args: { status: literal``an_enum`` }` should output `operation (status: an_enum)...`
+                - **_Detailed args_**: A tagged template. This will give more control over escaping (mostly to use enums). Argument name should be the key
+                  - Type: `tagged template`
+                  - Examples: ```args: { status: literal`an_enum` }``` should output `operation (status: an_enum)...`
 
 ### Examples
 
