@@ -12,7 +12,7 @@ const info = debug('gotql:info:parser')
  */
 function getQueryVars (variables: QueryType['variables']): string {
   info('Getting query variables')
-  if (!variables) return ''
+  if (!variables || Object.keys(variables).length === 0) return ''
 
   let queryVars = '('
   for (let varName in variables) {
@@ -236,7 +236,7 @@ function parseOperation (query: QueryType, allowEmptyFields: boolean = false): s
 
   try {
     let operationArgs = ''
-    if (operation.args) {
+    if (operation.args && Object.keys(operation.args).length > 0) {
       info('Parsing args')
       operationArgs = parseArgs(query.operation.args, query.variables)
       info('Operation args are: %s', operationArgs)
