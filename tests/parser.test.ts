@@ -673,4 +673,34 @@ describe('parser', () => {
         const mutationResult = parse(query, ExecutionType.MUTATION)
         expect(mutationResult).toEqual(mutationReturn)
     })
+
+    it('should not add parenthesis if the args object is empty (#TBD)', () => {
+        const query = {
+            name: 'TestQuery',
+            operation: {
+                name: 'TestOp',
+                args: {},
+                fields: ['field1', 'field2']
+            }
+        }
+
+        const testReturn = 'query TestQuery { TestOp { field1 field2 } }'
+        const queryResult = parse(query, ExecutionType.QUERY)
+        expect(queryResult).toEqual(testReturn)
+    });
+
+    it('should handle the empty object for variables (#TBD)', () => {
+        const query = {
+            name: 'TestQuery',
+            operation: {
+                name: 'TestOp',
+                fields: ['field1', 'field2']
+            },
+            variables: {}
+        }
+
+        const testReturn = 'query TestQuery { TestOp { field1 field2 } }'
+        const queryResult = parse(query, ExecutionType.QUERY)
+        expect(queryResult).toEqual(testReturn)
+    });
 })
