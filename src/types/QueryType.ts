@@ -1,5 +1,4 @@
 import { LiteralObject } from './Literal'
-
 /**
  * @typedef {object} queryType An getQL JSON query type
  * @prop {string} [name] Query name (it is needed when there are multiple queries)
@@ -31,8 +30,11 @@ export type QueryOperation = {
   fields: Array<string | FieldObject>
 }
 
+type Primitive = string | number | boolean
+type OneOrMore<T> = T | T[]
+
 export type ArgObject = {
-  [name: string]: string | ArgObject
+  [name: string]: OneOrMore<ArgObject | Primitive>
 } | LiteralObject
 
 /**

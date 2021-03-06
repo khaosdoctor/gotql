@@ -1,7 +1,7 @@
 import debug from 'debug'
-import { GotQL } from '../types/generics'
 import { ParserError } from '../errors/ParserError'
-import { QueryType, QueryOperation, VariableObject, ArgObject } from '../types/QueryType'
+import { GotQL } from '../types/generics'
+import { ArgObject, QueryOperation, QueryType, VariableObject } from '../types/QueryType'
 const shout = debug('gotql:errors')
 const info = debug('gotql:info:parser')
 
@@ -127,8 +127,9 @@ function isVarUndefined (varName: string, variables: QueryType['variables']) {
 }
 
 function isArray (value: any) {
-  info(`Checking if ${value} is an Array: ${typeof value}`)
-  return Array.isArray(value)
+  const result = Array.isArray(value)
+  info(`Checking if ${JSON.stringify(value)} is an Array: ${result}`)
+  return result
 }
 
 /**
@@ -136,7 +137,7 @@ function isArray (value: any) {
  * @param value Argument Value
  */
 function isNull (value: any) {
-  info(`Checking if ${value} is 'null'`)
+  info(`Checking if ${JSON.stringify(value)} is 'null'`)
   return value === null
 }
 
@@ -190,17 +191,27 @@ function parseNestedArgument (nestedArgList: QueryType['operation']['args'], var
  */
 function checkArgs (argsList: QueryType['operation']['args'], operationArg: string, variables: QueryType['variables']): string {
   const argValue = argsList![operationArg]
-  info(`Obtained arg value of %O`, argValue)
+  info(`Obtained arg value of %O for %s`, argValue, operationArg)
   if (isNull(argValue)) return 'null' // Check for strict null values (#33)
-  if (isArray(argValue)) return `["${(argValue as unknown as Array<any>).join('","')}"]` // Check for array values (#35)
+  if (isArray(argValue)) {
+    const parsedArray = (argValue as unknown as Array<any>).map((item: any) => {
+      const returnByType: Record<string, any> = {
+        object: (item: any) => `{ ${Object.keys(item)[ 0 ]}: ${checkArgs(item, Object.keys(item)[ 0 ], variables)} }`,
+        string: (item: any) => `"${item}"`
+      }
+
+      const fn = returnByType[ typeof item ]
+
+      return fn ? fn(item) : item
+    })
+    return `[${(parsedArray).join(',')}]` // Check for array values (#35)
+  }
 
   // Issue #28: Allow support for nested arguments
   if (isArgNestedObject(argValue)) {
     info('Argument "%s" is a nested argument, parsing...', operationArg)
     return parseNestedArgument(argValue as QueryType['operation']['args'], variables)
   }
-
-  let parsedVar = getParsedVar(argValue)
 
   if (isBool(argValue)) return argValue as string
 
@@ -216,7 +227,7 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
     if (!(argValue as { escape: boolean, value: any }).escape) return (argValue as { escape: boolean, value: any }).value
   }
 
-  return parsedVar
+  return getParsedVar(argValue)
 }
 
 /**
