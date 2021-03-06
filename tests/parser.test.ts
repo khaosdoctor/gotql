@@ -1,5 +1,6 @@
-import {parse} from '../src/modules/parser'
-import {GotQL} from '../src/types/generics'
+import { parse } from '../src/modules/parser'
+import { GotQL } from '../src/types/generics'
+import { QueryType } from '../src/types/QueryType'
 import ExecutionType = GotQL.ExecutionType
 
 describe('parser', () => {
@@ -672,6 +673,27 @@ describe('parser', () => {
         // @ts-ignore
         const mutationResult = parse(query, ExecutionType.MUTATION)
         expect(mutationResult).toEqual(mutationReturn)
+    })
+
+    it('Should be able to parse objects nested in arrays (#53)', () => {
+      const query: QueryType = {
+        operation: {
+          name: "Metadata",
+          args: {
+            where: {
+              _and: [
+                { hash: { _in: ["a", "b"] } },
+                { pool: { _eq: 32 } }
+              ],
+            },
+          },
+          fields: ["key", "value"]
+        }
+      }
+
+      const result = parse(query, ExecutionType.QUERY)
+      const expectedResult = 'query { Metadata(where: { _and: [{ hash: { _in: ["a",  "b"] } },{ pool: { _eq: "32" } }] }) { key value } }'
+      expect(result).toEqual(expectedResult)
     })
 
     it('should not add parenthesis if the args object is empty (#TBD)', () => {
