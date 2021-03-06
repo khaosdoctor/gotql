@@ -5,6 +5,8 @@ name: Build and Publish
 
 on:
   release:
+    types:
+      - published
 
 jobs:
   test:
