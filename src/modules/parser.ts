@@ -123,7 +123,7 @@ function getParsedVar (varName: string | VariableObject | ArgObject): string {
  */
 function isVarUndefined (varName: string, variables: QueryType['variables']) {
   info('Checking if "%s" variable is defined in the query', varName)
-  return !variables || !variables[varName] || !variables[varName].type || !variables[varName].value
+  return !variables || !variables[varName] || !variables[varName].type || variables[varName].value === undefined
 }
 
 function isArray (value: any) {
