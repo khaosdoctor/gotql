@@ -270,6 +270,11 @@ function parseOperation (query: QueryType, allowEmptyFields: boolean = false): s
   }
 }
 
+function getFragments (fragments: QueryType['fragments']): string {
+  if (!fragments) return ''
+  return ` ${fragments.map(f => f.trim()).join('\n')}`
+}
+
 /**
  * Parses a JSON-like query into a string
  * @param {queryType} query The JSON-like query to be parsed
@@ -284,7 +289,7 @@ export function parse (query: QueryType, type: GotQL.ExecutionType): string {
 
     let queryName = (query.name) ? `${query.name} ` : ''
     info('Defining name "%s"', queryName)
-    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query, type === GotQL.ExecutionType.MUTATION)} }`.trim()
+    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query, type === GotQL.ExecutionType.MUTATION)} }${getFragments(query.fragments)}`.trim()
     info('Parsed query: %s', parsedQuery)
     return parsedQuery
   } catch (error) {

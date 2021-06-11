@@ -11,6 +11,7 @@
     "/coverage/",
     "/.devcontainer/",
     "/.nyc_output/",
-    "/.vscode/"
+    "/.vscode/",
+    "/src/helpers/index.ts"
   ]
 }
