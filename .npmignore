@@ -1,0 +1,12 @@
+coverage/
+media/
+src/
+.github/
+.devcontainer/
+.editorconfig/
+.eslintrc.js/
+.prettierrc/
+.jest.config.json
+tests/
+tsconfig.json
+*.md

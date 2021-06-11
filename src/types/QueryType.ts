@@ -1,6 +1,6 @@
 import { LiteralObject } from './Literal'
 /**
- * @typedef {object} queryType An getQL JSON query type
+ * @typedef {object} queryType An gotQL JSON query type
  * @prop {string} [name] Query name (it is needed when there are multiple queries)
  * @prop {operation} operation Operation object
  * @prop {Object.<string, { type: string, value: string }>} [variables] Query variables
