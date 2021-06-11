@@ -1,6 +1,6 @@
 {
   "name": "gotql",
-  "version": "2.1.0-alpha1.0",
+  "version": "2.1.1-alpha1.0",
   "engines": {
     "node": ">=14"
   },
