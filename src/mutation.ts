@@ -11,7 +11,7 @@ const info = debug('gotql:info')
  * Performs a mutation on the specified GraphQL endpoint
  *
  * @param {string} endPoint GraphQL Endpoint
- * @param {queryType} query The JSON getQL query object
+ * @param {queryType} query The JSON gotQL query object
  * @param {userOpts} [options] User options
  * @public
  * @return {Promise<any>} A response object containing all the data
