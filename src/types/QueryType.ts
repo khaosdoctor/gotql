@@ -4,11 +4,23 @@ import { LiteralObject } from './Literal'
  * @prop {string} [name] Query name (it is needed when there are multiple queries)
  * @prop {operation} operation Operation object
  * @prop {Object.<string, { type: string, value: string }>} [variables] Query variables
+ * @prop {string[]} fragments Array of fragments as strings (NOTE: They should be written EXACTLY as the documentation states)
+ * @see https://graphql.org/learn/queries/#fragments
+ * @example for fragments
+ * { operation: { args }, // your args
+ *   fragments: [
+ *    `fragment Default on Character {
+ *      name
+ *      id
+ *    }`
+ *   ]
+ * }
  */
 export type QueryType = {
   name?: string,
   operation: QueryOperation,
   variables?: Record<string, VariableObject>
+  fragments?: string[]
 }
 
 export type VariableObject = {

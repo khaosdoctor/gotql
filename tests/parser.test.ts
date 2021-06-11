@@ -1,3 +1,4 @@
+import { fragment } from '../dist'
 import { parse } from '../src/modules/parser'
 import { GotQL } from '../src/types/generics'
 import { QueryType } from '../src/types/QueryType'
@@ -737,6 +738,82 @@ describe('parser', () => {
     }
 
     const testReturn = 'query TestQuery ($testVar: Boolean) { TestOp { field1 field2 } }'
+    const queryResult = parse((query as unknown) as QueryType, ExecutionType.QUERY)
+    expect(queryResult).toEqual(testReturn)
+  })
+})
+
+describe('Parser fragments', () => {
+  it('Should render a fragment when passed', () => {
+    const query = {
+      name: 'TestQuery',
+      operation: {
+        name: 'TestOp',
+        args: {},
+        fields: ['field1', fragment`field2`]
+      },
+      fragments: [
+        `fragment Test on Test { name id }`
+      ]
+    }
+
+    const testReturn = 'query TestQuery { TestOp { field1 ...field2 } } fragment Test on Test { name id }'
+    const queryResult = parse(query, ExecutionType.QUERY)
+    expect(queryResult).toEqual(testReturn)
+  })
+
+  it('Should not render a fragment when array is empty', () => {
+    const query = {
+      name: 'TestQuery',
+      operation: {
+        name: 'TestOp',
+        args: {},
+        fields: ['field1', fragment`field2`]
+      },
+      fragments: []
+    }
+
+    const testReturn = 'query TestQuery { TestOp { field1 ...field2 } }'
+    const queryResult = parse(query, ExecutionType.QUERY)
+    expect(queryResult).toEqual(testReturn)
+  })
+
+  it('Should render a fragment when passed in nested fields', () => {
+    const query = {
+      name: 'TestQuery',
+      operation: {
+        name: 'TestOp',
+        args: {},
+        fields: ['field1', {
+          nested: {
+            fields: [fragment`Test`]
+          }
+        }]
+      },
+      fragments: [
+        `fragment Test on Test { name id }`
+      ]
+    }
+
+    const testReturn = 'query TestQuery { TestOp { field1 nested { ...Test } } } fragment Test on Test { name id }'
+    const queryResult = parse(query, ExecutionType.QUERY)
+    expect(queryResult).toEqual(testReturn)
+  })
+
+  it('Should render a fragment when variables are set', () => {
+    const query = {
+      name: 'TestQuery',
+      operation: {
+        name: 'TestOp',
+        fields: ['field1', fragment`field2`]
+      },
+      variables: { testVar: { type: 'Boolean', value: false } },
+      fragments: [
+        `fragment field2 on test { name id }`
+      ]
+    }
+
+    const testReturn = 'query TestQuery ($testVar: Boolean) { TestOp { field1 ...field2 } } fragment field2 on test { name id }'
     const queryResult = parse((query as unknown) as QueryType, ExecutionType.QUERY)
     expect(queryResult).toEqual(testReturn)
   })
