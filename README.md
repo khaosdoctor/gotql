@@ -20,6 +20,13 @@
   </a>
 </h1>
 
+> :warning: :warning: **ATTENTION** :warning: :warning:
+>
+>**THIS IS AN ALPHA BRANCH,** ALL THE APIS CONTAINED HERE **WILL** CHANGE AT SOME POINT IN TIME.
+>
+>This branch exists to implement a functionality that will eventually be rewritten in a better form, but the current users needed the functionality working first.
+>
+>This branch will be a pre-release branch and should **only** be used in production if you know what you're doing.
 
 This is a better implementation of the [GraphQL](https://github.com/facebook/graphql) query API via NodeJS, created as a wrapper of [Got](http://github.com/sindresorhus/got). It works like a transpiler, with a built in HTTPRequest Client (Got), allowing you to write your GraphQL queries as Javascript Objects instead of strings.
 
