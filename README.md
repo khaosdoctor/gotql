@@ -343,7 +343,7 @@ query myQuery { users { name age } }
 ```js
 const query = {
   operation: {
-    name: 'user',
+    name: 'users',
     args: {
       name: 'Joe'
     },
@@ -355,7 +355,7 @@ const query = {
 Outputs:
 
 ```js
-query { user(name: "Joe") { name age } }
+query { users(name: "Joe") { name age } }
 ```
 
 #### Query with variables
@@ -369,7 +369,7 @@ const query = {
     }
   },
   operation: {
-    name: 'user',
+    name: 'users',
     args: {
       name: '$name'
     },
@@ -428,7 +428,7 @@ const { literal } = require('gotql')
 
 const query = {
   operation: {
-    name: 'user',
+    name: 'users',
     args: {
       type: literal`internal`
     },
@@ -448,7 +448,7 @@ The `literal` helper is just a shorthand to the old-style `{value: string, escap
 ```js
 const query = {
   operation: {
-    name: 'user',
+    name: 'users',
     args: {
       type: {
         value: 'internal',
