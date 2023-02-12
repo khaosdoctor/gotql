@@ -43,7 +43,7 @@
   "private": false,
   "dependencies": {
     "debug": "^4.1.1",
-    "got": "^11.5.1",
+    "got": "^12.5.3",
     "prepend-http": "^3.0.1"
   },
   "devDependencies": {
