@@ -193,6 +193,7 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
   const argValue = argsList![operationArg]
   info(`Obtained arg value of %O for %s`, argValue, operationArg)
   if (isNull(argValue)) return 'null' // Check for strict null values (#33)
+  if (typeof argValue === 'number') return argValue // Support Int type arguments (#74)
   if (isArray(argValue)) {
     const parsedArray = (argValue as unknown as Array<any>).map((item: any) => {
       const returnByType: Record<string, any> = {
