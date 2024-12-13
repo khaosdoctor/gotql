@@ -2,6 +2,7 @@ import { parse } from '../src/modules/parser'
 import { GotQL } from '../src/types/generics'
 import { QueryType } from '../src/types/QueryType'
 import ExecutionType = GotQL.ExecutionType
+import { literal } from '../src'
 
 describe('parser', () => {
   it('Should return a usable simple query', () => {
@@ -739,5 +740,41 @@ describe('parser', () => {
     const testReturn = 'query TestQuery ($testVar: Boolean) { TestOp { field1 field2 } }'
     const queryResult = parse((query as unknown) as QueryType, ExecutionType.QUERY)
     expect(queryResult).toEqual(testReturn)
+  })
+
+  it('Should enable working with array args that have more than one item', () => {
+    const query = {
+      operation: {
+        name: 'productCreate',
+        args: {
+          media: [
+            {
+              originalSource:
+                'https://example.com/image.jpg',
+              mediaContentType: literal`IMAGE`,
+            },
+            {
+              originalSource:
+                'https://example.com/image_2.jpg',
+              mediaContentType: literal`IMAGE`,
+            },
+          ],
+        },
+        fields: [
+          {
+            product: {
+              fields: ['createdAt', 'title'],
+            },
+            userErrors: {
+              fields: ['field', 'message'],
+            },
+          },
+        ],
+      },
+    }
+
+    const mutationResult = parse(query, ExecutionType.MUTATION)
+    const expectedResult = 'mutation { productCreate(media: [{ originalSource: "https://example.com/image.jpg" , mediaContentType: IMAGE },{ originalSource: "https://example.com/image_2.jpg" , mediaContentType: IMAGE }]) { product { createdAt title } } }'
+    expect(mutationResult).toEqual(expectedResult)
   })
 })

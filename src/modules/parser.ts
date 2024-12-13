@@ -180,6 +180,11 @@ function parseNestedArgument (nestedArgList: QueryType['operation']['args'], var
   return parsedFinalString
 }
 
+function parseArgsArray(item: any, variables: QueryType['variables'] ) {
+  const parsedArray = Object.keys(item).map(key => ` ${key}: ${checkArgs(item, key, variables)} `)
+  return `{${parsedArray.join(',')}}`
+}
+
 /**
  * Checks if the operation argument is a variable or not
  *
@@ -196,7 +201,7 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
   if (isArray(argValue)) {
     const parsedArray = (argValue as unknown as Array<any>).map((item: any) => {
       const returnByType: Record<string, any> = {
-        object: (item: any) => `{ ${Object.keys(item)[ 0 ]}: ${checkArgs(item, Object.keys(item)[ 0 ], variables)} }`,
+        object: (item: any) => parseArgsArray(item, variables),
         string: (item: any) => `"${item}"`
       }
 
