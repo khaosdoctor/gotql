@@ -6,6 +6,7 @@ import { QueryType } from '../types/QueryType'
 import { UserOptions } from '../types/UserOptions'
 import { RunnerError } from '../errors/RunnerError'
 import { Got as GotInstance, Response, Options } from 'got'
+import { inspect } from 'util'
 const shout = debug('gotql:errors')
 const info = debug('gotql:info:runner')
 
@@ -14,7 +15,7 @@ const info = debug('gotql:info:runner')
  *
  * @param {Object.<string, string>} headers Custom header Object
  */
-function getHeaders (headers: Record<string, string> = {}) {
+function getHeaders(headers: Record<string, string> = {}) {
   info('Mounting headers using "%o" as provided headers', headers)
   const defaultHeaders = {
     'X-Powered-By': 'GotQL - The server-side GraphQL query engine',
@@ -36,12 +37,12 @@ function getHeaders (headers: Record<string, string> = {}) {
  *
  * @param {Object.<string, { type: string, value: string }>} variables Variable object
  */
-function getQueryVariables (variables?: QueryType['variables']) {
+function getQueryVariables(variables?: QueryType['variables']) {
   info('Parsing query variables')
   if (!variables) return null
 
-  let newVars: Record<string, string> = {}
-  for (let varName in variables) {
+  const newVars: Record<string, string> = {}
+  for (const varName in variables) {
     info('Parsing var "%s"', varName)
     newVars[varName] = variables[varName].value
   }
@@ -57,7 +58,7 @@ function getQueryVariables (variables?: QueryType['variables']) {
  * @param {queryType} query JSON-like query type
  * @param {string} parsedQuery String-parsed query
  */
-function getPayload (headers: UserOptions['headers'], options: UserOptions, query: QueryType, parsedQuery: string) {
+function getPayload(headers: UserOptions['headers'], options: UserOptions, query: QueryType, parsedQuery: string) {
   info('Generating final payload')
   const returnObject: Pick<Options, 'json' | 'headers' | 'http2'> = {
     headers: getHeaders(headers),
@@ -80,7 +81,7 @@ function getPayload (headers: UserOptions['headers'], options: UserOptions, quer
  * @param {object} response Got response
  * @param {UserOptions} options User options
  */
-function handleResponse (response: Response<any>, options?: UserOptions): GotQL.Response {
+function handleResponse(response: Response<any>, options?: UserOptions): GotQL.Response {
   info('Response obtained: %O', { errors: response.body.errors, body: response.body, statusCode: response.statusCode })
   if (response.body.errors) {
     shout('Error on query: %O', response.body.errors)
@@ -107,7 +108,13 @@ function handleResponse (response: Response<any>, options?: UserOptions): GotQL.
  * @param {any} got The Got object as an injected dependency (for test modularity)
  * @return {{data: object, statusCode: number, message: string}} Got handled response
  */
-export async function run (endPoint: string, query: QueryType, type: GotQL.ExecutionType, got: GotInstance, options: UserOptions = { useHttp2: false }): Promise<GotQL.Response> {
+export async function run(
+  endPoint: string,
+  query: QueryType,
+  type: GotQL.ExecutionType,
+  got: GotInstance,
+  options: UserOptions = { useHttp2: false }
+): Promise<GotQL.Response> {
   try {
     info('Invoking runner with query type %s', type)
     if (!['query', 'mutation'].includes(type)) throw new Error('Query type must be either `query` or `mutation`')
@@ -121,13 +128,14 @@ export async function run (endPoint: string, query: QueryType, type: GotQL.Execu
     const gotPayload = getPayload(headers, options, query, graphQuery)
     info('Payload object: %O', gotPayload.json)
     info('Sending request...')
-    let response = await got.post<Request>(prependHttp(endPoint), gotPayload)
+    const response = await got.post<Request>(prependHttp(endPoint), gotPayload)
 
     info('Response: %O', response.body.toString())
 
     return handleResponse(response, options)
   } catch (error) {
     shout('Error on runner: %O', error)
-    throw new RunnerError(`Error when executing query: ${error.message}`)
+    if (error instanceof Error) throw new RunnerError(`Error when executing query: ${error.message}`)
+    throw new RunnerError(`Unknown Error: ${inspect(error)}`)
   }
 }
