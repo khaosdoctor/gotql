@@ -1,7 +1,10 @@
-import { run as runner } from '../src/modules/runner'
-import { GotQL } from '../src/types/generics'
+/* eslint-disable prefer-promise-reject-errors */
+/* eslint-disable no-redeclare */
+import { beforeEach, afterEach, it, describe, expect, jest } from '@jest/globals'
 import got, { Got as GotInstance } from 'got'
 import intercept from 'nock'
+import { run as runner } from '../src/modules/runner'
+import { GotQL } from '../src/types/generics'
 
 declare type got = {
   post: Function
@@ -10,10 +13,10 @@ declare type got = {
 declare type Context = {
   endpointDns: string
   got?: {
-    post: jest.Mock<any, any>
+    post: jest.Mock<any>
   }
   gotWithErrors?: {
-    post: jest.Mock<any, any>
+    post: jest.Mock<any>
   }
   endpointIp: string
 }
@@ -50,25 +53,25 @@ describe('runner', () => {
     }
     test.context = {
       got: {
-        post: jest.fn((endpoint: string) => (
-          {
-            body: JSON.stringify({
-              data: 'Simple data'
-            }),
-            requestUrl: endpoint,
-            statusCode: 200,
-            statusMessage: 'OK'
-          }
-        ))
+        post: jest.fn((endpoint: string) => ({
+          body: JSON.stringify({
+            data: 'Simple data'
+          }),
+          requestUrl: endpoint,
+          statusCode: 200,
+          statusMessage: 'OK'
+        }))
       },
       gotWithErrors: {
-        post: jest.fn((endpoint: string) => Promise.reject({
-          response: {
-            body: 'internal error',
-            url: endpoint
-          },
-          message: 'error'
-        }))
+        post: jest.fn((endpoint: string) =>
+          Promise.reject({
+            response: {
+              body: 'internal error',
+              url: endpoint
+            },
+            message: 'error'
+          })
+        )
       },
       endpointDns: 'my-local-dns.com',
       endpointIp: '192.168.0.1:4566'
@@ -105,7 +108,12 @@ describe('runner', () => {
       message: 'OK'
     }
 
-    const response = await runner(test.context.endpointDns, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got))
+    const response = await runner(
+      test.context.endpointDns,
+      query,
+      GotQL.ExecutionType.QUERY,
+      parseToGotInstance(test.context.got)
+    )
 
     expect(test.context.got?.post).toBeCalledWith(expectedResponse.endpoint, payload)
     expect(response).toEqual(expectedResponse)
@@ -135,7 +143,12 @@ describe('runner', () => {
       message: 'OK'
     }
 
-    const response = await runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got))
+    const response = await runner(
+      test.context.endpointIp,
+      query,
+      GotQL.ExecutionType.QUERY,
+      parseToGotInstance(test.context.got)
+    )
 
     expect(test.context.got?.post).toBeCalledWith(expectedResponse.endpoint, payload)
     expect(response).toEqual(expectedResponse)
@@ -148,9 +161,19 @@ describe('runner', () => {
         fields: ['t1', 't2']
       }
     }
-    const response = runner(test.context.endpointDns, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.gotWithErrors))
+    const response = runner(
+      test.context.endpointDns,
+      query,
+      GotQL.ExecutionType.QUERY,
+      parseToGotInstance(test.context.gotWithErrors)
+    )
 
-    await expect(() => response).rejects.toThrowError('Runner error: Error when executing query: error')
+    await expect(() => response).rejects.toMatchInlineSnapshot(`
+      [Error: Runner error: Unknown Error: {
+        response: { body: 'internal error', url: 'https://my-local-dns.com' },
+        message: 'error'
+      }]
+    `)
   })
 
   it('Should successfully handle a simple query errors on IP endpoint', async () => {
@@ -161,9 +184,19 @@ describe('runner', () => {
       }
     }
 
-    const response = runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.gotWithErrors))
+    const response = runner(
+      test.context.endpointIp,
+      query,
+      GotQL.ExecutionType.QUERY,
+      parseToGotInstance(test.context.gotWithErrors)
+    )
 
-    await expect(() => response).rejects.toThrowError('Runner error: Error when executing query: error')
+    await expect(() => response).rejects.toMatchInlineSnapshot(`
+      [Error: Runner error: Unknown Error: {
+        response: { body: 'internal error', url: 'https://192.168.0.1:4566' },
+        message: 'error'
+      }]
+    `)
   })
 
   it('Should successfully executes when the user passes on an extended Got instance (#48)', async () => {
@@ -182,9 +215,7 @@ describe('runner', () => {
       message: 'OK'
     }
 
-    intercept(test.context.endpointIp)
-      .post('/')
-      .reply(200, expectedResponse)
+    intercept(test.context.endpointIp).post('/').reply(200, expectedResponse)
 
     const customInstance = got.extend({ timeout: 1000 })
     const gotSpy = jest.spyOn(customInstance, 'post')
@@ -221,7 +252,13 @@ describe('runner', () => {
       message: 'OK'
     }
 
-    const response = await runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got), { headers: { 'Test-Header': 't' } })
+    const response = await runner(
+      test.context.endpointIp,
+      query,
+      GotQL.ExecutionType.QUERY,
+      parseToGotInstance(test.context.got),
+      { headers: { 'Test-Header': 't' } }
+    )
 
     expect(test.context.got?.post).toBeCalledWith(expectedResponse.endpoint, payload)
     expect(response).toEqual(expectedResponse)
@@ -257,7 +294,12 @@ describe('runner', () => {
       message: 'OK'
     }
 
-    const response = await runner(test.context.endpointIp, query, GotQL.ExecutionType.QUERY, parseToGotInstance(test.context.got))
+    const response = await runner(
+      test.context.endpointIp,
+      query,
+      GotQL.ExecutionType.QUERY,
+      parseToGotInstance(test.context.got)
+    )
 
     expect(test.context.got?.post).toBeCalledWith(expectedResponse.endpoint, payload)
     expect(response).toEqual(expectedResponse)

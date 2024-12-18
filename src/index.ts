@@ -2,7 +2,7 @@
 import { query } from './query'
 import { mutation } from './mutation'
 import { parse as parser } from './modules/parser'
-import { literal } from './helpers/literal'
+import { fragment, literal } from './helpers'
 
-module.exports = { query, mutation, parser, literal }
-export { query, mutation, parser, literal }
+module.exports = { query, mutation, parser, literal, fragment }
+export { query, mutation, parser, literal, fragment }

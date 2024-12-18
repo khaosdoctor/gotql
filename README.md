@@ -20,7 +20,6 @@
   </a>
 </h1>
 
-
 This is a better implementation of the [GraphQL](https://github.com/facebook/graphql) query API via NodeJS, created as a wrapper of [Got](http://github.com/sindresorhus/got). It works like a transpiler, with a built in HTTPRequest Client (Got), allowing you to write your GraphQL queries as Javascript Objects instead of strings.
 
 Built because manipulating strings is a real pain.
@@ -46,6 +45,7 @@ Built because manipulating strings is a real pain.
       - [Query with variables](#query-with-variables)
       - [Nested fields](#nested-fields)
       - [Enum args](#enum-args)
+    - [Fragment Support](#fragment-support)
   - [Contributing to this project](#contributing-to-this-project)
 
 <!-- /TOC -->
@@ -76,14 +76,15 @@ const query = {
 
 const options = {
   headers: {
-    "Authorization": "Bearer <token>"
+    Authorization: 'Bearer <token>'
   },
   debug: false,
   useHttp2: false
 }
 
-gotQL.query('mygraphqlendpoint.com.br/api', query, options)
-  .then(response => console.log(response.data))
+gotQL
+  .query('mygraphqlendpoint.com.br/api', query, options)
+  .then((response) => console.log(response.data))
   .catch(console.error)
 ```
 
@@ -119,7 +120,7 @@ const mutation = {
         id: variables.id
       }
     },
-    fields: [ 'uuid' ]
+    fields: ['uuid']
   }
 }
 ```
@@ -203,7 +204,7 @@ Both `gotql.query` and `gotql.mutation` accept an optional user option object wi
   - _useHttp2_: Boolean defining if the call should be made using HTTP2, defaults to `false` (see [release 11 of got](https://github.com/sindresorhus/got/releases/tag/v11.0.0))
     - Type: `boolean`
 
->**Note:** GotQL uses [`debug`](https://npmjs.com/package/debug) internally as default debugger, so you can set debug levels by setting the `DEBUG` environment variable. These are the current levels:
+> **Note:** GotQL uses [`debug`](https://npmjs.com/package/debug) internally as default debugger, so you can set debug levels by setting the `DEBUG` environment variable. These are the current levels:
 >
 > - `gotql:info`
 > - `gotql:info:parser`
@@ -287,7 +288,7 @@ const query = {
               - Example: `args { name: 'myName' }`
             - **_Detailed args_**: A tagged template. This will give more control over escaping (mostly to use enums). Argument name should be the key
               - Type: `tagged template`
-              - Examples: ```args: { status: literal`an_enum` }``` should output `operation (status: an_enum)...`
+              - Examples: `` args: { status: literal`an_enum` } `` should output `operation (status: an_enum)...`
         - _fields_: The field list to get back from the operation
           - Type: An `array` of `object` (to use nested fields) or `string`, or both.
           - Properties (for nested fields):
@@ -299,7 +300,9 @@ const query = {
                   - Example: `args { name: 'myName' }`
                 - **_Detailed args_**: A tagged template. This will give more control over escaping (mostly to use enums). Argument name should be the key
                   - Type: `tagged template`
-                  - Examples: ```args: { status: literal`an_enum` }``` should output `operation (status: an_enum)...`
+                  - Examples: `` args: { status: literal`an_enum` } `` should output `operation (status: an_enum)...`
+    - **_fragments_**: The fragments of the query, see [Fragments Support](#fragment-support) for more information
+      - Type: `string[]`
 
 ### Examples
 
@@ -466,7 +469,37 @@ If `literal` is omitted, or if `escape` is set to `true`, the output would be:
 query { users(type: "internal") { name age } }
 ```
 
-> **Note:** Variables such as described [here](#query-with-variables) will __not__ be recognized. If the arg object is not an `[argName]: value`, variables will not pass through the definition check (GotQL warns if a variable is not declared but used on operation).
+> **Note:** Variables such as described [here](#query-with-variables) will **not** be recognized. If the arg object is not an `[argName]: value`, variables will not pass through the definition check (GotQL warns if a variable is not declared but used on operation).
+
+### Fragment support
+
+Fragment support is in an alpha state (see #55), this means that, while the lib
+supports fragments, it's not as pretty or as tested as I'd like it to be, but
+PR's are welcome if you want to use it thoroughly.
+
+You can use fragments by adding a new key in the query JSON, besides
+`operation`, just like you do with variables. This key is called `fragments` and
+it's an array of strings that represent fragments in operations, for example:
+
+```js
+const query = {
+  operation: {
+    fields: ['f1']
+  },
+  fragments: [`fragment Test on Character { name id }`]
+}
+```
+
+You can then reference those fragments using the literal struct `fragment`:
+
+```js
+const query = {
+  operation: {
+    fields: [fragment`Test`]
+  },
+  fragments: [`fragment Test on Character { name id }`]
+}
+```
 
 ## Contributing to this project
 
