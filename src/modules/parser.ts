@@ -2,6 +2,7 @@ import debug from 'debug'
 import { ParserError } from '../errors/ParserError'
 import { GotQL } from '../types/generics'
 import { ArgObject, QueryOperation, QueryType, VariableObject } from '../types/QueryType'
+import { inspect } from 'util'
 const shout = debug('gotql:errors')
 const info = debug('gotql:info:parser')
 
@@ -10,12 +11,12 @@ const info = debug('gotql:info:parser')
  * @param {Object.<string, { type: string, value: string }>} variables Variable object
  * @return {string} Parsed variables
  */
-function getQueryVars (variables: QueryType['variables']): string {
+function getQueryVars(variables: QueryType['variables']): string {
   info('Getting query variables')
   if (!variables || Object.keys(variables).length === 0) return ''
 
   let queryVars = '('
-  for (let varName in variables) {
+  for (const varName in variables) {
     info('Processing var "%s"', varName)
     queryVars += `$${varName}: ${variables[varName].type}, `
   }
@@ -27,21 +28,23 @@ function getQueryVars (variables: QueryType['variables']): string {
  * @param {Array<string | Object.<string, [fieldObj]>>} fieldList List of fields
  * @return {string} Parsed fields
  */
-function getFields (fieldList: QueryOperation['fields'], variables: QueryType['variables']): string {
+function getFields(fieldList: QueryOperation['fields'], variables: QueryType['variables']): string {
   info('Getting fields')
   if (!fieldList) return '' // Return condition, reached bottom of tree
   let fieldStr = ''
 
-  for (let field of fieldList) {
+  for (const field of fieldList) {
     if (typeof field === 'string') {
       info('Processing field %s', field)
       fieldStr += `${field} ` // Return plain string field
-    }
-    /* istanbul ignore next */
-    else if (typeof field === 'object') {
+    } else if (typeof field === 'object') {
+      /* istanbul ignore next */
       const fieldName = Object.keys(field)[0]
       info('Processing field %s', fieldName)
-      fieldStr += `${fieldName}${parseArgs(field[fieldName].args, variables)} { ${getFields(field[fieldName].fields, variables)}} ` // Get fields recursively if nested
+      fieldStr += `${fieldName}${parseArgs(field[fieldName].args, variables)} { ${getFields(
+        field[fieldName].fields,
+        variables
+      )}} ` // Get fields recursively if nested
     }
   }
   info('Parsed field: "%s"', fieldStr)
@@ -54,11 +57,11 @@ function getFields (fieldList: QueryOperation['fields'], variables: QueryType['v
  * @param argsList {QueryType['operation']['args']} Argument object
  * @param variables {QueryType['variables']} Variable object
  */
-function parseArgs (argsList: QueryType['operation']['args'], variables: QueryType['variables']): string {
+function parseArgs(argsList: QueryType['operation']['args'], variables: QueryType['variables']): string {
   if (!argsList) return ''
   let fieldArgs = ''
   info('Parsing args %O', argsList)
-  for (let argName in argsList) {
+  for (const argName in argsList) {
     info('Parsing arg "%s"', argName)
     fieldArgs += `${argName}: ${checkArgs(argsList, argName, variables)}, ` // There'll be a last comma we'll strip later
   }
@@ -74,7 +77,7 @@ function parseArgs (argsList: QueryType['operation']['args'], variables: QueryTy
  * @param {any} varName Object to be checked
  * @return {boolean} True if is object
  */
-function isUsableObject (varName: any): boolean {
+function isUsableObject(varName: any): boolean {
   info(`checking if ${JSON.stringify(varName)} is object:`, `type: ${typeof varName}`)
   const result = !!(typeof varName === 'object' && varName?.value)
   info(`is ${result ? '' : 'not'} an usable object`)
@@ -86,8 +89,8 @@ function isUsableObject (varName: any): boolean {
  * @param {string} varName Variable value
  * @return {boolean} True if it is a boolean
  */
-function isBool (varValue: any): boolean {
-  return (typeof varValue === typeof true)
+function isBool(varValue: any): boolean {
+  return typeof varValue === typeof true
 }
 
 /**
@@ -95,7 +98,7 @@ function isBool (varValue: any): boolean {
  * @param {string|object} varName Variable value or object
  * @return {boolean} True if it is a variable
  */
-function isVar (varName: any): boolean {
+function isVar(varName: any): boolean {
   if (isUsableObject(varName) || typeof varName !== 'string') return false
   return varName.indexOf('$') === 0
 }
@@ -107,7 +110,7 @@ function isVar (varName: any): boolean {
  * @param {string|object} varName Variable value or object
  * @return {string} Parsed variablename
  */
-function getParsedVar (varName: string | VariableObject | ArgObject): string {
+function getParsedVar(varName: string | VariableObject | ArgObject): string {
   info('Parsing variable "%s" into string', varName)
   let variable = `"${varName}"`
   if (isUsableObject(varName)) variable = `"${(varName as VariableObject).value}"`
@@ -121,12 +124,12 @@ function getParsedVar (varName: string | VariableObject | ArgObject): string {
  * @param {string} varName Variable name without $
  * @param {queryType} query The JSON-Like Query
  */
-function isVarUndefined (varName: string, variables: QueryType['variables']) {
+function isVarUndefined(varName: string, variables: QueryType['variables']) {
   info('Checking if "%s" variable is defined in the query', varName)
   return !variables || !variables[varName] || !variables[varName].type || variables[varName].value === undefined
 }
 
-function isArray (value: any) {
+function isArray(value: any) {
   const result = Array.isArray(value)
   info(`Checking if ${JSON.stringify(value)} is an Array: ${result}`)
   return result
@@ -136,7 +139,7 @@ function isArray (value: any) {
  * Check against "Null" only
  * @param value Argument Value
  */
-function isNull (value: any) {
+function isNull(value: any) {
   info(`Checking if ${JSON.stringify(value)} is 'null'`)
   return value === null
 }
@@ -146,7 +149,7 @@ function isNull (value: any) {
  *
  * @param argList List of arguments
  */
-function isArgNestedObject (argList: any) {
+function isArgNestedObject(argList: any) {
   info('Checking for nested argument objects without escape or value')
   return !isUsableObject(argList) && typeof argList === 'object'
 }
@@ -166,9 +169,9 @@ function isArgNestedObject (argList: any) {
  *
  * @returns {string} A argument list like argName: { nestedArgName1: "nestedArgValue" }
  */
-function parseNestedArgument (nestedArgList: QueryType['operation']['args'], variables: QueryType['variables']): string {
+function parseNestedArgument(nestedArgList: QueryType['operation']['args'], variables: QueryType['variables']): string {
   let parsedNestedArg: string = '{ '
-  for (let argument in nestedArgList as any) {
+  for (const argument in nestedArgList as any) {
     info('Parsing nested argument "%s"', argument)
     parsedNestedArg += `${argument}: ${checkArgs(nestedArgList, argument, variables)},`
   }
@@ -180,8 +183,8 @@ function parseNestedArgument (nestedArgList: QueryType['operation']['args'], var
   return parsedFinalString
 }
 
-function parseArgsArray(item: any, variables: QueryType['variables'] ) {
-  const parsedArray = Object.keys(item).map(key => ` ${key}: ${checkArgs(item, key, variables)} `)
+function parseArgsArray(item: any, variables: QueryType['variables']) {
+  const parsedArray = Object.keys(item).map((key) => ` ${key}: ${checkArgs(item, key, variables)} `)
   return `{${parsedArray.join(',')}}`
 }
 
@@ -194,7 +197,11 @@ function parseArgsArray(item: any, variables: QueryType['variables'] ) {
  * @param {QueryType['variables']} variables Variables list
  * @returns {string} Parsed operation argument
  */
-function checkArgs (argsList: QueryType['operation']['args'], operationArg: string, variables: QueryType['variables']): string {
+function checkArgs(
+  argsList: QueryType['operation']['args'],
+  operationArg: string,
+  variables: QueryType['variables']
+): string {
   const argValue = argsList![operationArg]
   info(`Obtained arg value of %O for %s`, argValue, operationArg)
   if (isNull(argValue)) return 'null' // Check for strict null values (#33)
@@ -205,11 +212,11 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
         string: (item: any) => `"${item}"`
       }
 
-      const fn = returnByType[ typeof item ]
+      const fn = returnByType[typeof item]
 
       return fn ? fn(item) : item
     })
-    return `[${(parsedArray).join(',')}]` // Check for array values (#35)
+    return `[${parsedArray.join(',')}]` // Check for array values (#35)
   }
 
   // Issue #28: Allow support for nested arguments
@@ -220,16 +227,20 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
 
   if (isBool(argValue)) return argValue as string
 
-  if (isVar(argValue)) { // Check if is query var, must contain "$" and not be an object
+  if (isVar(argValue)) {
+    // Check if is query var, must contain "$" and not be an object
     const varName = (argValue as string).slice(1) // Removes "$" to check for name
     info('Argument is variable "%s"', varName)
-    if (isVarUndefined(varName, variables)) throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
+    if (isVarUndefined(varName, variables))
+      throw new Error(`Variable "${varName}" is defined on operation but it has neither a type or a value`)
     return argValue as string
   }
 
-  if (isUsableObject(argValue)) { // Check if arg is object (i.e enum)
+  if (isUsableObject(argValue)) {
+    // Check if arg is object (i.e enum)
     info('Arg is object %O', argValue)
-    if (!(argValue as { escape: boolean, value: any }).escape) return (argValue as { escape: boolean, value: any }).value
+    if (!(argValue as { escape: boolean; value: any }).escape)
+      return (argValue as { escape: boolean; value: any }).value
   }
 
   return getParsedVar(argValue)
@@ -241,14 +252,14 @@ function checkArgs (argsList: QueryType['operation']['args'], operationArg: stri
  * @param {boolean} allowEmptyFields If 'true', empty fields are allowed (WARNING: this is not considered a good practice)
  * @return {string} Parsed operation query
  */
-function parseOperation (query: QueryType, allowEmptyFields: boolean = false): string {
-  let operation = query.operation
+function parseOperation(query: QueryType, allowEmptyFields: boolean = false): string {
+  const operation = query.operation
   const hasEmptyFields = !operation.fields || !operation.fields.length
   info('Parsing operation %s', operation.name)
   if (!operation.name) throw new Error(`name is required for graphQL operation`)
   if (hasEmptyFields && !allowEmptyFields) throw new Error(`field list is required for operation "${operation.name}"`)
 
-  if(hasEmptyFields) info('Hint: Returning no fields is not considered a good practice')
+  if (hasEmptyFields) info('Hint: Returning no fields is not considered a good practice')
 
   try {
     let operationArgs = ''
@@ -258,21 +269,23 @@ function parseOperation (query: QueryType, allowEmptyFields: boolean = false): s
       info('Operation args are: %s', operationArgs)
     }
 
-    let alias = operation.alias ? `${operation.alias}:` : ''
+    const alias = operation.alias ? `${operation.alias}:` : ''
     const parsedOperation = hasEmptyFields
-        ?`${alias} ${operation.name}${operationArgs}`.trim()
-        :`${alias} ${operation.name}${operationArgs} { ${getFields(operation.fields, query.variables).trim()} }`.trim()
+      ? `${alias} ${operation.name}${operationArgs}`.trim()
+      : `${alias} ${operation.name}${operationArgs} { ${getFields(operation.fields, query.variables).trim()} }`.trim()
     info('Parsed operation: %s', parsedOperation)
     return parsedOperation
   } catch (error) {
     shout('Parser error on operation: %O', error)
-    throw new Error(`Failed to parse operation "${query.operation.name}" => ${error.message}`)
+    if (error instanceof Error)
+      throw new Error(`Failed to parse operation "${query.operation.name}" => ${error.message}`)
+    throw new Error(`Unknown error when parsing operation: ${inspect(error)}`)
   }
 }
 
-function getFragments (fragments: QueryType['fragments']): string {
+function getFragments(fragments: QueryType['fragments']): string {
   if (!fragments) return ''
-  return ` ${fragments.map(f => f.trim()).join('\n')}`
+  return ` ${fragments.map((f) => f.trim()).join('\n')}`
 }
 
 /**
@@ -281,19 +294,23 @@ function getFragments (fragments: QueryType['fragments']): string {
  * @param {string} type Can be 'query' or 'mutation'
  * @return {string} Parsed query
  */
-export function parse (query: QueryType, type: GotQL.ExecutionType): string {
+export function parse(query: QueryType, type: GotQL.ExecutionType): string {
   info('Starting parser with query %O', query)
   try {
     if (!query.operation) throw new Error('a query must have at least one operation')
     if (!type) throw new Error('type must be either "query" or "mutation"')
 
-    let queryName = (query.name) ? `${query.name} ` : ''
+    const queryName = query.name ? `${query.name} ` : ''
     info('Defining name "%s"', queryName)
-    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(query, type === GotQL.ExecutionType.MUTATION)} }${getFragments(query.fragments)}`.trim()
+    const parsedQuery = `${type.trim()} ${queryName}${getQueryVars(query.variables)}{ ${parseOperation(
+      query,
+      type === GotQL.ExecutionType.MUTATION
+    )} }${getFragments(query.fragments)}`.trim()
     info('Parsed query: %s', parsedQuery)
     return parsedQuery
   } catch (error) {
     shout('Parser error: %O', error)
-    throw new ParserError(error.message)
+    if (error instanceof Error) throw new ParserError(error.message)
+    throw new ParserError(`Unknown error: ${inspect(error)}`)
   }
 }
