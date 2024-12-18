@@ -35,7 +35,7 @@ type OneOrMore<T> = T | T[]
 
 export type ArgObject = {
   [name: string]: OneOrMore<ArgObject | Primitive>
-} | LiteralObject
+} | LiteralObject | Array<ArgObject | Primitive>
 
 /**
  * @typedef {object} fieldObj Field properties
